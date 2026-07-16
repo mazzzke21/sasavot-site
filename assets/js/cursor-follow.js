@@ -69,34 +69,13 @@ const CursorFX = {
         });
     },
 
-    // Start cursor jitter (unstable cursor in glitch zones)
+    // Cursor jitter disabled — no sudden effects
     startJitter() {
-        if (this.jitterTimer) return;
-        let jitterCount = 0;
-
-        this.jitterTimer = setInterval(() => {
-            jitterCount++;
-            const x = (Math.random() - 0.5) * 10;
-            const y = (Math.random() - 0.5) * 10;
-            document.body.style.cursor = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='${18 + y}' x='${x}' font-size='18'>🗡</text></svg>"), auto`;
-
-            if (jitterCount > 20) {
-                this.stopJitter();
-                document.body.style.cursor = 'default';
-            }
-        }, 100);
-
-        // Auto-stop after 2 seconds
-        setTimeout(() => this.stopJitter(), 2000);
+        // Disabled
     },
 
-    // Stop cursor jitter
     stopJitter() {
-        if (this.jitterTimer) {
-            clearInterval(this.jitterTimer);
-            this.jitterTimer = null;
-        }
-        document.body.style.cursor = 'default';
+        // Disabled
     },
 
     // Create a visual cursor trail (optional)

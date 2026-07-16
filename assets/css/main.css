@@ -613,6 +613,35 @@ a:hover {
     font-size: 11px;
 }
 
+.creepy-note {
+    color: #994444;
+    font-style: italic;
+    font-size: 11px;
+    border-left: 2px solid #661111;
+    padding-left: 8px;
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+.made-by {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #222;
+    font-size: 12px;
+    color: #555;
+    letter-spacing: 1px;
+}
+
+.made-by p {
+    color: #666;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.made-by:hover p {
+    color: #888;
+}
+
 .log-note {
     color: #888;
     font-size: 11px;

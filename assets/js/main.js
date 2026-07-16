@@ -376,41 +376,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 9. FINAL SECTION HEAVY GLITCH
+    // 9. FINAL SECTION — disabled (no effects)
     // ==========================================
     function initFinalSection() {
-        const finalSection = document.getElementById('final');
-        
-        if (!finalSection) return;
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Trigger heavy glitch when final section enters viewport
-                    setTimeout(() => {
-                        GlitchEngine.triggerHeavy();
-                        AudioEngine.resume();
-                        AudioEngine.playSiren();
-                    }, 500);
-                    
-                    // Once done, disconnect
-                    observer.disconnect();
-                }
-            });
-        }, { threshold: 0.3 });
-
-        observer.observe(finalSection);
+        // Disabled — no sudden heavy glitch
     }
 
     // ==========================================
-    // 10. MOUSE TRAIL (subtle)
+    // 10. MOUSE TRAIL — disabled
     // ==========================================
     function initMouseTrail() {
-        document.addEventListener('mousemove', (e) => {
-            if (CursorFX && CursorFX.createTrail) {
-                CursorFX.createTrail(e);
-            }
-        });
+        // Disabled — no sudden effects
     }
 
     // ==========================================
@@ -436,23 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // INITIALIZATION
     // ==========================================
 
-    // Audio engine needs user interaction to start
-    let audioStarted = false;
-    const startAudio = () => {
-        if (audioStarted) return;
-        audioStarted = true;
-        
-        AudioEngine.init().then(() => {
-            console.log('Audio engine initialized');
-        }).catch(err => {
-            console.warn('Audio init warning:', err);
-        });
-    };
-
-    // Start audio on first user interaction
-    document.addEventListener('click', startAudio, { once: true });
-    document.addEventListener('keydown', startAudio, { once: true });
-    document.addEventListener('scroll', startAudio, { once: true });
+    // Audio engine is disabled — no sounds, no hum, no audio effects
+    // Only visual glitch effects remain active
+    console.log('Режим тишины: аудио-движок отключен');
 
     // Initialize all modules
     try {
