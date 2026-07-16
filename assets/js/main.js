@@ -59,22 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         escapeLink.addEventListener('click', (e) => {
             e.preventDefault();
-            escOverlay.classList.add('active');
-            AudioEngine.resume();
-            AudioEngine.playTapeStop();
-
-            let count = 5;
-            const interval = setInterval(() => {
-                count--;
-                if (countdownEl) countdownEl.textContent = count;
-                if (count <= 0) {
-                    clearInterval(interval);
-                    escOverlay.classList.remove('active');
-                    if (countdownEl) countdownEl.textContent = '5';
-                    // Trigger glitch then return
-                    GlitchEngine.triggerHeavy();
-                }
-            }, 1000);
+            window.location.href = 'game.html';
         });
 
         // Global ESC key
