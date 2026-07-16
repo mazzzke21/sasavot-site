@@ -32,10 +32,27 @@
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 255, 0.06));
             background-size: 100% 4px, 3px 100%;
             z-index: 999;
             pointer-events: none;
+        }
+
+        /* Улучшенный эффект свечения экрана */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.03) 0%, transparent 70%);
+            z-index: 998;
+            pointer-events: none;
+            animation: screenGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes screenGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
         }
 
         /* АДАПТИВНОСТЬ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ */
@@ -243,9 +260,24 @@
         }
 
         @keyframes flicker {
-            0% { opacity: 0.98; }
+            0% { opacity: 0.97; }
             50% { opacity: 1; }
-            100% { opacity: 0.99; }
+            100% { opacity: 0.98; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
         .screen {
@@ -262,6 +294,10 @@
             position: relative;
         }
 
+        .screen.active {
+            animation: fadeIn 0.5s ease-in;
+        }
+
         /* Глитч-название */
         .title-container {
             margin-bottom: 20px;
@@ -274,10 +310,11 @@
             letter-spacing: 5px;
             color: #ff0000;
             text-shadow: 
-                0px 0px 8px rgba(255, 0, 0, 0.8),
-                -3px -3px 0px rgba(0, 255, 255, 0.4),
-                3px 3px 0px rgba(255, 0, 255, 0.4);
-            animation: shake 1s infinite alternate;
+                0px 0px 10px rgba(255, 0, 0, 0.9),
+                0px 0px 20px rgba(255, 0, 0, 0.5),
+                -3px -3px 0px rgba(0, 255, 255, 0.5),
+                3px 3px 0px rgba(255, 0, 255, 0.5);
+            animation: shake 1s infinite alternate, titleGlow 2s ease-in-out infinite;
         }
 
         @keyframes shake {
@@ -289,6 +326,23 @@
             100% { transform: translate(0, 0); }
         }
 
+        @keyframes titleGlow {
+            0%, 100% { 
+                text-shadow: 
+                    0px 0px 10px rgba(255, 0, 0, 0.9),
+                    0px 0px 20px rgba(255, 0, 0, 0.5),
+                    -3px -3px 0px rgba(0, 255, 255, 0.5),
+                    3px 3px 0px rgba(255, 0, 255, 0.5);
+            }
+            50% { 
+                text-shadow: 
+                    0px 0px 15px rgba(255, 0, 0, 1),
+                    0px 0px 30px rgba(255, 0, 0, 0.7),
+                    -3px -3px 0px rgba(0, 255, 255, 0.7),
+                    3px 3px 0px rgba(255, 0, 255, 0.7);
+            }
+        }
+
         /* Прогресс концовок */
         .ending-progress {
             position: fixed;
@@ -296,13 +350,16 @@
             right: 20px;
             font-size: 1.6rem;
             color: #ffaa00;
-            text-shadow: 0 0 8px rgba(255, 170, 0, 0.3);
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
             z-index: 1000;
             pointer-events: none;
-            background: rgba(5, 2, 2, 0.7);
-            padding: 6px 14px;
-            border: 1px solid #500;
+            background: linear-gradient(135deg, rgba(5, 2, 2, 0.9) 0%, rgba(20, 5, 5, 0.9) 100%);
+            padding: 8px 16px;
+            border: 2px solid #ff6600;
+            border-radius: 4px;
             letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         /* Уведомление о новой концовке */
@@ -311,31 +368,62 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: #0d0404;
+            background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
             border: 4px solid #00ff66;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
-            box-shadow: 0 0 60px rgba(0, 255, 102, 0.4);
+            box-shadow: 
+                0 0 60px rgba(0, 255, 102, 0.4),
+                inset 0 0 30px rgba(0, 255, 102, 0.1);
             z-index: 1100;
-            animation: pulseGlow 1.5s infinite alternate;
+            animation: pulseGlow 1.5s infinite alternate, notificationAppear 0.5s ease-out;
             pointer-events: none;
+            border-radius: 8px;
         }
 
         .ending-notification .notif-title {
             font-size: 3.5rem;
             color: #00ff66;
             margin-bottom: 10px;
-            text-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
+            text-shadow: 
+                0 0 15px rgba(0, 255, 102, 0.8),
+                0 0 30px rgba(0, 255, 102, 0.4);
+            animation: textPulse 1s ease-in-out infinite;
         }
 
         .ending-notification .notif-sub {
             font-size: 2rem;
-            color: #cccccc;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 40px rgba(0, 255, 102, 0.2); }
-            100% { box-shadow: 0 0 80px rgba(0, 255, 102, 0.6); }
+            0% { box-shadow: 0 0 40px rgba(0, 255, 102, 0.2), inset 0 0 30px rgba(0, 255, 102, 0.1); }
+            100% { box-shadow: 0 0 80px rgba(0, 255, 102, 0.6), inset 0 0 30px rgba(0, 255, 102, 0.2); }
+        }
+
+        @keyframes notificationAppear {
+            from { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes textPulse {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 15px rgba(0, 255, 102, 0.8),
+                    0 0 30px rgba(0, 255, 102, 0.4);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 20px rgba(0, 255, 102, 1),
+                    0 0 40px rgba(0, 255, 102, 0.6);
+            }
         }
 
         /* Выбор сложности */
@@ -344,13 +432,15 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .difficulty-title {
             font-size: 2.2rem;
-            color: #888;
+            color: #ffaa00;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
         }
 
         .diff-options {
@@ -364,7 +454,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: color 0.2s;
+            transition: all 0.3s ease;
+            color: #cccccc;
         }
 
         .diff-label input {
@@ -372,97 +463,144 @@
         }
 
         .custom-radio {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border: 3px solid #d11a1a;
             display: inline-block;
             position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(209, 26, 26, 0.3);
         }
 
         .diff-label input:checked + .custom-radio::after {
             content: '';
             position: absolute;
-            top: 2px;
-            left: 2px;
+            top: 3px;
+            left: 3px;
             width: 8px;
             height: 8px;
             background: #ff0000;
-            box-shadow: 0 0 8px #ff0000;
+            box-shadow: 
+                0 0 8px #ff0000,
+                0 0 15px #ff0000;
+            animation: radioPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes radioPulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 8px #ff0000,
+                    0 0 15px #ff0000;
+            }
+            50% { 
+                box-shadow: 
+                    0 0 12px #ff0000,
+                    0 0 25px #ff0000;
+            }
         }
 
         .diff-label:hover {
             color: #ff0000;
+            transform: translateX(5px);
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
         /* Предупреждение */
         .warning-text {
             font-size: 1.6rem;
-            color: #ff6600;
+            color: #ffaa00;
             text-align: center;
             max-width: 800px;
             line-height: 1.5;
             margin-bottom: 30px;
             padding: 20px;
             border: 2px solid #ff6600;
-            background: rgba(255, 102, 0, 0.1);
-            text-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255, 102, 0, 0.1) 0%, rgba(255, 50, 0, 0.1) 100%);
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.2);
+            border-radius: 4px;
+            animation: fadeIn 1s ease-out;
         }
 
         /* Кнопки */
         .btn {
-            background: transparent;
-            border: 4px solid #d11a1a;
-            color: #d11a1a;
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%);
+            border: 3px solid #d11a1a;
+            color: #ff3333;
             font-family: 'VT323', monospace;
             font-size: 3rem;
-            padding: 10px 40px;
+            padding: 12px 45px;
             cursor: pointer;
             text-align: left;
             position: relative;
             outline: none;
-            box-shadow: 0 0 10px rgba(209, 26, 26, 0.2);
-            transition: all 0.1s ease;
+            box-shadow: 
+                0 0 15px rgba(209, 26, 26, 0.3),
+                inset 0 0 15px rgba(209, 26, 26, 0.1);
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-shadow: 0 0 5px rgba(255, 51, 51, 0.5);
         }
 
         .btn::before {
             content: '> ';
             opacity: 0;
-            transition: opacity 0.1s ease;
+            transition: all 0.3s ease;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
         }
 
         .btn:hover {
-            background-color: #d11a1a;
-            color: #000;
-            box-shadow: 0 0 25px rgba(209, 26, 26, 0.8);
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.3) 0%, rgba(139, 0, 0, 0.3) 100%);
+            color: #ff0000;
+            box-shadow: 
+                0 0 30px rgba(209, 26, 26, 0.8),
+                inset 0 0 20px rgba(209, 26, 26, 0.2);
             transform: translateX(10px);
+            border-color: #ff0000;
         }
 
         .btn:hover::before {
             opacity: 1;
         }
 
+        .btn:active {
+            transform: translateX(10px) scale(0.98);
+            box-shadow: 
+                0 0 40px rgba(209, 26, 26, 1),
+                inset 0 0 30px rgba(209, 26, 26, 0.3);
+        }
+
         /* Настройка Гайда при старте */
         .guide-box {
-            border: 4px solid #d11a1a;
-            background: #0d0404;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(209, 26, 26, 0.3);
+            border: 3px solid #d11a1a;
+            background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
+            padding: 35px;
+            box-shadow: 
+                0 0 40px rgba(209, 26, 26, 0.4),
+                inset 0 0 30px rgba(209, 26, 26, 0.1);
             max-width: 800px;
             margin-bottom: 25px;
+            border-radius: 6px;
+            animation: fadeIn 0.8s ease-out;
         }
 
         .guide-title {
             font-size: 3.5rem;
             color: #ff0000;
             margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.4);
+            animation: titleGlow 2s ease-in-out infinite;
         }
 
         .guide-text {
             font-size: 2rem;
-            line-height: 1.4;
-            color: #cccccc;
+            line-height: 1.5;
+            color: #dddddd;
             margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(200, 200, 200, 0.3);
         }
 
         /* Геймплей */
@@ -473,26 +611,32 @@
             flex-direction: column;
             justify-content: space-between;
             padding: 40px 0;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .game-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #500;
-            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 12px;
             margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 10px;
+            box-shadow: 0 2px 15px rgba(255, 102, 0, 0.3);
         }
 
         .hud-item {
             font-size: 2rem;
             text-transform: uppercase;
+            color: #ffaa00;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+            letter-spacing: 1px;
         }
 
         #hud-inventory {
-            color: #ffaa00;
+            color: #00ff66;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.6);
         }
 
         .text-log {
@@ -500,8 +644,13 @@
             overflow-y: auto;
             margin-bottom: 20px;
             font-size: 2.2rem;
-            line-height: 1.4;
-            color: #ff3333;
+            line-height: 1.5;
+            color: #ff4444;
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.4);
+            padding: 10px;
+            background: rgba(10, 0, 0, 0.3);
+            border-left: 3px solid #ff0000;
+            border-radius: 4px;
         }
 
         .choices-container {
@@ -511,41 +660,77 @@
         }
 
         .choice-btn {
-            background: #0d0404;
+            background: linear-gradient(135deg, rgba(13, 4, 4, 0.9) 0%, rgba(30, 5, 5, 0.9) 100%);
             border: 2px solid #801010;
-            color: #ff3333;
+            color: #ff4444;
             font-family: 'VT323', monospace;
             font-size: 2.2rem;
-            padding: 12px 20px;
+            padding: 15px 25px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+            box-shadow: 0 0 10px rgba(128, 16, 16, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .choice-btn:hover::before {
+            left: 100%;
         }
 
         .choice-btn:hover {
-            background: #d11a1a;
-            color: #000;
-            border-color: #ff3333;
-            transform: translateX(5px);
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
+            color: #ff0000;
+            border-color: #ff0000;
+            transform: translateX(8px);
+            box-shadow: 
+                0 0 25px rgba(209, 26, 26, 0.6),
+                inset 0 0 20px rgba(209, 26, 26, 0.1);
+            text-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.8),
+                0 0 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .choice-btn:active {
+            transform: translateX(8px) scale(0.98);
         }
 
         .chance-badge {
             float: right;
-            background: #300;
-            color: #ff5555;
-            padding: 2px 10px;
+            background: linear-gradient(135deg, #300 0%, #500 100%);
+            color: #ff6666;
+            padding: 3px 12px;
             font-size: 1.6rem;
-            border: 1px solid #600;
+            border: 1px solid #ff0000;
+            border-radius: 3px;
+            text-shadow: 0 0 5px rgba(255, 102, 102, 0.5);
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
         }
 
         .darkness-warning {
             float: right;
-            background: #111;
-            color: #8866ff;
-            padding: 2px 10px;
+            background: linear-gradient(135deg, #111 0%, #222 100%);
+            color: #aa99ff;
+            padding: 3px 12px;
             font-size: 1.4rem;
-            border: 1px solid #444;
+            border: 1px solid #8866ff;
+            border-radius: 3px;
             margin-right: 5px;
+            text-shadow: 0 0 5px rgba(136, 102, 255, 0.5);
+            box-shadow: 0 0 8px rgba(136, 102, 255, 0.3);
         }
 
         /* Таймер */
@@ -555,18 +740,34 @@
             left: 20px;
             font-size: 2rem;
             color: #ff0000;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.9),
+                0 0 20px rgba(255, 0, 0, 0.5);
             z-index: 1000;
-            background: rgba(5, 2, 2, 0.7);
-            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(5, 2, 2, 0.9) 0%, rgba(30, 0, 0, 0.9) 100%);
+            padding: 10px 18px;
             border: 2px solid #ff0000;
             letter-spacing: 2px;
             animation: timerPulse 1s infinite;
+            border-radius: 4px;
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.5),
+                inset 0 0 15px rgba(255, 0, 0, 0.2);
         }
 
         @keyframes timerPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            0%, 100% { 
+                opacity: 1;
+                box-shadow: 
+                    0 0 20px rgba(255, 0, 0, 0.5),
+                    inset 0 0 15px rgba(255, 0, 0, 0.2);
+            }
+            50% { 
+                opacity: 0.7;
+                box-shadow: 
+                    0 0 30px rgba(255, 0, 0, 0.8),
+                    inset 0 0 20px rgba(255, 0, 0, 0.3);
+            }
         }
 
         /* Стилизация экрана концовок */
@@ -576,7 +777,179 @@
             font-weight: bold;
             display: block;
             margin-top: 15px;
-            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+            text-shadow: 
+                0 0 10px rgba(0, 255, 102, 0.8),
+                0 0 20px rgba(0, 255, 102, 0.4);
+            animation: endingPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes endingPulse {
+            0%, 100% { 
+                text-shadow: 
+                    0 0 10px rgba(0, 255, 102, 0.8),
+                    0 0 20px rgba(0, 255, 102, 0.4);
+            }
+            50% { 
+                text-shadow: 
+                    0 0 15px rgba(0, 255, 102, 1),
+                    0 0 30px rgba(0, 255, 102, 0.6);
+            }
+        }
+
+        /* Модальное окно списка концовок */
+        .endings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .endings-modal.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .endings-modal-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
+            border: 3px solid #d11a1a;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 
+                0 0 60px rgba(209, 26, 26, 0.5),
+                inset 0 0 30px rgba(209, 26, 26, 0.1);
+        }
+
+        .endings-modal-title {
+            font-size: 3.5rem;
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 20px rgba(255, 0, 0, 0.4);
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        .ending-item {
+            background: rgba(10, 0, 0, 0.5);
+            border: 2px solid #801010;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .ending-item:hover {
+            border-color: #ff0000;
+            box-shadow: 0 0 20px rgba(209, 26, 26, 0.4);
+        }
+
+        .ending-item.unlocked {
+            border-color: #00ff66;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+        }
+
+        .ending-item.locked {
+            opacity: 0.7;
+        }
+
+        .ending-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .ending-name {
+            font-size: 2.2rem;
+            color: #ffaa00;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+            flex: 1;
+        }
+
+        .ending-status {
+            font-size: 1.4rem;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .ending-status.unlocked {
+            background: #00ff66;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+        }
+
+        .ending-status.locked {
+            background: #500;
+            color: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+        }
+
+        .spoiler-btn {
+            background: #000;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 8px 16px;
+            font-family: 'VT323', monospace;
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .spoiler-btn:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .spoiler-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border-left: 3px solid #ff6600;
+            border-radius: 4px;
+            color: #cccccc;
+            font-size: 1.6rem;
+            line-height: 1.5;
+        }
+
+        .spoiler-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .close-modal-btn {
+            display: block;
+            margin: 30px auto 0;
+            background: transparent;
+            border: 3px solid #ff0000;
+            color: #ff0000;
+            font-family: 'VT323', monospace;
+            font-size: 2.5rem;
+            padding: 12px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        .close-modal-btn:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
         }
     </style>
 </head>
@@ -632,6 +1005,7 @@
         <div class="menu-buttons">
             <p class="warning-text">⚠ ПРЕДУПРЕЖДЕНИЕ: Игра может показатся сыроватой тк делал я один(мне 16) методом проб и ошибок надеюсь понравится!</p>
             <button class="btn" onclick="startGame()">НАЧАТЬ ИГРУ</button>
+            <button class="btn" onclick="showEndingsList()" style="margin-top: 15px;">СПИСОК КОНЦОВОК</button>
         </div>
     </div>
 
@@ -897,19 +1271,26 @@
         // =====================================================================
         function calculateChance(baseChance, sceneKey) {
             let finalChance = baseChance;
+            
+            // Сложность
             if (gameState.currentDifficulty === 'easy') {
-                finalChance = Math.round(baseChance * 1.4);
+                finalChance = Math.round(baseChance * 1.3);
             } else if (gameState.currentDifficulty === 'hard') {
-                finalChance = Math.round(baseChance * 0.5);
+                finalChance = Math.round(baseChance * 0.7);
             }
+            
+            // Бонусы и штрафы
             if (gameState.inventory.security_map) {
                 finalChance += 15;
             }
-            // Темнота без фонарика: -15% к шансам (сбалансировано)
+            
+            // Темнота без фонарика: -15% к шансам
             if (gameState.isDarkScene && !gameState.inventory.flashlight) {
                 finalChance -= 15;
             }
-            return Math.max(5, Math.min(95, finalChance));
+            
+            // Ограничения
+            return Math.max(10, Math.min(90, finalChance));
         }
 
         // =====================================================================
@@ -981,7 +1362,7 @@
                     { 
                         text: "Попытаться выбить старую дверь плечом", 
                         isChance: true, 
-                        baseChance: 55,
+                        baseChance: 60,
                         onSuccess: "door_success", 
                         onFailure: "door_fail" 
                     }
@@ -1000,7 +1381,7 @@
                     { 
                         text: "Запустить эксплойт методом подбора", 
                         isChance: true, 
-                        baseChance: 45, 
+                        baseChance: 50, 
                         onSuccess: "hack_success", 
                         onFailure: "hack_fail" 
                     },
@@ -1222,7 +1603,7 @@
                     { 
                         text: "Отразить удар железной ножкой", 
                         isChance: true, 
-                        baseChance: 45, 
+                        baseChance: 50, 
                         onSuccess: "fight_win", 
                         onFailure: "fight_death" 
                     }
@@ -1360,7 +1741,7 @@
                     { 
                         text: "Надавить со всей силы", 
                         isChance: true, 
-                        baseChance: 80, 
+                        baseChance: 85, 
                         onSuccess: "door_success", 
                         onFailure: "tool_break" 
                     }
@@ -1390,7 +1771,7 @@
                     { 
                         text: "Сидеть тихо, не издавая ни звука", 
                         isChance: true, 
-                        baseChance: 60, 
+                        baseChance: 65, 
                         onSuccess: "locker_stealth_win", 
                         onFailure: "locker_stealth_fail" 
                     }
@@ -1436,7 +1817,7 @@
                     { 
                         text: "Попробовать заклинить лопасти работающего вентилятора руками", 
                         isChance: true, 
-                        baseChance: 35, 
+                        baseChance: 40, 
                         onSuccess: "vent_fan_success", 
                         onFailure: "vent_fan_fail" 
                     }
@@ -1585,14 +1966,14 @@
                     { 
                         text: "Срезать путь через узкий дренажный коллектор", 
                         isChance: true, 
-                        baseChance: 65, 
+                        baseChance: 70, 
                         onSuccess: "sewer_cut_success", 
                         onFailure: "sewer_cut_fail" 
                     },
                     { 
                         text: "Нырнуть под воду, чтобы найти скрытый проход", 
                         isChance: true, 
-                        baseChance: 40, 
+                        baseChance: 45, 
                         onSuccess: "sewer_secret_passage", 
                         onFailure: "sewer_cut_fail" 
                     }
@@ -1664,7 +2045,7 @@
                     { 
                         text: "Попробовать незаметно обойти существо среди ящиков", 
                         isChance: true, 
-                        baseChance: 75, 
+                        baseChance: 70, 
                         onSuccess: "warehouse_stealth_success", 
                         onFailure: "caught_warehouse" 
                     },
@@ -1742,7 +2123,7 @@
                     { 
                         text: "Очнуться и, превозмогая боль, ползти к выходу", 
                         isChance: true, 
-                        baseChance: 50, 
+                        baseChance: 55, 
                         onSuccess: "warehouse_crawl_escape", 
                         onFailure: "death_screen" 
                     }
@@ -1771,7 +2152,7 @@
                 text: "Вы находите тяжелую гермодверь с надписью 'ВЫХОД'. Но для ее открытия требуется запустить резервный генератор в другом крыле здания.",
                 choices: [
                     { text: "Пробираться в Генераторную", next: "generator_path" },
-                    { text: "Попробовать взломать замок двери", isChance: true, baseChance: 50, onSuccess: "warehouse_hack_escape_ending", onFailure: "warehouse_code_fail" }
+                    { text: "Попробовать взломать замок двери", isChance: true, baseChance: 55, onSuccess: "warehouse_hack_escape_ending", onFailure: "warehouse_code_fail" }
                 ]
             },
 
@@ -1820,7 +2201,7 @@
                     { 
                         text: "Судорожно запустить генератор вручную", 
                         isChance: true, 
-                        baseChance: 70, 
+                        baseChance: 75, 
                         onSuccess: "generator_on", 
                         onFailure: "generator_explode" 
                     },
@@ -1972,7 +2353,7 @@
                     { 
                         text: "Спуститься по тросу на крышу кабины лифта", 
                         isChance: true, 
-                        baseChance: 65, 
+                        baseChance: 70, 
                         onSuccess: "elevator_success", 
                         onFailure: "elevator_fail" 
                     },
@@ -2020,7 +2401,7 @@
                     { 
                         text: "Дождаться кабину и вбежать внутрь", 
                         isChance: true, 
-                        baseChance: 75, 
+                        baseChance: 70, 
                         onSuccess: "elevator_success", 
                         onFailure: "elevator_caught" 
                     },
@@ -2092,7 +2473,7 @@
                 text: "Секретная дверь архива заперта на кодовый замок. На ней висит табличка 'Только для персонала'. Рядом на стене кто-то оставил пометку: 'Код меняется каждую неделю'.",
                 choices: [
                     { text: "Ввести сохраненный код", requiresCode: true, correctCode: "9999", onSuccess: "archive_inside", onFailure: "archive_alarm" },
-                    { text: "Попробовать угадать другой код", isChance: true, baseChance: 25, onSuccess: "archive_inside", onFailure: "archive_alarm" },
+                    { text: "Попробовать угадать другой код", isChance: true, baseChance: 30, onSuccess: "archive_inside", onFailure: "archive_alarm" },
                     { text: "Сдаться и бежать в лифтовую шахту", next: "elevator_shaft" }
                 ]
             },
@@ -2150,7 +2531,7 @@
                     { 
                         text: "Сделать быстрый рывок к выходу во время шума вентиляции", 
                         isChance: true, 
-                        baseChance: 80, 
+                        baseChance: 75, 
                         onSuccess: "corridor_escape_ending", 
                         onFailure: "caught_corridor" 
                     },
@@ -2252,16 +2633,16 @@
             },
 
             hide_under_desk: {
-                text: "Вы сжимаетесь в комок под терминалом. SASAVOT спрыгивает в комнату. Вы видите его когтистые лапы, которые медленно обходят стол. Оно принюхивается. Под столом вы замечаете выцарапанный код на дереве: '3030'.",
+                text: "Вы сжимаетесь в комок под терминалом. SASAVOT спрыгивает в комнату. Вы видите его когтистые лапы, которые медленно обходят стол. Оно принюхивается. Под столом, на старой картонке, вы замечаете выцарапанный код: '6666'.",
                 isDark: true,
                 onEnter: () => {
-                    gameState.rememberedCode = '3030';
+                    gameState.rememberedCode = '6666';
                 },
                 choices: [
                     { 
                         text: "Задержать дыхание изо всех сил", 
                         isChance: true, 
-                        baseChance: 70, 
+                        baseChance: 60, 
                         onSuccess: "hide_desk_success", 
                         onFailure: "hide_desk_fail" 
                     }
@@ -2503,6 +2884,119 @@
                 choicesContainer.appendChild(btn);
             });
         }
+
+        // =====================================================================
+        // СИСТЕМА ПОДСКАЗОК КОНЦОВОК
+        // =====================================================================
+        const endingHints = {
+            'ending_vent': 'Найдите разводной ключ в шкафчиках, залезьте в вентиляцию и заблокируйте лопасти вентилятора ключом или заклините их руками.',
+            'ending_sewer': 'Спуститесь в канализацию через люк в коридоре, затем преодолейте узкий дренажный коллектор или нырните под воду.',
+            'ending_drown': 'Спуститесь в канализацию и попробуйте нырнуть под воду или пройти через коллектор (провал).',
+            'ending_warehouse_secret': 'Найдите кассету в шкафчиках, вставьте её в плеер на складе, затем откройте секретную комнату кодом 5555.',
+            'ending_warehouse_hack': 'Найдите кассету, отвлеките монстра, затем взломайте замок двери склада (шанс 55%).',
+            'ending_warehouse': 'Вставьте кассету в плеер, затем спокойно пройдите к пожарному выходу или используйте шкафчик для скрытности.',
+            'ending_generator_emergency': 'Найдите код 4869 (в кабинете охраны, на сервере или в шкафу генераторной), введите его на пульте генератора.',
+            'ending_generator_overload': 'Найдите разводной ключ, затяните клапан давления на генераторе для перегрузки.',
+            'ending_heroic': 'Сделайте перегрузку генератора, затем используйте ключ чтобы сломать систему охлаждения.',
+            'ending_generator_normal': 'Запустите генератор вручную (шанс 75%) или найдите инструкцию и включите по схеме.',
+            'ending_fire': 'Провалите ручной запуск генератора (шанс 75%).',
+            'ending_elevator_call': 'Найдите код 1337 (в сейфе кабинета охраны или шкафу генераторной), вызовите лифт и вберите внутрь.',
+            'ending_elevator_manual': 'Спуститесь по тросу на крышу кабины лифта (шанс 70%).',
+            'ending_fall': 'Провалите спуск по тросу (шанс 70%).',
+            'ending_rescue': 'Найдите рацию в шкафу генераторной, подайте сигнал бедствия и ждите спасения.',
+            'ending_roof_secret': 'Исследуйте крышу и найдите скрытую панель с кодом.',
+            'ending_roof_ladder': 'Найдите кассету, отвлеките монстра, затем поднимитесь по пожарной лестнице на крышу.',
+            'ending_chemist': 'Создайте дымовую завесу в лаборатории (шанс 75%), затем подойдите к дезориентированному монстру.',
+            'ending_mutation': 'Выпейте синюю сыворотку в лаборатории и атакуйте монстра.',
+            'ending_truth': 'Найдите USB-флешку в кабинете охраны или на сервере, затем загрузите данные в Архиве.',
+            'ending_archive_direct': 'Проникните в Архив (через вентиляцию или код 9999), затем бежите к выходу на крышу.',
+            'ending_corridor': 'Сядьте в шкафчик (шанс 65%) или прячьтесь под столом (шанс 60%), затем выбежите через технический выход.',
+            'ending_frozen': 'Позвольте таймеру истечь на любой сцене с таймером.',
+            'ending_archive': 'Найдите код 9999 (в кабинете охраны, на сервере или через камеры), откройте архив и найдите выход.'
+        };
+
+        function showEndingsList() {
+            const modal = document.createElement('div');
+            modal.className = 'endings-modal active';
+            modal.id = 'endings-modal';
+            
+            let endingsHtml = '<div class="endings-modal-content">';
+            endingsHtml += '<h2 class="endings-modal-title">СПИСОК КОНЦОВОК</h2>';
+            
+            // Получаем все концовки из истории
+            const allEndings = [];
+            for (const key in story) {
+                if (story[key].ending) {
+                    allEndings.push({
+                        id: story[key].ending.id,
+                        name: story[key].ending.name,
+                        unlocked: gameState.unlockedEndings.includes(story[key].ending.id)
+                    });
+                }
+            }
+            
+            // Сортируем: сначала открытые, потом закрытые
+            allEndings.sort((a, b) => {
+                if (a.unlocked && !b.unlocked) return -1;
+                if (!a.unlocked && b.unlocked) return 1;
+                return a.name.localeCompare(b.name);
+            });
+            
+            allEndings.forEach(ending => {
+                const statusClass = ending.unlocked ? 'unlocked' : 'locked';
+                const statusText = ending.unlocked ? 'ОТКРЫТА' : 'ЗАКРЫТА';
+                const hint = endingHints[ending.id] || 'Подсказка отсутствует';
+                
+                endingsHtml += `
+                    <div class="ending-item ${statusClass}">
+                        <div class="ending-header">
+                            <div class="ending-name">${ending.name}</div>
+                            <div class="ending-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <button class="spoiler-btn" onclick="toggleSpoiler(this, '${ending.id}')">
+                            СПОЙЛЕР
+                        </button>
+                        <div class="spoiler-content" id="spoiler-${ending.id}">
+                            <strong>Как дойти:</strong><br>
+                            ${hint}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            endingsHtml += '<button class="close-modal-btn" onclick="closeEndingsList()">ЗАКРЫТЬ</button>';
+            endingsHtml += '</div>';
+            
+            modal.innerHTML = endingsHtml;
+            document.body.appendChild(modal);
+            
+            // Блокируем скролл страницы
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEndingsList() {
+            const modal = document.getElementById('endings-modal');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function toggleSpoiler(btn, endingId) {
+            const spoiler = document.getElementById(`spoiler-${endingId}`);
+            if (spoiler) {
+                spoiler.classList.toggle('active');
+                btn.textContent = spoiler.classList.contains('active') ? 'СКРЫТЬ' : 'СПОЙЛЕР';
+            }
+        }
+
+        // Закрытие модального окна по клику на фон
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('endings-modal');
+            if (modal && event.target === modal) {
+                closeEndingsList();
+            }
+        });
 
         // =====================================================================
         // ИНИЦИАЛИЗАЦИЯ
