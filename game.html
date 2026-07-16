@@ -796,6 +796,69 @@
             }
         }
 
+        /* Ссылки внизу экрана */
+        .footer-links {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .footer-link {
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
+            border: 2px solid #d11a1a;
+            color: #ff4444;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: 1.6rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+            box-shadow: 0 0 10px rgba(128, 16, 16, 0.3);
+        }
+
+        .footer-link:hover {
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.4) 0%, rgba(139, 0, 0, 0.4) 100%);
+            color: #ff0000;
+            border-color: #ff0000;
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 20px rgba(209, 26, 26, 0.6),
+                inset 0 0 15px rgba(209, 26, 26, 0.2);
+            text-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.8),
+                0 0 15px rgba(255, 0, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .footer-links {
+                bottom: 10px;
+                right: 10px;
+                gap: 10px;
+            }
+
+            .footer-link {
+                font-size: 1.2rem;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-links {
+                flex-direction: column;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .footer-link {
+                font-size: 1rem;
+                padding: 6px 12px;
+            }
+        }
+
         /* Модальное окно списка концовок */
         .endings-modal {
             display: none;
@@ -956,10 +1019,16 @@
 <body class="crt">
 
     <!-- ИНДИКАТОР ПРОГРЕССА КОНЦОВОК -->
-    <div id="ending-progress" class="ending-progress">Концовок: 0 / 16</div>
+    <div id="ending-progress" class="ending-progress">Концовок: 0 / 22</div>
 
     <!-- ТАЙМЕР -->
     <div id="timer-display" class="timer-display" style="display: none;">ВРЕМЯ: 60</div>
+
+    <!-- ССЫЛКИ ВНИЗУ ЭКРАНА -->
+    <div class="footer-links">
+        <a href="https://t.me/kkkrilola" target="_blank" class="footer-link">TELEGRAM</a>
+        <a href="https://www.donationalerts.com/r/mazzzke211" target="_blank" class="footer-link">ДОНАТ</a>
+    </div>
 
     <!-- СТАДИЯ 1: ГАЙД ПРИ ВХОДЕ -->
     <div id="intro-guide" class="screen">
@@ -2563,14 +2632,6 @@
                 ]
             },
 
-            // ========== КРЫША (ФИНАЛ) ==========
-            roof_escape_ending: {
-                text: "Вы выбегаете на крышу комплекса. Позади захлопывается бронированная дверь. Ночной ветер бьет в лицо, вдали виднеются огни города. Вы выжили.",
-                ending: { id: "ending_roof", name: "Ускользнувший во Тьму" },
-                choices: [
-                    { text: "ПОЗДРАВЛЯЕМ! НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
-                ]
-            },
 
             // ========== КОНЦОВКА: ПОБЕГ ЧЕРЕЗ ЛЕСТНИЦУ НА КРЫШУ ==========
             roof_ladder_escape_ending: {
@@ -2696,14 +2757,6 @@
                 ]
             },
 
-            // ========== КОНЦОВКА: ПОБЕГ ИЗ АРХИВА ==========
-            archive_escape_ending: {
-                text: "Вы находите черный выход из архива и вылезаете на крышу. Ветер бьет в лицо, а внизу видны огни города. Вы не слили данные, но вы живы. Информация о SASAVOT останется в вашей голове.",
-                ending: { id: "ending_archive", name: "Побег из Архива" },
-                choices: [
-                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
-                ]
-            }
         };
 
         // =====================================================================
@@ -2911,8 +2964,7 @@
             'ending_truth': 'Найдите USB-флешку в кабинете охраны или на сервере, затем загрузите данные в Архиве.',
             'ending_archive_direct': 'Проникните в Архив (через вентиляцию или код 9999), затем бежите к выходу на крышу.',
             'ending_corridor': 'Сядьте в шкафчик (шанс 65%) или прячьтесь под столом (шанс 60%), затем выбежите через технический выход.',
-            'ending_frozen': 'Позвольте таймеру истечь на любой сцене с таймером.',
-            'ending_archive': 'Найдите код 9999 (в кабинете охраны, на сервере или через камеры), откройте архив и найдите выход.'
+            'ending_frozen': 'Позвольте таймеру истечь на любой сцене с таймером.'
         };
 
         function showEndingsList() {
