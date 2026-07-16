@@ -38,6 +38,210 @@
             pointer-events: none;
         }
 
+        /* АДАПТИВНОСТЬ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 4rem;
+                letter-spacing: 3px;
+            }
+
+            .screen {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .guide-title {
+                font-size: 2.5rem;
+            }
+
+            .guide-text {
+                font-size: 1.4rem;
+                line-height: 1.3;
+            }
+
+            .guide-text br {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .btn {
+                font-size: 2rem;
+                padding: 8px 25px;
+            }
+
+            .difficulty-title {
+                font-size: 1.6rem;
+            }
+
+            .diff-label {
+                font-size: 1.6rem;
+            }
+
+            .warning-text {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+
+            .hud-item {
+                font-size: 1.4rem;
+            }
+
+            .text-log {
+                font-size: 1.6rem;
+                line-height: 1.3;
+            }
+
+            .choice-btn {
+                font-size: 1.6rem;
+                padding: 10px 15px;
+            }
+
+            .chance-badge {
+                font-size: 1.2rem;
+                padding: 2px 8px;
+            }
+
+            .darkness-warning {
+                font-size: 1.1rem;
+                padding: 2px 8px;
+            }
+
+            .ending-progress {
+                font-size: 1.2rem;
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+            }
+
+            .timer-display {
+                font-size: 1.4rem;
+                top: 10px;
+                left: 10px;
+                padding: 6px 12px;
+            }
+
+            .ending-notification {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            .ending-notification .notif-title {
+                font-size: 2.5rem;
+            }
+
+            .ending-notification .notif-sub {
+                font-size: 1.5rem;
+            }
+
+            .ending-tag {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 3rem;
+                letter-spacing: 2px;
+            }
+
+            .screen {
+                padding-left: 3%;
+                padding-right: 3%;
+            }
+
+            .guide-box {
+                padding: 20px;
+            }
+
+            .guide-title {
+                font-size: 2rem;
+            }
+
+            .guide-text {
+                font-size: 1.2rem;
+            }
+
+            .btn {
+                font-size: 1.6rem;
+                padding: 6px 20px;
+            }
+
+            .difficulty-container {
+                gap: 8px;
+            }
+
+            .difficulty-title {
+                font-size: 1.3rem;
+            }
+
+            .diff-options {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .diff-label {
+                font-size: 1.3rem;
+            }
+
+            .warning-text {
+                font-size: 1rem;
+                padding: 12px;
+            }
+
+            .game-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .hud-item {
+                font-size: 1.2rem;
+            }
+
+            .text-log {
+                font-size: 1.3rem;
+            }
+
+            .choice-btn {
+                font-size: 1.3rem;
+                padding: 8px 12px;
+            }
+
+            .chance-badge {
+                font-size: 1rem;
+            }
+
+            .darkness-warning {
+                font-size: 0.9rem;
+            }
+
+            .ending-progress {
+                font-size: 1rem;
+                top: 5px;
+                right: 5px;
+                padding: 4px 8px;
+            }
+
+            .timer-display {
+                font-size: 1.2rem;
+                top: 5px;
+                left: 5px;
+                padding: 5px 10px;
+            }
+
+            .ending-notification .notif-title {
+                font-size: 2rem;
+            }
+
+            .ending-notification .notif-sub {
+                font-size: 1.2rem;
+            }
+
+            .ending-tag {
+                font-size: 1.4rem;
+            }
+        }
+
         @keyframes flicker {
             0% { opacity: 0.98; }
             50% { opacity: 1; }
@@ -379,7 +583,7 @@
 <body class="crt">
 
     <!-- ИНДИКАТОР ПРОГРЕССА КОНЦОВОК -->
-    <div id="ending-progress" class="ending-progress">Концовок: 0 / 11</div>
+    <div id="ending-progress" class="ending-progress">Концовок: 0 / 16</div>
 
     <!-- ТАЙМЕР -->
     <div id="timer-display" class="timer-display" style="display: none;">ВРЕМЯ: 60</div>
@@ -388,9 +592,9 @@
     <div id="intro-guide" class="screen">
         <div class="guide-box">
             <h2 class="guide-title">> ИНСТРУКТАЖ ВЫЖИВАНИЯ</h2>
-            <p class="guide-text">
+                <p class="guide-text">
                 Добро пожаловать в текстовый интерактивный хоррор. Твоя судьба определяется твоим выбором и шансом.<br><br>
-                1. <strong>Разветвления:</strong> Сюжетная линия имеет множество скрытых путей и 10 уникальных концовок.<br>
+                1. <strong>Разветвления:</strong> Сюжетная линия имеет множество скрытых путей и 16 уникальных концовок.<br>
                 2. <strong>Предметы:</strong> Найденные вещи автоматически открывают безопасные действия без риска и отображаются вверху экрана.<br>
                 3. <strong>Шансы на успех [ШАНС]:</strong> Некоторые действия рискованны. Успех рассчитывается случайно.<br>
                 4. <strong>Сложность:</strong> Выбранный уровень в меню напрямую меняет вероятность удачного исхода.<br>
@@ -1250,14 +1454,23 @@
             vent_fan_wrench_success: {
                 text: "Вы просовываете тяжелый разводной ключ прямо между лопастями вентилятора. С оглушительным скрежетом двигатель вентилятора сгорает и останавливается. Путь на крышу полностью открыт и безопасен!",
                 choices: [
-                    { text: "Выбраться на крышу по вентиляционной шахте", next: "roof_escape_ending" }
+                    { text: "Выбраться на крышу по вентиляционной шахте", next: "vent_escape_ending" }
                 ]
             },
 
             vent_fan_success: {
                 text: "Каким-то чудом вам удается улучить момент и заклинить вращающийся барабан вентилятора куском арматуры. Путь свободен!",
                 choices: [
-                    { text: "Пролезть на крышу", next: "roof_escape_ending" }
+                    { text: "Пролезть на крышу", next: "vent_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ПО ВЕНТИЛЯЦИИ ==========
+            vent_escape_ending: {
+                text: "Вы выбираетесь на крышу через вентиляционную шахту. Лестница скрипит под ногами, но вы успеваете запрыгнуть на металлический люк. Сзади слышен яростный рев SASAVOT — он понял, что вы сбежали. Вы спрыгиваете на пожарную лестницу и скрываетесь в темноте ночи.",
+                ending: { id: "ending_vent", name: "Побег по Вентиляции" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1468,7 +1681,16 @@
                     updateHUD();
                 },
                 choices: [
-                    { text: "Взять сигнальный пистолет и выйти из склада", next: "roof_escape_ending" }
+                    { text: "Взять сигнальный пистолет и подняться по служебной лестнице на крышу", next: "warehouse_secret_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ИЗ СЕКРЕТНОЙ КОМНАТЫ СКЛАДА ==========
+            warehouse_secret_escape_ending: {
+                text: "Вы выходите из секретной комнаты и поднимаетесь по служебной лестнице прямо на крышу. Сигнальный пистолет у вас за поясом — вы готовы к встрече с монстром, но он не появляется. Вы перелезаете через парапет и спускаетесь по пожарной лестнице на улицу. Свобода.",
+                ending: { id: "ending_warehouse_secret", name: "Побег из Секретной Комнаты" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1479,7 +1701,7 @@
                 isChase: true,
                 onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.9); },
                 choices: [
-                    { text: "Бежать к выходу", next: "roof_escape_ending" },
+                    { text: "Бежать к выходу", next: "warehouse_escape_ending" },
                     { text: "Прятаться за ящиками", next: "warehouse_stealth_success" }
                 ]
             },
@@ -1487,7 +1709,7 @@
             play_distraction_tape: {
                 text: "Вы вставляете кассету 'ПЕРВЫЙ СТРИМ SASAVOT' в старый плеер охраны. На всех мониторах склада запускается старая архивная запись стрима. Знакомые звуки полностью дезориентируют монстра — он замирает у экрана, растерянно смотря на пиксели. Вы можете спокойно пройти дальше!",
                 choices: [
-                    { text: "Спокойно пройти к пожарному выходу", next: "roof_escape_ending" },
+                    { text: "Спокойно пройти к пожарному выходу", next: "warehouse_escape_ending" },
                     { text: "Проверить соседний кабинет охраны", next: "security_room_from_warehouse" },
                     { text: "Осторожно подойти к дезориентированному монстру", next: "approach_monster_distracted" }
                 ]
@@ -1502,7 +1724,7 @@
                         requiresItem: "wrench", 
                         next: "warehouse_kill_attempt" 
                     },
-                    { text: "Не рисковать — уйти к выходу", next: "roof_escape_ending" }
+                    { text: "Не рисковать — уйти к выходу", next: "warehouse_escape_ending" }
                 ]
             },
 
@@ -1530,7 +1752,7 @@
             warehouse_crawl_escape: {
                 text: "Вы ползете по бетонному полу, оставляя кровавый след. Позади гремит — монстр ищет вас среди ящиков. Ваша рука нащупывает холодный металл пожарной двери. Рывок — и вы снаружи, в ночной тишине, под звездами.",
                 choices: [
-                    { text: "Уползти в темноту леса", next: "roof_escape_ending" }
+                    { text: "Уползти в темноту леса", next: "warehouse_escape_ending" }
                 ]
             },
 
@@ -1540,7 +1762,7 @@
                     gameState.rememberedCode = '9999';
                 },
                 choices: [
-                    { text: "Идти на крышу", next: "roof_escape_ending" },
+                    { text: "Идти на крышу", next: "roof_ladder_escape_ending" },
                     { text: "Вернуться в Лифтовой холл через вентиляцию", next: "elevator_shaft" }
                 ]
             },
@@ -1548,14 +1770,24 @@
             warehouse_exit: {
                 text: "Вы находите тяжелую гермодверь с надписью 'ВЫХОД'. Но для ее открытия требуется запустить резервный генератор в другом крыле здания.",
                 choices: [
-                    { text: "Пробираться в Генераторную", next: "generator_path" }
+                    { text: "Пробираться в Генераторную", next: "generator_path" },
+                    { text: "Попробовать взломать замок двери", isChance: true, baseChance: 50, onSuccess: "warehouse_hack_escape_ending", onFailure: "warehouse_code_fail" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ЧЕРЕЗ ВЗЛОМ ДВЕРИ СКЛАДА ==========
+            warehouse_hack_escape_ending: {
+                text: "Вам удается взломать замок! Дверь открывается, и вы вываливаетесь на улицу. За спиной слышен рев SASAVOT, но он не может выйти за пределы комплекса. Вы скрываетесь в темных переулках.",
+                ending: { id: "ending_warehouse_hack", name: "Побег через Взлом" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
             warehouse_stealth_success: {
                 text: "Вы ловко маневрируете между стеллажами. Существо проходит мимо, так вас и не заметив. Впереди виднеется пожарный выход.",
                 choices: [
-                    { text: "Выбежать на лестницу к крыше", next: "roof_escape_ending" }
+                    { text: "Выбежать на лестницу к крыше", next: "warehouse_escape_ending" }
                 ]
             },
 
@@ -1602,7 +1834,16 @@
             generator_emergency_on: {
                 text: "Код принят! Генератор запускается в аварийном режиме. Свет вспыхивает во всем комплексе с невероятной яркостью. SASAVOT, который уже был рядом, отступает, завывая от боли. Свет выжигает ему глаза! Автоматические двери разблокированы.",
                 choices: [
-                    { text: "Бежать к главному выходу под защитой света", next: "roof_escape_ending" }
+                    { text: "Бежать к главному выходу под защитой света", next: "generator_emergency_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ПОСЛЕ АВАРИЙНОГО ЗАПУСКА ==========
+            generator_emergency_escape_ending: {
+                text: "Вы выбегаете через автоматические двери. Аварийные софиты освещают вам путь. SASAVOT отступает в темноту, ослепленный ярким светом. Вы идете по дорожке к шоссе, и через несколько минут вас подбирает проезжающая машина. Вы спасены.",
+                ending: { id: "ending_generator_emergency", name: "Аварийное Спасение" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1636,7 +1877,7 @@
                 text: "Вы включаете рацию. Сквозь помехи пробивается голос: '...прием... это поисково-спасательный отряд... мы на подходе к комплексу...' Рацию заглушает рев монстра за дверью. Они идут! Нужно продержаться!",
                 choices: [
                     { text: "Прокричать в рацию координаты и ждать спасения", next: "rescue_ending" },
-                    { text: "Запустить генератор и бежать на крышу к спасателям", next: "generator_on" }
+                    { text: "Запустить генератор и бежать на крышу к спасателям", next: "generator_normal_escape_ending" }
                 ]
             },
 
@@ -1654,7 +1895,16 @@
                 text: "Вы используете разводной ключ, чтобы затянуть клапан давления и пустить ток в обход предохранителей. Весь комплекс озаряет невероятно яркий свет софитов! Слышен дикий визг SASAVOT — свет выжигает ему глаза. Монстр в панике убегает обратно под землю. Вы в абсолютной безопасности!",
                 choices: [
                     { text: "Устроить саботаж и полностью взорвать комплекс с монстром внутри", requiresItem: "wrench", next: "sabotage_choice" },
-                    { text: "Спокойно пойти к главному выходу на крышу", next: "roof_escape_ending" }
+                    { text: "Спокойно пойти к главному выходу на крышу", next: "generator_overload_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ПОСЛЕ ПЕРЕГРУЗКИ ==========
+            generator_overload_escape_ending: {
+                text: "Вы выходите через главный выход, ослепленный яркими софитами. SASAVOT не может выйти на свет — он остаётся в темноте комплекса. Вы свободны под открытым небом, и ваши глаза еще долго видят этот яркий свет побега.",
+                ending: { id: "ending_generator_overload", name: "Побег Светом Софитов" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1676,7 +1926,16 @@
             generator_on: {
                 text: "Генераторы с диким ревом оживают! Свет вспыхивает во всем комплексе, ослепляя SASAVOT, который уже крался за вами. Автоматические двери склада и выхода теперь полностью разблокированы!",
                 choices: [
-                    { text: "Бежать к главному выходу со склада под защитой света", next: "roof_escape_ending" }
+                    { text: "Бежать к главному выходу со склада под защитой света", next: "generator_normal_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ПРИ ОСВЕЩЕНИИ ==========
+            generator_normal_escape_ending: {
+                text: "Свет генераторов освещает вам путь. Вы выбегаете через главный выход, ослепленный яркими софитами. SASAVOT не может выйти на свет — он остаётся в темноте комплекса. Вы свободны под открытым небом.",
+                ending: { id: "ending_generator_normal", name: "Побег при Освещении" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1730,6 +1989,15 @@
                 ]
             },
 
+            // ========== КОНЦОВКА: ПОБЕГ НА ЛИФТЕ ==========
+            elevator_call_escape_ending: {
+                text: "Вы вбегаете в лифт и нажимаете кнопку первого этажа. Кабина плавно спускается. Двери открываются — перед вами ночной город. Вы выходите на улицу. SASAVOT остался в комплексе.",
+                ending: { id: "ending_elevator_call", name: "Побег на Лифте" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
             // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД ЛИФТА ==========
             elevator_code_fail: {
                 text: "Панель мигает красным светом. 'НЕВЕРНЫЙ КОД'. Сирена на несколько секунд оглушает вас. Из темноты слышится приближающийся рев SASAVOT!",
@@ -1770,7 +2038,16 @@
             elevator_success: {
                 text: "Вы успешно соскальзываете вниз на крышу кабины лифта. Отсюда видна приоткрытая дверь технического этажа, ведущая наружу.",
                 choices: [
-                    { text: "Выползти через проем наружу", next: "roof_escape_ending" }
+                    { text: "Выползти через проем наружу", next: "elevator_manual_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ИЗ ЛИФТА ВРУЧНУЮ ==========
+            elevator_manual_escape_ending: {
+                text: "Вы выползаете через проем на технический этаж. Пожарная лестница ведет прямо на улицу. Вы спускаетесь, оглядываясь на пустую шахту. SASAVOT остался внизу. Этот побег — только ваша заслуга.",
+                ending: { id: "ending_elevator_manual", name: "Ручной Побег через Лифт" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1838,7 +2115,16 @@
                         requiresItem: "usb", 
                         next: "truth_ending" 
                     },
-                    { text: "Просто бежать к черному выходу из архива на крышу", next: "roof_escape_ending" }
+                    { text: "Просто бежать к черному выходу из архива на крышу", next: "archive_direct_escape_ending" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПРЯМОЙ ПОБЕГ ИЗ АРХИВА ==========
+            archive_direct_escape_ending: {
+                text: "Вы выбегаете из архива на крышу. Ветер бьет в лицо, а внизу видны огни города. Вы не слили данные, но вы живы. Информация о SASAVOT останется в вашей голове.",
+                ending: { id: "ending_archive_direct", name: "Прямой Побег из Архива" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1865,10 +2151,19 @@
                         text: "Сделать быстрый рывок к выходу во время шума вентиляции", 
                         isChance: true, 
                         baseChance: 80, 
-                        onSuccess: "roof_escape_ending", 
+                        onSuccess: "corridor_escape_ending", 
                         onFailure: "caught_corridor" 
                     },
                     { text: "Осторожно заглянуть в дверь Химической лаборатории", next: "lab_path" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ЧЕРЕЗ КОРИДОР ==========
+            corridor_escape_ending: {
+                text: "Вы вылетаете из комплекса через технический выход. Ноги несут вас сами, а в легких жжет холодный ночной воздух. За спиной слышен яростный рев SASAVOT, но он остался позади. Вы живёте.",
+                ending: { id: "ending_corridor", name: "Побег через Коридор" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1893,6 +2188,15 @@
                 ending: { id: "ending_roof", name: "Ускользнувший во Тьму" },
                 choices: [
                     { text: "ПОЗДРАВЛЯЕМ! НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ЧЕРЕЗ ЛЕСТНИЦУ НА КРЫШУ ==========
+            roof_ladder_escape_ending: {
+                text: "Вы поднимаетесь по пожарной лестнице прямо на крышу. Каждый шаг дается с трудом, но вы наверху. Бронированная дверь захлопывается за вашей спиной. Ночной ветер бьет в лицо. Вы свободны.",
+                ending: { id: "ending_roof_ladder", name: "Побег по Лестнице" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1970,6 +2274,42 @@
             roof_secret_ending: {
                 text: "Вы вводите код в скрытую панель на крыше, и открывается люк в недоступный ранее технический отсек. Отсюда через пожарную лестницу можно безопасно спуститься на улицу. Вы свободны!",
                 ending: { id: "ending_roof_secret", name: "Тайный Выход" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== НОВАЯ КОНЦОВКА: ПОБЕГ СО СКЛАДА ==========
+            warehouse_escape_ending: {
+                text: "Вы вырываетесь из склада и спускаетесь по пожарной лестнице на улицу. Ноги подкашиваются, но вы живы. За спиной слышен рев SASAVOT, но он не может выйти за пределы комплекса. Вы скрываетесь в темных переулках ЮАО.",
+                ending: { id: "ending_warehouse", name: "Побег со Склада" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== НОВАЯ КОНЦОВКА: ПОБЕГ ЧЕРЕЗ ГЕНЕРАТОРНУЮ ==========
+            generator_escape_ending: {
+                text: "Свет генераторов освещает вам путь. Вы выбегаете через главный выход, ослепленный яркими софитами. SASAVOT не может выйти на свет — он остаётся в темноте комплекса. Вы свободны под открытым небом.",
+                ending: { id: "ending_generator", name: "Спасение Светом" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== НОВАЯ КОНЦОВКА: ПОБЕГ ЧЕРЕЗ ЛИФТ ==========
+            elevator_escape_ending: {
+                text: "Вы вылезаете из лифтовой шахты на технический этаж. Отсюда открывается вид на ночной город. Пожарная лестница ведет прямо на улицу. Вы спускаетесь, оглядываясь на пустую шахту. SASAVOT остался внизу.",
+                ending: { id: "ending_elevator", name: "Побег через Лифт" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== КОНЦОВКА: ПОБЕГ ИЗ АРХИВА ==========
+            archive_escape_ending: {
+                text: "Вы находите черный выход из архива и вылезаете на крышу. Ветер бьет в лицо, а внизу видны огни города. Вы не слили данные, но вы живы. Информация о SASAVOT останется в вашей голове.",
+                ending: { id: "ending_archive", name: "Побег из Архива" },
                 choices: [
                     { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
