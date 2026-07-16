@@ -1,0 +1,291 @@
+/* ============================================
+   WINDOWS98-THEME.CSS — SAS_ARCHIVE.EXE
+   Стилизация под Windows 98/XP для сайта-музея «Дело SAS»
+   ============================================ */
+
+/* Windows 98 Window Frame */
+.win98-window {
+    background: #ece9d8;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    box-shadow: 1px 1px 0 0 #000;
+    font-family: 'Segoe UI', 'Tahoma', sans-serif;
+    font-size: 11px;
+    color: #000;
+}
+
+.win98-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(90deg, #000080, #1084d0);
+    color: white;
+    padding: 2px 4px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.win98-title {
+    flex: 1;
+    padding: 0 4px;
+}
+
+.win98-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.win98-btn {
+    width: 16px;
+    height: 14px;
+    background: #c0c0c0;
+    border: 1px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.win98-btn:hover {
+    background: #d4d4d4;
+}
+
+.win98-btn:active {
+    border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.win98-btn-close {
+    background: #c0c0c0;
+    border-color: #ffffff #808080 #808080 #ffffff;
+}
+
+.win98-btn-close:hover {
+    background: #e00000;
+    color: white;
+}
+
+/* Windows 98 Button */
+.win98-button {
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    padding: 4px 12px;
+    font-family: 'Segoe UI', 'Tahoma', sans-serif;
+    font-size: 11px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 1px 1px 0 0 #000;
+}
+
+.win98-button:hover {
+    background: #d4d4d4;
+}
+
+.win98-button:active {
+    border-color: #808080 #ffffff #ffffff #808080;
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+/* Windows 98 Input */
+.win98-input {
+    background: white;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 2px 4px;
+    font-family: 'Segoe UI', 'Tahoma', sans-serif;
+    font-size: 11px;
+    outline: none;
+}
+
+.win98-input:focus {
+    border-color: #000080 #c0c0c0 #c0c0c0 #000080;
+}
+
+/* Windows 98 Checkbox */
+.win98-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.win98-checkbox input[type="checkbox"] {
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    background: white;
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.win98-checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    font-size: 11px;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Windows 98 Tab */
+.win98-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #808080;
+    padding-left: 4px;
+}
+
+.win98-tab {
+    background: #c0c0c0;
+    border: 1px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    border-bottom: none;
+    padding: 4px 12px;
+    font-size: 11px;
+    cursor: pointer;
+    margin-bottom: -1px;
+}
+
+.win98-tab.active {
+    background: #ece9d8;
+    border-bottom: 1px solid #ece9d8;
+    font-weight: bold;
+}
+
+/* Windows 98 Status Bar */
+.win98-statusbar {
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 2px 4px;
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Windows 98 Progress Bar */
+.win98-progress {
+    height: 16px;
+    background: white;
+    border: 1px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+}
+
+.win98-progress-fill {
+    height: 100%;
+    background: #000080;
+    transition: width 0.3s;
+}
+
+/* Windows 98 Dialog */
+.win98-dialog {
+    background: #ece9d8;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    padding: 16px;
+    min-width: 300px;
+}
+
+.win98-dialog-title {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.win98-dialog-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+/* Windows 98 Icon sizes */
+.win98-icon-sm {
+    width: 16px;
+    height: 16px;
+}
+
+.win98-icon-md {
+    width: 32px;
+    height: 32px;
+}
+
+.win98-icon-lg {
+    width: 48px;
+    height: 48px;
+}
+
+/* Windows 98 Tooltip */
+.win98-tooltip {
+    background: #ffffe0;
+    border: 1px solid #000;
+    padding: 2px 4px;
+    font-family: 'Segoe UI', 'Tahoma', sans-serif;
+    font-size: 11px;
+    box-shadow: 1px 1px 0 0 #000;
+}
+
+/* Windows 98 List */
+.win98-list {
+    background: white;
+    border: 2px solid;
+    border-color: #808080 #ffffff #ffffff #808080;
+    padding: 2px;
+    list-style: none;
+}
+
+.win98-list li {
+    padding: 2px 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.win98-list li:hover {
+    background: #000080;
+    color: white;
+}
+
+/* Windows 98 Seperator */
+.win98-separator {
+    border: none;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #ffffff;
+    margin: 4px 0;
+}
+
+/* Blue screen of death simulation */
+.bsod {
+    background: #000080;
+    color: #c0c0c0;
+    font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 40px;
+    min-height: 100vh;
+}
+
+.bsod-title {
+    color: #c0c0c0;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.bsod-code {
+    color: #c0c0c0;
+    margin-bottom: 16px;
+}
+
+.bsod-cursor {
+    animation: blink 1s step-end infinite;
+}

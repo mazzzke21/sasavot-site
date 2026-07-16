@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ДЕЛО №sasavot-2024-88 | Цифровой архив расследования</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/windows98-theme.css">
+    <link rel="stylesheet" href="assets/css/vhs-overlay.css">
+    <link rel="stylesheet" href="assets/css/glitch.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+    <!-- VHS Overlay Layers - усиленные -->
+    <div class="vhs-overlay"></div>
+    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="grain-overlay"></div>
+    <div class="vhs-flash"></div>
+    <div class="head-clog"></div>
+    <div class="dropout"></div>
+    <div class="glitch-flash" id="glitchFlash"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="top-nav" id="topNav">
+        <div class="nav-titlebar">
+            <span class="nav-title">ДЕЛО №sasavot-2024-88</span>
+            <span class="nav-status">СТАТУС: АРХИВ ЗАКРЫТ, ДЕЛО ПРИОСТАНОВЛЕНО</span>
+            <span class="nav-version">v1.04.2025</span>
+        </div>
+        <div class="nav-menu">
+            <a href="#intro" class="nav-link" data-section="intro">00: ВСТУПЛЕНИЕ</a>
+            <a href="#dasha" class="nav-link" data-section="dasha">01: dasha228play</a>
+            <a href="#morphe" class="nav-link" data-section="morphe">02: morphe_ya</a>
+            <a href="#cutie" class="nav-link" data-section="cutie">03: cutierover</a>
+            <a href="#cris" class="nav-link" data-section="cris">04: chr1swave</a>
+            <a href="#korya" class="nav-link" data-section="korya">05: korya_mc</a>
+            <a href="#final" class="nav-link" data-section="final">06: ФИНАЛ</a>
+            <a href="#map" class="nav-link" data-section="map">07: КАРТА</a>
+        </div>
+    </nav>
+
+    <!-- ==================== EXPONAT 00: INTRO ==================== -->
+    <section class="exhibit" id="intro">
+        <div class="terminal" id="terminal">
+            <div class="terminal-line" data-delay="0">C:\НАДЕЖДА\ХРАНИЛИЩЕ\sasavot_archive.exe</div>
+            <div class="terminal-line" data-delay="500"> </div>
+            <div class="terminal-line" data-delay="1000">>> ЗАПУСК АРХИВА...</div>
+            <div class="terminal-line" data-delay="2000">>> ЗАГРУЗКА ДАННЫХ...</div>
+            <div class="terminal-line" data-delay="3000">>> ВНИМАНИЕ: НЕКОТОРЫЕ ФАЙЛЫ ПОВРЕЖДЕНЫ ИЛИ НЕ ПОЛНОСТЬЮ ВОССТАНОВЛЕНЫ.</div>
+            <div class="terminal-line" data-delay="4000">>> ПРОСМОТР ДАННЫХ МОЖЕТ ВЫЗВАТЬ... НЕОПРЕДЕЛЕННУЮ РЕАКЦИЮ.</div>
+            <div class="terminal-line" data-delay="5000">>> АВТОРЫ ПРОЕКТА НЕ РЕКОМЕНДУЮТ ПРОСМОТР ЛИЦАМ С НЕУСТОЙЧИВОЙ ПСИХИКОЙ.</div>
+            <div class="terminal-line" data-delay="6000"> </div>
+            <div class="terminal-line" data-delay="6500">>> ДЛЯ ПРОДОЛЖЕНИЯ НАЖМИТЕ [ENTER] ИЛИ ПРОКРУТИТЕ ЭКРАН ВНИЗ.</div>
+            <div class="terminal-line" data-delay="7000">>> ИЛИ... <a href="#" class="escape-link" id="escapeLink">[НАЖМИТЕ ESC ДЛЯ ВЫХОДА]</a>.</div>
+            <div class="terminal-cursor" id="terminalCursor">_</div>
+        </div>
+    </section>
+
+    <!-- ESC Page (hidden) -->
+    <div class="esc-overlay" id="escOverlay">
+        <div class="esc-content">
+            <p>ВЫ ПОКИНУЛИ АРХИВ.</p>
+            <p>НО ОН НЕ ПОКИНЕТ ВАС.</p>
+            <p class="esc-sub">Перенаправление через <span id="escCountdown">5</span>...</p>
+        </div>
+    </div>
+
+    <!-- ==================== EXPONAT 01: DASHA ==================== -->
+    <section class="exhibit" id="dasha">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">УЛИКА №sasavot-001</span>
+                <span class="badge-status status-confirmed">СТАТУС: ПОДТВЕРЖДЕНО</span>
+            </div>
+            <div class="exhibit-meta">
+                <div class="meta-row"><span class="meta-label">ЖЕРТВА:</span><span class="meta-value victim-name">dasha228play</span></div>
+                <div class="meta-row"><span class="meta-label">ДАТА ПРОПАЖИ:</span><span class="meta-value">12.04.2021</span></div>
+                <div class="meta-row"><span class="meta-label">ПОСЛЕДНЯЯ ТРАНСЛЯЦИЯ:</span><span class="meta-value">11.04.2021 23:14:42</span></div>
+                <div class="meta-row"><span class="meta-label">ВОЗРАСТ:</span><span class="meta-value">23 ГОДА</span></div>
+                <div class="meta-row"><span class="meta-label">ОБНАРУЖЕНА:</span><span class="meta-value status-missing">НЕ НАЙДЕНА</span></div>
+            </div>
+        </div>
+
+        <div class="exhibit-body two-column">
+            <div class="column-left">
+                <div class="vhs-player" data-video="dasha">
+                    <div class="vhs-player-screen" id="dashaPlayer">
+                        <canvas class="vhs-canvas" id="dashaCanvas"></canvas>
+                        <div class="vhs-noise-overlay"></div>
+                        <div class="vhs-tracking-lines"></div>
+                        <div class="vhs-corrupted-overlay" id="dashaCorrupted">
+                            <div class="corrupted-text">[ФАЙЛ ПОВРЕЖДЕН]</div>
+                            <div class="corrupted-sub">ВОССТАНОВЛЕНИЕ: 0%</div>
+                        </div>
+                    </div>
+                    <div class="vhs-player-controls">
+                        <button class="vhs-btn play-btn" data-player="dasha">▶ PLAY</button>
+                        <button class="vhs-btn stop-btn" data-player="dasha">⏹ СТОП</button>
+                        <span class="vhs-time">00:00:47</span>
+                        <span class="vhs-status">[ФАЙЛ ПОВРЕЖДЕН. ВОССТАНОВЛЕНИЕ НЕВОЗМОЖНО]</span>
+                    </div>
+                </div>
+                <div class="evidence-text">
+                    <p><strong>Файл:</strong> <span class="filename">LAST_STREAM_dasha228play_fragment.avi</span></p>
+                    <p>Первые 30 секунд записи — обычный стрим. Даша сидит в комнате, общается с чатом. Ничего не предвещает беды. На 31-й секунде — <span class="highlight-red">резкий стук в дверь</span>. Даша замолкает. Поворачивается к двери. Спрашивает: «Кто там?»</p>
+                    <p>Никто не отвечает. Чат начинает спамить: «ОТКРОЙ», «НЕ ОТКРЫВАЙ», «БЕГИ».</p>
+                    <p>Даша встаёт. Подходит к двери. Говорит: <span class="highlight-yellow">«Я тебя слышу, Саша, выходи... я знаю, что это ты»</span>.</p>
+                    <p>Дверь открывается. Камера смотрит в коридор. Там — <span class="highlight-red">темнота. Абсолютная. Непроглядная.</span></p>
+                    <p>Даша делает шаг назад. Кричит.</p>
+                    <p class="archival-note">[Запись обрывается. 17 секунд помех. Далее — белый шум до конца файла.]</p>
+                    <p class="archival-note">Аудиодорожка: на 41-й секунде — очень тихое, почти неразличимое: <em>«...прости... но ты слишком много знала...»</em></p>
+                </div>
+            </div>
+            <div class="column-right">
+                <div class="evidence-card">
+                    <h3>Журнал модератора</h3>
+                    <div class="card-content log-content">
+                        <p>[СЛУЖБА ПОДДЕРЖКИ ПЛАТФОРМЫ — ЖАЛОБА НА ТРАНСЛЯЦИЮ]</p>
+                        <p>Пользователь: dasha228play</p>
+                        <p>Тип жалобы: Трансляция прервана, стример не выходит на связь</p>
+                        <p>Статус: ПЕРЕДАНО В ПРАВООХРАНИТЕЛЬНЫЕ ОРГАНЫ</p>
+                        <p class="log-note">— Стрим оборвался в 23:17. На кадрах, что успели сохраниться, видно, что в комнату кто-то вошёл. Мы не можем идентифицировать личность.</p>
+                    </div>
+                </div>
+                <div class="evidence-card">
+                    <h3>Полицейский протокол</h3>
+                    <div class="card-content">
+                        <p>ОМВД России по г. [ДАННЫЕ УДАЛЕНЫ]</p>
+                        <p>Протокол осмотра места происшествия №284-21</p>
+                        <p>Дата: 12.04.2021, 02:15</p>
+                        <p>Прибыв по адресу [ДАННЫЕ УДАЛЕНЫ], сотрудники полиции обнаружили:</p>
+                        <ul>
+                            <li>дверь в квартиру открыта</li>
+                            <li>следы взлома отсутствуют</li>
+                            <li>в комнате: перевёрнутый стол, разбитый монитор</li>
+                            <li>на полу: повреждённая веб-камера с вырванным кабелем</li>
+                            <li>следов крови не обнаружено</li>
+                        </ul>
+                        <p class="log-note">Гражданка [ДАННЫЕ УДАЛЕНЫ] не обнаружена. Дело приостановлено.</p>
+                    </div>
+                </div>
+                <div class="spoiler-block">
+                    <button class="spoiler-toggle">[РАСКРЫТЬ ДОПОЛНИТЕЛЬНЫЙ МАТЕРИАЛ]</button>
+                    <div class="spoiler-content">
+                        <p><strong>Файл:</strong> <span class="filename">dasha_SPECIAL_EDIT.mp4</span> (зашифрован, восстановлен частично)</p>
+                        <p>На видео — нарезка стримов Даши за последний месяц. Кадры, где она улыбается, смеётся.</p>
+                        <p>В конце файла — чёрный экран с текстом:</p>
+                        <div class="sas-message">
+                            <p>"Ты говорила правду. Но правда убивает.</p>
+                            <p>Теперь ты — часть правды.</p>
+                            <p>Часть меня.</p>
+                            <p>Спи спокойно, Даша."</p>
+                            <p class="sas-signature">— sasavot_dev</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 02: MORPHE_YA ==================== -->
+    <section class="exhibit" id="morphe">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">УЛИКА №sasavot-002</span>
+                <span class="badge-status status-confirmed">СТАТУС: ПОДТВЕРЖДЕНО</span>
+            </div>
+            <div class="exhibit-meta">
+                <div class="meta-row"><span class="meta-label">ЖЕРТВА:</span><span class="meta-value victim-name">morphe_ya</span></div>
+                <div class="meta-row"><span class="meta-label">ДАТА ПРОПАЖИ:</span><span class="meta-value">03.09.2022</span></div>
+                <div class="meta-row"><span class="meta-label">ПОСЛЕДНЯЯ ТРАНСЛЯЦИЯ:</span><span class="meta-value">02.09.2022 19:47:03</span></div>
+                <div class="meta-row"><span class="meta-label">ВОЗРАСТ:</span><span class="meta-value">24 ГОДА</span></div>
+                <div class="meta-row"><span class="meta-label">ОБНАРУЖЕНА:</span><span class="meta-value status-missing">НЕ НАЙДЕНА</span></div>
+            </div>
+        </div>
+
+        <div class="exhibit-body two-column">
+            <div class="column-left">
+                <div class="cctv-grid">
+                    <div class="cctv-cam active">
+                        <canvas class="cctv-canvas" id="morpheCCTV1"></canvas>
+                        <span class="cctv-label">КАМЕРА 1 — УЛИЦА</span>
+                    </div>
+                    <div class="cctv-cam active">
+                        <canvas class="cctv-canvas" id="morpheCCTV2"></canvas>
+                        <span class="cctv-label">КАМЕРА 2 — ПЕРЕКРЁСТОК</span>
+                    </div>
+                    <div class="cctv-cam lost">
+                        <span class="cctv-lost-text">SIGNAL LOST</span>
+                        <span class="cctv-label">КАМЕРА 3</span>
+                    </div>
+                    <div class="cctv-cam lost">
+                        <span class="cctv-lost-text">SIGNAL LOST</span>
+                        <span class="cctv-label">КАМЕРА 4</span>
+                    </div>
+                </div>
+                <div class="evidence-text">
+                    <p><strong>Файл:</strong> <span class="filename">CCTV_STREET_02-09-2022_1930-2000.avi</span></p>
+                    <p>Изъято с сервера системы видеонаблюдения ООО «[ДАННЫЕ УДАЛЕНЫ]».</p>
+                    <p>19:33 — на кадрах видна девушка (morphe_ya), возвращающаяся домой. Она идёт быстрым шагом, оглядывается.</p>
+                    <p>19:34 — она останавливается. Достаёт телефон. Смотрит на экран. Выражение лица — <span class="highlight-red">испуганное</span>.</p>
+                    <p>19:36 — за ней из-за угла выходит <span class="highlight-red">мужской силуэт</span>. Высокий. Идёт ровным, спокойным шагом.</p>
+                    <p>19:38 — камера начинает <span class="glitch-text">глитчить</span>. Изображение искажается VHS-помехами.</p>
+                    <p>19:39 — на одном из кадров (если замедлить) — <span class="highlight-red">человеческое лицо</span>, приближенное к камере. Улыбка. Глаза — чёрные дыры.</p>
+                    <p>19:40 — помехи прекращаются. Улица пуста. Никого нет.</p>
+                </div>
+            </div>
+            <div class="column-right">
+                <div class="evidence-card">
+                    <h3>Рапорт о проникновении</h3>
+                    <div class="card-content">
+                        <p>ОМВД России по г. [ДАННЫЕ УДАЛЕНЫ]</p>
+                        <p>Дата: 04.09.2022, 11:30</p>
+                        <p>Обнаружено:</p>
+                        <ul>
+                            <li>Квартира пуста. Личные вещи на месте.</li>
+                            <li>На столе — включённый ноутбук. Открыт чат Discord.</li>
+                            <li>Окно на кухне открыто. Следов проникновения — нет.</li>
+                            <li>На подоконнике — окурок сигареты, не принадлежащей гражданке.</li>
+                            <li>На стене над кроватью — надпись чёрным маркером:</li>
+                        </ul>
+                        <p class="sas-graffiti">«ТЫ НЕ ДАЛА. Я ЗАБРАЛ САМ. sasavot»</p>
+                    </div>
+                </div>
+                <div class="evidence-card">
+                    <h3>Последние сообщения в Discord</h3>
+                    <div class="card-content discord-log">
+                        <p><span class="timestamp">[18:32:14]</span> <span class="user-name">morphe_ya:</span> он снова написал мне</p>
+                        <p><span class="timestamp">[18:32:22]</span> <span class="user-name">morphe_ya:</span> я ему отказала уже сто раз</p>
+                        <p><span class="timestamp">[18:33:01]</span> <span class="user-name">morphe_ya:</span> мне страшно</p>
+                        <p><span class="timestamp">[18:33:09]</span> <span class="user-name">morphe_ya:</span> я знаю где он живёт. я нашла его ип через донейшн</p>
+                        <p><span class="timestamp">[18:33:28]</span> <span class="user-name">morphe_ya:</span> он сейчас стримит</p>
+                        <p><span class="timestamp">[18:33:35]</span> <span class="user-name">morphe_ya:</span> и он смотрит на меня из камеры</p>
+                        <p><span class="timestamp">[18:33:50]</span> <span class="user-name">morphe_ya:</span> я вижу его лицо</p>
+                        <p><span class="timestamp">[18:33:58]</span> <span class="user-name">morphe_ya:</span> он улыбается</p>
+                        <p><span class="timestamp">[18:34:06]</span> <span class="user-name">morphe_ya:</span> как у него ключи от моей квартиры</p>
+                        <p><span class="timestamp">[18:34:12]</span> <span class="user-name">morphe_ya:</span> я слышу шаги в коридоре</p>
+                        <p><span class="timestamp">[18:34:19]</span> <span class="user-name">morphe_ya:</span> он здесь</p>
+                        <p><span class="timestamp">[18:34:25]</span> <span class="user-name">morphe_ya:</span> мамочка прости</p>
+                        <p><span class="timestamp">[18:34:27]</span> <span class="user-name">morphe_ya:</span> я лю</p>
+                        <p class="system-msg">— ПОЛЬЗОВАТЕЛЬ ВЫШЕЛ ИЗ ЧАТА —</p>
+                        <p class="system-msg">— ПОЛЬЗОВАТЕЛЬ УДАЛИЛ АККАУНТ —</p>
+                    </div>
+                </div>
+                <div class="spoiler-block">
+                    <button class="spoiler-toggle">[РАСКРЫТЬ ПЕРЕПИСКУ sasavot → morphe_ya]</button>
+                    <div class="spoiler-content">
+                        <p>Восстановлено из кэша Telegram:</p>
+                        <div class="sas-chat">
+                            <p><span class="sas-name">[sasavot]:</span> ты не ответила на мое сообщение</p>
+                            <p><span class="sas-name">[sasavot]:</span> я ждал 4 часа</p>
+                            <p><span class="victim-name">[morphe_ya]:</span> отстань</p>
+                            <p><span class="victim-name">[morphe_ya]:</span> ты псих</p>
+                            <p><span class="sas-name">[sasavot]:</span> я просто хочу чтобы ты была моей</p>
+                            <p><span class="sas-name">[sasavot]:</span> навсегда</p>
+                            <p><span class="victim-name">[morphe_ya]:</span> я вызову полицию</p>
+                            <p><span class="sas-name">[sasavot]:</span> они не придут</p>
+                            <p><span class="sas-name">[sasavot]:</span> уже поздно</p>
+                            <p><span class="sas-name">[sasavot]:</span> я уже рядом</p>
+                            <p><span class="sas-name">[sasavot]:</span> у тебя за спиной</p>
+                            <p><span class="sas-name">[sasavot]:</span> оглянись</p>
+                        </div>
+                        <p class="archival-note">Последнее сообщение доставлено в 19:32. Время смерти (предположительно) — 19:35.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 03: CUTIEROVER ==================== -->
+    <section class="exhibit" id="cutie">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">УЛИКА №sasavot-003</span>
+                <span class="badge-status status-confirmed">СТАТУС: ПОДТВЕРЖДЕНО</span>
+            </div>
+            <div class="exhibit-meta">
+                <div class="meta-row"><span class="meta-label">ЖЕРТВА:</span><span class="meta-value victim-name">cutierover</span></div>
+                <div class="meta-row"><span class="meta-label">ДАТА ПРОПАЖИ:</span><span class="meta-value">17.01.2023</span></div>
+                <div class="meta-row"><span class="meta-label">ПОСЛЕДНЯЯ ТРАНСЛЯЦИЯ:</span><span class="meta-value">16.01.2023 22:05:18</span></div>
+                <div class="meta-row"><span class="meta-label">ВОЗРАСТ:</span><span class="meta-value">25 ЛЕТ</span></div>
+                <div class="meta-row"><span class="meta-label">ОБНАРУЖЕНА:</span><span class="meta-value status-missing">НЕ НАЙДЕНА</span></div>
+            </div>
+        </div>
+
+        <div class="exhibit-body two-column">
+            <div class="column-left">
+                <div class="discord-voice-window">
+                    <div class="discord-header">
+                        <span class="discord-channel">🔊 Расследование cutierover</span>
+                        <span class="discord-users">3 участника</span>
+                    </div>
+                    <div class="discord-log-content" id="discordLog">
+                        <p><span class="timestamp">[22:01:47]</span> <span class="user-name cutie-name">cutierover:</span> я выяснила его ип</p>
+                        <p><span class="timestamp">[22:01:52]</span> <span class="user-name cutie-name">cutierover:</span> он не использует впн</p>
+                        <p><span class="timestamp">[22:02:04]</span> <span class="user-name cutie-name">cutierover:</span> я прогнала через базу данных — он живёт в москве, южный округ</p>
+                        <p><span class="timestamp">[22:02:11]</span> <span class="user-name cutie-name">cutierover:</span> я сузила до района</p>
+                        <p><span class="timestamp">[22:02:31]</span> <span class="user-name cutie-name">cutierover:</span> даша была моей подругой</p>
+                        <p><span class="timestamp">[22:02:38]</span> <span class="user-name cutie-name">cutierover:</span> я не могу просто сидеть и смотреть как он уходит</p>
+                        <p><span class="timestamp">[22:03:08]</span> <span class="user-name cutie-name">cutierover:</span> но я знаю что он стримит сейчас</p>
+                        <p><span class="timestamp">[22:03:14]</span> <span class="user-name cutie-name">cutierover:</span> я открыла его стрим на втором мониторе</p>
+                        <p><span class="timestamp">[22:03:25]</span> <span class="user-name cutie-name">cutierover:</span> он смотрит пустым взглядом в камеру</p>
+                        <p><span class="timestamp">[22:03:31]</span> <span class="user-name cutie-name">cutierover:</span> и улыбается</p>
+                        <p><span class="timestamp">[22:03:58]</span> <span class="user-name cutie-name">cutierover:</span> он встал</p>
+                        <p><span class="timestamp">[22:04:18]</span> <span class="user-name cutie-name">cutierover:</span> я слышу звук открывающейся двери</p>
+                        <p><span class="timestamp">[22:04:25]</span> <span class="user-name cutie-name">cutierover:</span> у меня за спиной</p>
+                        <p><span class="timestamp">[22:04:30]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> НЕТ</p>
+                        <p><span class="timestamp">[22:04:36]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> ОН ЗДЕСЬ</p>
+                        <p><span class="timestamp">[22:04:42]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> ОН В МОЕЙ КОМНАТЕ</p>
+                        <p><span class="timestamp">[22:04:48]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> БЛЯТЬ ПОЛИЦИЮ</p>
+                        <p><span class="timestamp">[22:04:55]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> Я НЕ МОГУ ПОШЕВЕЛИТЬСЯ</p>
+                        <p><span class="timestamp">[22:04:57]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> ОН СТОИТ ЗА МНОЙ</p>
+                        <p><span class="timestamp">[22:05:01]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> я вижу его отражение в мониторе</p>
+                        <p><span class="timestamp">[22:05:03]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> у него в руке нож</p>
+                        <p><span class="timestamp">[22:05:12]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> «ты слишком умная, Катя»</p>
+                        <p><span class="timestamp">[22:05:15]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> «умные девочки не живут долго»</p>
+                        <p><span class="timestamp">[22:05:18]</span> <span class="user-name cutie-name cutie-panic">cutierover:</span> ПОЖАЛУЙСТА</p>
+                        <p class="system-msg">— Пользователь cutierover отключился от голосового канала —</p>
+                        <p class="system-msg">— Пользователь cutierover удалил аккаунт —</p>
+                    </div>
+                </div>
+                <button class="audio-btn" id="cutieAudioBtn">[▶ ПРОСЛУШАТЬ АУДИО]</button>
+                <p class="archival-note">*Предупреждение: запись содержит крики. Рекомендуется низкая громкость.*</p>
+            </div>
+            <div class="column-right">
+                <div class="evidence-card">
+                    <h3>Анализ пользователя cutierover</h3>
+                    <div class="card-content">
+                        <p>Сообщение в общий чат за 2 часа до исчезновения:</p>
+                        <div class="discord-log-content">
+                            <p><span class="timestamp">[19:47:12]</span> <span class="user-name cutie-name">cutierover:</span> ребят, я нашла паттерн</p>
+                            <p><span class="timestamp">[19:47:28]</span> <span class="user-name cutie-name">cutierover:</span> он всегда стримит в одно и то же время</p>
+                            <p><span class="timestamp">[19:47:35]</span> <span class="user-name cutie-name">cutierover:</span> 20:00-00:00 по мск</p>
+                            <p><span class="timestamp">[19:48:05]</span> <span class="user-name cutie-name">cutierover:</span> на одном стриме я услышала сирену</p>
+                            <p><span class="timestamp">[19:48:12]</span> <span class="user-name cutie-name">cutierover:</span> определила по звуку — это машина скорой помощи</p>
+                            <p><span class="timestamp">[19:48:25]</span> <span class="user-name cutie-name">cutierover:</span> я сравнила с открытой базой — это южный округ</p>
+                            <p><span class="timestamp">[19:48:38]</span> <span class="user-name cutie-name">cutierover:</span> я увидела здание напротив — это торговый центр «москворечье»</p>
+                            <p><span class="timestamp highlight-red">[19:48:45]</span> <span class="user-name cutie-name">cutierover:</span> я знаю где он живёт.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="evidence-card">
+                    <h3>Техническая заметка архивариуса</h3>
+                    <div class="card-content archival-note">
+                        <p>Анализ IP-адреса, проведённый cutierover, совпадает с данными, полученными следствием. Она действительно вычислила его локацию с точностью до квартала. Это, вероятно, стало причиной её убийства.</p>
+                        <p>После её смерти sasavot начал использовать VPN. Навсегда.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 04: CHR1SWAVE ==================== -->
+    <section class="exhibit" id="cris">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">УЛИКА №sasavot-004</span>
+                <span class="badge-status status-confirmed">СТАТУС: ПОДТВЕРЖДЕНО</span>
+            </div>
+            <div class="exhibit-meta">
+                <div class="meta-row"><span class="meta-label">ЖЕРТВА:</span><span class="meta-value victim-name">chr1swave</span></div>
+                <div class="meta-row"><span class="meta-label">ДАТА ПРОПАЖИ:</span><span class="meta-value">08.06.2023</span></div>
+                <div class="meta-row"><span class="meta-label">ПОСЛЕДНЯЯ ТРАНСЛЯЦИЯ:</span><span class="meta-value">07.06.2023 20:33:41</span></div>
+                <div class="meta-row"><span class="meta-label">ВОЗРАСТ:</span><span class="meta-value">24 ГОДА</span></div>
+                <div class="meta-row"><span class="meta-label">ОБНАРУЖЕНА:</span><span class="meta-value status-missing">НЕ НАЙДЕНА</span></div>
+                <div class="meta-row"><span class="meta-label">ОСОБАЯ ПРИМЕТА:</span><span class="meta-value highlight-yellow">ПОЛНОЕ ОТСУТСТВИЕ УЛИК</span></div>
+            </div>
+        </div>
+
+        <div class="exhibit-body">
+            <div class="audio-player-section">
+                <div class="audio-visualizer" id="audioVisualizer">
+                    <canvas id="audioWaveform"></canvas>
+                </div>
+                <div class="audio-controls">
+                    <button class="vhs-btn play-btn" id="crisAudioPlay">▶ ВОСПРОИЗВЕСТИ ЗВОНОК</button>
+                    <span class="audio-duration">03:47</span>
+                </div>
+                <div class="evidence-text">
+                    <p><strong>Файл:</strong> <span class="filename">call_112_chr1swave_07-06-2023.wav</span></p>
+                    <p>Аудиозапись предоставлена МЧС России по г. Москва.</p>
+                </div>
+                <div class="call-transcript">
+                    <p><span class="timestamp">[20:33:41]</span> — ЗВОНОК ПОСТУПИЛ —</p>
+                    <p><span class="operator">ОПЕРАТОР:</span> Служба спасения, что у вас случилось?</p>
+                    <p><span class="victim-voice">chr1swave:</span> Здравствуйте... Помогите... За мной следят...</p>
+                    <p><span class="operator">ОПЕРАТОР:</span> Назовите ваш адрес.</p>
+                    <p><span class="victim-voice">chr1swave:</span> Я не знаю... Я не дома... Я в подъезде... Он за мной идёт...</p>
+                    <p><span class="operator">ОПЕРАТОР:</span> Кто за вами идёт?</p>
+                    <p><span class="victim-voice">chr1swave:</span> Глеб... Стример... sasavot... Он нашёл меня... Он здесь...</p>
+                    <p><span class="victim-voice">chr1swave:</span> Я спряталась в подвале... Здесь темно... Очень темно...</p>
+                    <p class="highlight-red">[20:34:52] — на фоне слышен звук открывающейся металлической двери —</p>
+                    <p><span class="victim-voice panic">chr1swave:</span> ОН ЗДЕСЬ</p>
+                    <p class="highlight-red">[20:34:58] — ЗВУК ПАДЕНИЯ. ЖЕНСКИЙ КРИК. ПОМЕХИ. —</p>
+                    <p class="highlight-red">[20:35:12] — ПОМЕХИ ПРЕКРАЩАЮТСЯ. ТИШИНА. —</p>
+                    <p class="sas-whisper">[20:35:15] — НИЗКИЙ МУЖСКОЙ ГОЛОС, ПОЧТИ ШЁПОТОМ: —</p>
+                    <p class="sas-whisper">sasavot (предп.): ...без следа... как ты и хотела...</p>
+                    <p class="highlight-red">[20:35:22] — ЗВУК ВОЛОЧЕНИЯ ТЕЛА ПО БЕТОНУ —</p>
+                    <p class="highlight-red">[20:35:28] — ТИШИНА. —</p>
+                    <p><span class="operator">ОПЕРАТОР:</span> Алло? Алло? Девушка? Вы здесь?</p>
+                    <p class="archival-note">[20:35:40 — 20:37:28] — БЕЛЫЙ ШУМ. —</p>
+                    <p class="archival-note">[20:37:28] — ЗВОНОК ПРЕРВАН —</p>
+                </div>
+            </div>
+            <div class="evidence-card">
+                <h3>Протокол осмотра места происшествия</h3>
+                <div class="card-content">
+                    <p>Место происшествия: подвальное помещение дома [ДАННЫЕ УДАЛЕНЫ]</p>
+                    <p>Обнаружено:</p>
+                    <ul>
+                        <li>Следы волочения на бетонном полу</li>
+                        <li>Оторванная пуговица от джинсовой куртки</li>
+                        <li>Разбитый телефон (IMEI совпадает с номером звонящего)</li>
+                        <li>На стене — надпись чёрным маркером:</li>
+                    </ul>
+                    <p class="sas-graffiti">«sasavot WAS HERE. sasavot IS FOREVER. sasavot IS GOD.»</p>
+                    <p class="archival-note">Отпечатков пальцев, пригодных для идентификации, не обнаружено. Биологических образцов — не обнаружено.</p>
+                </div>
+            </div>
+            <div class="spoiler-block">
+                <button class="spoiler-toggle">[СТОП-КАДР ПОСЛЕДНЕЙ ТРАНСЛЯЦИИ]</button>
+                <div class="spoiler-content">
+                    <p>На кадре — пустая комната. Веб-камера направлена на кресло. Кресло пустое. На столе — стакан с водой. Вода — <span class="highlight-red">чёрная, как нефть</span>.</p>
+                    <p>На мониторе — открыт чат. Последнее сообщение:</p>
+                    <p class="sas-message">[sasavot]: ты думала, я не найду тебя? глупая девочка. я всегда знаю, где ты.</p>
+                    <p>За окном — темнота. Абсолютная. Только отражение в стекле. Отражение <span class="highlight-red">кого-то</span>, стоящего за спиной стримерши, но её самой в кадре нет.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 05: KORYA_MC ==================== -->
+    <section class="exhibit exhibit-survivor" id="korya">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">УЛИКА №sasavot-005</span>
+                <span class="badge-status status-anomaly">СТАТУС: АНОМАЛИЯ</span>
+            </div>
+            <div class="exhibit-meta">
+                <div class="meta-row"><span class="meta-label">ЖЕРТВА:</span><span class="meta-value survivor-name">korya_mc</span></div>
+                <div class="meta-row"><span class="meta-label">ДАТА:</span><span class="meta-value">14.11.2023 (ПОСЛЕДНИЙ КОНТАКТ)</span></div>
+                <div class="meta-row"><span class="meta-label">СТАТУС:</span><span class="meta-value status-alive">ЖИВА</span></div>
+                <div class="meta-row"><span class="meta-label">ЗДОРОВЬЕ:</span><span class="meta-value">ФИЗИЧЕСКИ — НОРМА</span></div>
+                <div class="meta-row"><span class="meta-label">ВОЗРАСТ:</span><span class="meta-value">24 ГОДА</span></div>
+                <div class="meta-row"><span class="meta-label">ПСИХИЧЕСКИ:</span><span class="meta-value">СТАБИЛЬНО</span></div>
+            </div>
+        </div>
+
+        <div class="exhibit-body two-column">
+            <div class="column-left">
+                <div class="evidence-card card-survivor">
+                    <h3>Единственная известная выжившая</h3>
+                    <div class="card-content">
+                        <p>korya_mc — единственная жертва sasavot, которая осталась жива и невредима. Она была целью в ноябре 2023 года. Он следил за ней 47 дней. Установил камеры в её квартире. Взломал её аккаунты. Знал её расписание.</p>
+                        <p>И — <span class="highlight-yellow">не тронул</span>.</p>
+                        <p>Почему — неизвестно. Это единственный задокументированный случай, когда sasavot <span class="highlight-yellow">отказался</span> от своей цели.</p>
+                    </div>
+                </div>
+                <div class="evidence-card card-survivor">
+                    <h3>Сообщения sasavot → korya_mc</h3>
+                    <div class="card-content">
+                        <p class="archival-note">Тональность сообщений кардинально отличается от всех остальных. Нет угроз. Нет одержимости. Есть... отчаяние?</p>
+                        <div class="sas-chat">
+                            <p><span class="sas-name">[sasavot]:</span> привет</p>
+                            <p><span class="sas-name">[sasavot]:</span> ты не знаешь меня</p>
+                            <p><span class="sas-name">[sasavot]:</span> но я знаю тебя</p>
+                            <p><span class="sas-name">[sasavot]:</span> давно</p>
+                            <p><span class="sas-name">[sasavot]:</span> ты не бойся</p>
+                            <p><span class="sas-name">[sasavot]:</span> я не сделаю тебе больно</p>
+                            <p><span class="sas-name">[sasavot]:</span> ты — другая</p>
+                            <p><span class="sas-name">[sasavot]:</span> ты напоминаешь мне её</p>
+                            <p><span class="survivor-name">[korya_mc]:</span> КОГО??</p>
+                            <p><span class="sas-name">[sasavot]:</span> мою сестру</p>
+                            <p><span class="sas-name">[sasavot]:</span> она умерла</p>
+                            <p><span class="sas-name">[sasavot]:</span> я убил её</p>
+                            <p><span class="sas-name">[sasavot]:</span> случайно</p>
+                            <p><span class="sas-name">[sasavot]:</span> мне было 9</p>
+                            <p><span class="sas-name">[sasavot]:</span> ты — её копия</p>
+                            <p><span class="sas-name">[sasavot]:</span> поэтому я не могу причинить тебе вред</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column-right">
+                <div class="vhs-player" data-video="korya">
+                    <div class="vhs-player-screen" id="koryaPlayer">
+                        <canvas class="vhs-canvas" id="koryaCanvas"></canvas>
+                        <div class="vhs-noise-overlay"></div>
+                        <div class="vhs-tracking-lines"></div>
+                        <div class="vhs-corrupted-overlay" id="koryaCorrupted">
+                            <div class="corrupted-text">[ФАЙЛ ПОВРЕЖДЕН]</div>
+                            <div class="corrupted-sub">ВОССТАНОВЛЕНИЕ: 0%</div>
+                        </div>
+                    </div>
+                    <div class="vhs-player-controls">
+                        <button class="vhs-btn play-btn" data-player="korya">▶ PLAY</button>
+                        <button class="vhs-btn stop-btn" data-player="korya">⏹ СТОП</button>
+                        <span class="vhs-time">00:00:45</span>
+                        <span class="vhs-status">[ФАЙЛ ПОВРЕЖДЕН]</span>
+                    </div>
+                </div>
+                <div class="evidence-text">
+                    <p><strong>Файл:</strong> <span class="filename">korya_mc_stream_14-11-2023_clip.mp4</span></p>
+                    <p>Обычный стрим korya_mc. Она играет в Stardew Valley. На фоне — её комната.</p>
+                    <p>На 23-й секунде видео — за окном (за спиной стримерши) <span class="highlight-red">мелькает силуэт</span>.</p>
+                    <p>Высокий. Худой. Стоит неподвижно.</p>
+                    <p>Чат:</p>
+                    <div class="chat-messages">
+                        <p><span class="chat-user">[cool_guy92]:</span> ниче за тобой там мужик стоит?</p>
+                        <p><span class="chat-user">[starlight_88]:</span> БТВ ЗА ТОБОЙ КТО-ТО</p>
+                        <p><span class="chat-user">[korya_mc]:</span> чё? (оборачивается) никого нет, вы че</p>
+                    </div>
+                    <p>Силуэт исчезает. Но если замедлить видео — видно, как <span class="highlight-red">тень отделяется от стены</span> и уходит в коридор. У неё есть лицо. Лицо sasavot.</p>
+                    <p class="highlight-yellow">Он был там. Он не тронул её. Он просто ушёл.</p>
+                </div>
+                <div class="evidence-card card-survivor">
+                    <h3>Из интервью (2025)</h3>
+                    <div class="card-content">
+                        <p class="interview-text">«Я знаю, что он мог меня убить. Он был в моей комнате. Я видела его тень. Но вместо страха... я чувствовала странную... жалость. Он прислал мне сообщение на следующий день. Одно слово: "Прости". Больше я никогда о нём не слышала.»</p>
+                        <p class="interview-author">— korya_mc</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 06: FINAL ==================== -->
+    <section class="exhibit" id="final">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">УЛИКА №sasavot-FINAL</span>
+                <span class="badge-status status-closed">СТАТУС: ДЕЛО ПРИОСТАНОВЛЕНО</span>
+            </div>
+            <div class="exhibit-meta">
+                <div class="meta-row"><span class="meta-label">ОБЪЕКТ:</span><span class="meta-value sas-name">sasavot (подозреваемый)</span></div>
+                <div class="meta-row"><span class="meta-label">ДАТА ИСЧЕЗНОВЕНИЯ:</span><span class="meta-value">01.01.2025</span></div>
+                <div class="meta-row"><span class="meta-label">ПОСЛЕДНЯЯ АКТИВНОСТЬ:</span><span class="meta-value">31.12.2024 23:59:59</span></div>
+                <div class="meta-row"><span class="meta-label">ТЕКУЩИЙ СТАТУС:</span><span class="meta-value status-wanted">В РОЗЫСКЕ (ФЕДЕРАЛЬНЫЙ)</span></div>
+            </div>
+        </div>
+
+        <div class="exhibit-body">
+            <div class="final-warning">
+                <p>⚠ ПРИ ЗАГРУЗКЕ ДАННОГО РАЗДЕЛА БЫЛ ЗАФИКСИРОВАН ГЛИТЧ СИСТЕМЫ.</p>
+                <p>НЕКОТОРЫЕ ФАЙЛЫ МОГУТ БЫТЬ НЕСТАБИЛЬНЫ.</p>
+                <p class="glitch-text">⚠ ОБНАРУЖЕНА НЕСАНКЦИОНИРОВАННАЯ АКТИВНОСТЬ. sasavot В СЕТИ.</p>
+            </div>
+
+            <div class="vhs-player final-player" data-video="final">
+                <div class="vhs-player-screen" id="finalPlayer">
+                    <canvas class="vhs-canvas" id="finalCanvas"></canvas>
+                    <div class="vhs-noise-overlay heavy"></div>
+                    <div class="vhs-tracking-lines heavy"></div>
+                    <div class="vhs-corrupted-overlay" id="finalCorrupted">
+                        <div class="corrupted-text">[ФАЙЛ НЕСТАБИЛЕН]</div>
+                        <div class="corrupted-sub">ВОССТАНОВЛЕНИЕ: 12%</div>
+                    </div>
+                </div>
+                <div class="vhs-player-controls">
+                    <button class="vhs-btn play-btn" data-player="final">▶ PLAY</button>
+                    <button class="vhs-btn stop-btn" data-player="final">⏹ СТОП</button>
+                    <span class="vhs-time">00:17:23</span>
+                    <span class="vhs-status">[ФАЙЛ НЕСТАБИЛЕН]</span>
+                </div>
+            </div>
+
+            <div class="final-transcript">
+                <h3>Расшифровка последней трансляции — 31.12.2024</h3>
+                <div class="transcript-content">
+                    <p><span class="timestamp">[23:47:12]</span> — Стрим начинается. Чёрный экран. Белый шум.</p>
+                    <p><span class="timestamp">[23:47:19]</span> — Появляется изображение. Качество 120p. sasavot сидит в кресле. На нём — та же одежда, что и на первом стриме в 2018.</p>
+                    <p><span class="timestamp">[23:47:28]</span> — Он не двигается. Смотрит прямо в камеру. Глаза широко открыты. Не моргает.</p>
+                    <p><span class="timestamp">[23:47:35]</span> — Говорит. Голос низкий, монотонный, искажён помехами:</p>
+                    <p class="sas-voice">«Я ждал этого момента. Четыре года. Семь жертв. Одна ошибка. Но не в этот раз. В этот раз — всё правильно.»</p>
+                    <p><span class="timestamp">[23:47:52]</span> — Улыбается. Улыбка слишком широкая. Уголки губ — до ушей. <span class="highlight-red">Нечеловеческая.</span></p>
+                    <p><span class="timestamp">[23:48:01]</span> — Чат начинает спамить: «sasavot», «sasavot», «sasavot» — одинаковые сообщения. Все аккаунты — созданы в 2018 году.</p>
+                    <p><span class="timestamp">[23:48:15]</span> — sasavot встаёт. Поворачивается спиной к камере. На его спине — надписи. Имена. dasha228play. morphe_ya. cutierover. chr1swave. И другие.</p>
+                    <p><span class="timestamp">[23:48:30]</span> — Поворачивается к камере. Подносит нож к собственному горлу.</p>
+                    <p class="sas-voice">«Вы все хотели знать правду. Хотите увидеть, что внутри меня?»</p>
+                    <p><span class="timestamp">[23:48:37]</span> — <span class="glitch-text">Экран начинает глитчить. Помехи. Белый шум. Изображение распадается на пиксели.</span></p>
+                    <p><span class="timestamp highlight-red">[23:48:42]</span> — ПОМЕХИ. ИЗОБРАЖЕНИЕ ПРОПАДАЕТ.</p>
+                    <p><span class="timestamp">[23:48:44 — 00:06:32]</span> — Чёрный экран. Камера всё ещё работает. Слышны шаги. Дыхание. Звук открывающейся двери. Звук закрывающейся двери. Тишина.</p>
+                    <p><span class="timestamp">[00:06:33 — 00:17:23]</span> — Стрим продолжается. Камера направлена на <span class="highlight-red">пустое кресло</span>. Стрим идёт 11 минут. Ничего не происходит. Камера медленно плавится от помех. Белый шум усиливается. К 17-й минуте — изображение полностью белое. Затем — выключение.</p>
+                </div>
+            </div>
+
+            <div class="evidence-card">
+                <h3>Что стало с каналом</h3>
+                <div class="card-content">
+                    <ul>
+                        <li>Канал sasavot на Twitch удалён через 2 часа после финального стрима</li>
+                        <li>Все VOD-записи удалены без возможности восстановления</li>
+                        <li>Сообщество расследователей успело сохранить ~30% материалов</li>
+                        <li>Аккаунт в Discord деактивирован</li>
+                        <li>Номер телефона отключён</li>
+                        <li>Адрес проживания — пуст. Квартира брошена</li>
+                    </ul>
+                    <p class="highlight-yellow">sasavot — в федеральном розыске. Дело приостановлено. Тело не найдено.</p>
+                </div>
+            </div>
+
+            <div class="spoiler-block">
+                <button class="spoiler-toggle">[СОВЕРШЕННО СЕКРЕТНО. ГРИФ: ДСП. — ПСИХОЛОГИЧЕСКИЙ ПРОФИЛЬ ФБР]</button>
+                <div class="spoiler-content">
+                    <p>Выдержка из психологического профиля, составленного ФБР (отдел поведенческого анализа):</p>
+                    <p>«Субъект демонстрирует классические признаки организованного серийного убийцы с нарциссическим и антисоциальным расстройством личности. Однако ключевая аномалия — случай с korya_mc. Отказ от убийства при полном доступе к жертве не вписывается ни в одну известную модель.</p>
+                    <p>Субъект испытывает эмоциональную привязанность к образу неназванной сестры, проецируя его на определённый типаж жертв. Это — его триггер. И его единственная уязвимость.</p>
+                    <p>Субъект, вероятно, мёртв (суицид off-camera) или скрылся за пределами РФ. Вероятность рецидива в случае, если субъект жив — 94.7%.»</p>
+                    <p class="archival-note">Дата составления: 03.03.2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 07: MAP ==================== -->
+    <section class="exhibit" id="map">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">КАРТА ПРЕСТУПЛЕНИЙ</span>
+                <span class="badge-status status-confirmed">ИНТЕРАКТИВНАЯ</span>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div class="map-placeholder" id="crimeMap">
+                <div class="map-grid"></div>
+                <div class="map-marker" data-victim="dasha" style="top: 35%; left: 45%;">
+                    <span class="marker-dot"></span>
+                    <span class="marker-label">dasha228play</span>
+                    <span class="marker-date">12.04.2021</span>
+                </div>
+                <div class="map-marker" data-victim="morphe" style="top: 42%; left: 52%;">
+                    <span class="marker-dot"></span>
+                    <span class="marker-label">morphe_ya</span>
+                    <span class="marker-date">03.09.2022</span>
+                </div>
+                <div class="map-marker" data-victim="cutie" style="top: 28%; left: 48%;">
+                    <span class="marker-dot"></span>
+                    <span class="marker-label">cutierover</span>
+                    <span class="marker-date">17.01.2023</span>
+                </div>
+                <div class="map-marker" data-victim="cris" style="top: 50%; left: 40%;">
+                    <span class="marker-dot"></span>
+                    <span class="marker-label">chr1swave</span>
+                    <span class="marker-date">08.06.2023</span>
+                </div>
+                <div class="map-marker marker-survivor" data-victim="korya" style="top: 38%; left: 55%;">
+                    <span class="marker-dot"></span>
+                    <span class="marker-label">korya_mc</span>
+                    <span class="marker-date">14.11.2023 — ВЫЖИЛА</span>
+                </div>
+                <div class="map-marker marker-sas" data-victim="sas" style="top: 45%; left: 50%;">
+                    <span class="marker-dot"></span>
+                    <span class="marker-label">sasavot (последняя активность)</span>
+                    <span class="marker-date">31.12.2024</span>
+                </div>
+                <div class="map-title">Москва, Южный административный округ</div>
+            </div>
+        </div>
+
+        <div class="map-modal" id="mapModal">
+            <div class="map-modal-content">
+                <span class="map-modal-close" id="mapModalClose">✕</span>
+                <h3 id="mapModalTitle"></h3>
+                <div class="map-modal-image" id="mapModalImage"></div>
+                <p id="mapModalText"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EXPONAT 08: GUESTBOOK ==================== -->
+    <section class="exhibit" id="guestbook">
+        <div class="exhibit-header">
+            <div class="exhibit-badge">
+                <span class="badge-id">ПОСЛЕСЛОВИЕ</span>
+                <span class="badge-status">НАШИ ДНИ</span>
+            </div>
+        </div>
+
+        <div class="exhibit-body">
+            <div class="guestbook-warning">
+                <p>⚠ ПРЕДУПРЕЖДЕНИЕ</p>
+                <p>Данный раздел содержит сообщения от пользователей, которые утверждают, что видели sasavot после его исчезновения.</p>
+                <p>Администрация ресурса не подтверждает достоверность этих сообщений. Некоторые из них могут быть фальшивками.</p>
+                <p>Некоторые — могут быть настоящими.</p>
+                <p>Вы не можете знать наверняка.</p>
+                <p>Он тоже.</p>
+            </div>
+
+            <div class="guestbook-header">
+                <h3>ГОСТЕВАЯ КНИГА РАССЛЕДОВАНИЯ sasavot</h3>
+                <p class="guestbook-count">ВСЕГО СООБЩЕНИЙ: 47,283 (С ФИЛЬТРАЦИЕЙ: ПОСЛЕДНИЕ 50)</p>
+            </div>
+
+            <div class="guestbook-messages" id="guestbookMessages">
+                <div class="gb-message">
+                    <p class="gb-meta"><span class="gb-date">[15.07.2025 21:03:44]</span> Пользователь: xXx_ghost_hunter_xXx</p>
+                    <p class="gb-text">ребят я был в том доме. в подвале где нашли телефон крис. там реально надписи на стенах. я сфоткал. там не только sasavot. там ещё что-то. какие-то символы.</p>
+                </div>
+                <div class="gb-message">
+                    <p class="gb-meta"><span class="gb-date">[15.07.2025 19:47:12]</span> Пользователь: просто_макс_2025</p>
+                    <p class="gb-text">я вчера ночью листал тикток и мне вылезла реклама. просто реклама стирального порошка. но в конце видео — лицо. его лицо. на один кадр. ребят, он в алгоритмах.</p>
+                </div>
+                <div class="gb-message">
+                    <p class="gb-meta"><span class="gb-date">[14.07.2025 23:12:08]</span> Пользователь: nadezhda_forever</p>
+                    <p class="gb-text">я живу в том районе. иногда по ночам я слышу стрим. звук доносится из пустой квартиры этажом ниже. там никто не живёт уже полгода. но компьютер работает. я слышу звуки игры. sasavot.</p>
+                </div>
+                <div class="gb-message gb-verified">
+                    <p class="gb-meta"><span class="gb-date">[14.07.2025 15:30:44]</span> Пользователь: korya_mc (ВЕРИФИЦИРОВАННЫЙ АККАУНТ)</p>
+                    <p class="gb-text">Я жива. У меня всё хорошо. Пожалуйста, перестаньте писать мне. Я не хочу вспоминать. Я хочу жить дальше. Прощайте.</p>
+                </div>
+                <div class="gb-message">
+                    <p class="gb-meta"><span class="gb-date">[13.07.2025 02:15:33]</span> Пользователь: Аноним 217.132.XX.XXX (IP СКРЫТ)</p>
+                    <p class="gb-text">Вы ищете его не там. Он не в Москве. Он в проводах. В коде. В каждом пикселе этого сайта. Вы читаете это сообщение? Он читает его вместе с вами. Оглянитесь.</p>
+                </div>
+                <div class="gb-message gb-sas" id="sasMessage">
+                    <p class="gb-meta"><span class="gb-date">[12.07.2025 18:44:01]</span> Пользователь: sasavot (НЕВЕРИФИЦИРОВАННЫЙ АККАУНТ)</p>
+                    <p class="gb-text sas-text">Я всё ещё здесь.</p>
+                </div>
+            </div>
+
+            <div class="guestbook-counter">
+                <p>СТРИМЕРОВ, ПРОВЕРЕННЫХ СООБЩЕСТВОМ НА СВЯЗЬ С sasavot: <span class="counter-value" id="counter1">15,893</span></p>
+                <p>ИЗ НИХ ПОДОЗРИТЕЛЬНЫХ: <span class="counter-value" id="counter2">47</span></p>
+                <p>ДЕЛ, ПЕРЕДАННЫХ В ПОЛИЦИЮ: <span class="counter-value" id="counter3">12</span></p>
+                <p>ДЕЛ, ПРИНЯТЫХ К РАССЛЕДОВАНИЮ: <span class="counter-value" id="counter4">3</span></p>
+                <p>ДЕЛ, РАСКРЫТЫХ: <span class="counter-value zero" id="counter5">0</span></p>
+                <p class="sas-tagline">sasavot — НЕ ОДИН. sasavot — ЭТО СТИЛЬ ЖИЗНИ.</p>
+            </div>
+
+            <div class="archivist-closing">
+                <p>ДАННЫЙ АРХИВ СОСТАВЛЕН НА ОСНОВАНИИ МАТЕРИАЛОВ, СОБРАННЫХ СООБЩЕСТВОМ РАССЛЕДОВАТЕЛЕЙ В ПЕРИОД С 12.04.2021 ПО 01.07.2025.</p>
+                <p>ВСЕ МАТЕРИАЛЫ НОСЯТ ИНФОРМАЦИОННЫЙ ХАРАКТЕР. АВТОРЫ НЕ НЕСУТ ОТВЕТСТВЕННОСТИ ЗА ДОСТОВЕРНОСТЬ.</p>
+                <p>ОДНАКО...</p>
+                <p>МЫ ЗНАЕМ, ЧТО ЭТО ПРАВДА.</p>
+                <p>МЫ ЗНАЕМ, ЧТО ОН ВСЁ ЕЩЁ ГДЕ-ТО РЯДОМ.</p>
+                <p>МЫ ЗНАЕМ, ЧТО sasavot НЕ УМЕР. sasavot СТАЛ ЧАСТЬЮ ЭТОГО МИРА.</p>
+                <p>ОН В АЛГОРИТМАХ. ОН В ПРОВОДАХ. ОН В ВАШЕМ ЭКРАНЕ.</p>
+                <p class="sas-final">sasavot FOREVER.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screamer overlay (hidden, triggered by VHS player) -->
+    <div class="screamer-overlay" id="screamerOverlay">
+        <div class="screamer-content">
+            <div class="screamer-image" id="screamerImage">
+                <!-- User's image will be shown here -->
+                <div class="screamer-face">👁</div>
+            </div>
+            <div class="screamer-text">ТЫ НАШЁЛ МЕНЯ</div>
+            <div class="screamer-sub">sasavot ВСЕГДА РЯДОМ</div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/glitch-engine.js"></script>
+    <script src="assets/js/audio-engine.js"></script>
+    <script src="assets/js/vhs-player.js"></script>
+    <script src="assets/js/cursor-follow.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
