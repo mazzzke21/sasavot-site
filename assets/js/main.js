@@ -1,9 +1,30 @@
 /* ============================================
    MAIN.JS — SAS_ARCHIVE.EXE
-   Главный файл инициализации сайта-музея «Дело SAS»
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    // ==========================================
+    // 0. WARNING OVERLAY
+    // ==========================================
+    function initWarningOverlay() {
+        const warningOverlay = document.getElementById('warningOverlay');
+        const warningOkBtn = document.getElementById('warningOkBtn');
+        
+        if (!warningOverlay || !warningOkBtn) return;
+        
+        // Show warning overlay immediately
+        warningOverlay.classList.remove('hidden');
+        
+        // Hide overlay and start terminal animation on OK click
+        warningOkBtn.addEventListener('click', () => {
+            warningOverlay.classList.add('hidden');
+            // Start terminal animation after overlay is hidden
+            setTimeout(() => {
+                initTerminal();
+            }, 300);
+        });
+    }
 
     // ==========================================
     // 1. TERMINAL TYPING EFFECT (Intro)
@@ -403,7 +424,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize all modules
     try {
-        initTerminal();
+        // Initialize warning overlay first (it will handle terminal initialization)
+        initWarningOverlay();
+        
+        // Initialize other modules (but terminal will wait for OK button)
         initEscOverlay();
         initSpoilers();
         initCCTV();
