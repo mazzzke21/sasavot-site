@@ -379,7 +379,7 @@
 <body class="crt">
 
     <!-- ИНДИКАТОР ПРОГРЕССА КОНЦОВОК -->
-    <div id="ending-progress" class="ending-progress">Концовок: 0 / 10</div>
+    <div id="ending-progress" class="ending-progress">Концовок: 0 / 11</div>
 
     <!-- ТАЙМЕР -->
     <div id="timer-display" class="timer-display" style="display: none;">ВРЕМЯ: 60</div>
@@ -777,7 +777,7 @@
                     { 
                         text: "Попытаться выбить старую дверь плечом", 
                         isChance: true, 
-                        baseChance: 40,
+                        baseChance: 55,
                         onSuccess: "door_success", 
                         onFailure: "door_fail" 
                     }
@@ -796,7 +796,7 @@
                     { 
                         text: "Запустить эксплойт методом подбора", 
                         isChance: true, 
-                        baseChance: 30, 
+                        baseChance: 45, 
                         onSuccess: "hack_success", 
                         onFailure: "hack_fail" 
                     },
@@ -1156,7 +1156,7 @@
                     { 
                         text: "Надавить со всей силы", 
                         isChance: true, 
-                        baseChance: 65, 
+                        baseChance: 80, 
                         onSuccess: "door_success", 
                         onFailure: "tool_break" 
                     }
@@ -1186,7 +1186,7 @@
                     { 
                         text: "Сидеть тихо, не издавая ни звука", 
                         isChance: true, 
-                        baseChance: 40, 
+                        baseChance: 60, 
                         onSuccess: "locker_stealth_win", 
                         onFailure: "locker_stealth_fail" 
                     }
@@ -1232,7 +1232,7 @@
                     { 
                         text: "Попробовать заклинить лопасти работающего вентилятора руками", 
                         isChance: true, 
-                        baseChance: 20, 
+                        baseChance: 35, 
                         onSuccess: "vent_fan_success", 
                         onFailure: "vent_fan_fail" 
                     }
@@ -1280,7 +1280,7 @@
                     { 
                         text: "Смешать реактивы, чтобы создать густую химическую дымовую завесу", 
                         isChance: true, 
-                        baseChance: 60, 
+                        baseChance: 75, 
                         onSuccess: "smoke_success", 
                         onFailure: "smoke_fail" 
                     },
@@ -1330,10 +1330,11 @@
             },
 
             smoke_success: {
-                text: "УСПЕХ! Смесь мгновенно вступает в реакцию, выделяя плотный белый дым, заполнивший всю лабораторию и коридор. Ворвавшийся SASAVOT начинает бешено кашлять и тереть слезящиеся глаза. Он полностью дезориентирован! Вы можете незаметно пройти мимо него.",
+                text: "УСПЕХ! Смесь мгновенно вступает в реакцию, выделяя плотный белый дым, заполнивший всю лабораторию и коридор. Ворвавшийся SASAVOT начинает бешено кашлять и тереть слезящиеся глаза. Он полностью дезориентирован! Вы можете незаметно пройти мимо него. Дым настолько густой, что скрывает вас полностью. Вы чувствуете себя невидимым.",
                 choices: [
                     { text: "Скрытно проскользнуть на Склад сквозь туман", next: "warehouse_path" },
-                    { text: "Выбежать на лестницу к Генераторной", next: "generator_path" }
+                    { text: "Выбежать на лестницу к Генераторной", next: "generator_path" },
+                    { text: "Выйти в коридор и столкнуться с дезориентированным монстром лицом к лицу", next: "smoke_face_ending" }
                 ]
             },
 
@@ -1371,14 +1372,14 @@
                     { 
                         text: "Срезать путь через узкий дренажный коллектор", 
                         isChance: true, 
-                        baseChance: 50, 
+                        baseChance: 65, 
                         onSuccess: "sewer_cut_success", 
                         onFailure: "sewer_cut_fail" 
                     },
                     { 
                         text: "Нырнуть под воду, чтобы найти скрытый проход", 
                         isChance: true, 
-                        baseChance: 25, 
+                        baseChance: 40, 
                         onSuccess: "sewer_secret_passage", 
                         onFailure: "sewer_cut_fail" 
                     }
@@ -1450,7 +1451,7 @@
                     { 
                         text: "Попробовать незаметно обойти существо среди ящиков", 
                         isChance: true, 
-                        baseChance: 60, 
+                        baseChance: 75, 
                         onSuccess: "warehouse_stealth_success", 
                         onFailure: "caught_warehouse" 
                     },
@@ -1519,7 +1520,7 @@
                     { 
                         text: "Очнуться и, превозмогая боль, ползти к выходу", 
                         isChance: true, 
-                        baseChance: 30, 
+                        baseChance: 50, 
                         onSuccess: "warehouse_crawl_escape", 
                         onFailure: "death_screen" 
                     }
@@ -1587,7 +1588,7 @@
                     { 
                         text: "Судорожно запустить генератор вручную", 
                         isChance: true, 
-                        baseChance: 55, 
+                        baseChance: 70, 
                         onSuccess: "generator_on", 
                         onFailure: "generator_explode" 
                     },
@@ -1712,7 +1713,7 @@
                     { 
                         text: "Спуститься по тросу на крышу кабины лифта", 
                         isChance: true, 
-                        baseChance: 50, 
+                        baseChance: 65, 
                         onSuccess: "elevator_success", 
                         onFailure: "elevator_fail" 
                     },
@@ -1751,7 +1752,7 @@
                     { 
                         text: "Дождаться кабину и вбежать внутрь", 
                         isChance: true, 
-                        baseChance: 65, 
+                        baseChance: 75, 
                         onSuccess: "elevator_success", 
                         onFailure: "elevator_caught" 
                     },
@@ -1814,7 +1815,7 @@
                 text: "Секретная дверь архива заперта на кодовый замок. На ней висит табличка 'Только для персонала'. Рядом на стене кто-то оставил пометку: 'Код меняется каждую неделю'.",
                 choices: [
                     { text: "Ввести сохраненный код", requiresCode: true, correctCode: "9999", onSuccess: "archive_inside", onFailure: "archive_alarm" },
-                    { text: "Попробовать угадать другой код", isChance: true, baseChance: 10, onSuccess: "archive_inside", onFailure: "archive_alarm" },
+                    { text: "Попробовать угадать другой код", isChance: true, baseChance: 25, onSuccess: "archive_inside", onFailure: "archive_alarm" },
                     { text: "Сдаться и бежать в лифтовую шахту", next: "elevator_shaft" }
                 ]
             },
@@ -1863,7 +1864,7 @@
                     { 
                         text: "Сделать быстрый рывок к выходу во время шума вентиляции", 
                         isChance: true, 
-                        baseChance: 70, 
+                        baseChance: 80, 
                         onSuccess: "roof_escape_ending", 
                         onFailure: "caught_corridor" 
                     },
@@ -1892,6 +1893,15 @@
                 ending: { id: "ending_roof", name: "Ускользнувший во Тьму" },
                 choices: [
                     { text: "ПОЗДРАВЛЯЕМ! НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== НОВАЯ КОНЦОВКА: ХИМИК ==========
+            smoke_face_ending: {
+                text: "Вы решаете не убегать. Вместо этого вы хватаете банку с оставшимся реактивом и подходите к дезориентированному SASAVOT. Монстр не видит вас сквозь дым. Один точный бросок — и взрыв химической смеси прямо в лицо. Тварь падает, корчась в агонии. Вы стояте над ней, пока она не затихает. Вы — хозяин этого комплекса теперь.",
+                ending: { id: "ending_chemist", name: "Химический Правосудие" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
                 ]
             },
 
@@ -1938,7 +1948,7 @@
                     { 
                         text: "Задержать дыхание изо всех сил", 
                         isChance: true, 
-                        baseChance: 55, 
+                        baseChance: 70, 
                         onSuccess: "hide_desk_success", 
                         onFailure: "hide_desk_fail" 
                     }
