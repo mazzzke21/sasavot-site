@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sasavot - Текстовая Хоррор Игра</title>
+    <style>
+        /* Импорт пиксельного шрифта */
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050202;
+            font-family: 'VT323', monospace;
+            color: #d11a1a;
+        }
+
+        /* Эффект ЭЛТ-монитора */
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.98; }
+            50% { opacity: 1; }
+            100% { opacity: 0.99; }
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding-left: 10%;
+            padding-right: 10%;
+            background: radial-gradient(circle, #1a0505 0%, #030101 100%);
+            animation: flicker 0.15s infinite;
+            position: relative;
+        }
+
+        /* Глитч-название */
+        .title-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .main-title {
+            font-size: 8rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #ff0000;
+            text-shadow: 
+                0px 0px 8px rgba(255, 0, 0, 0.8),
+                -3px -3px 0px rgba(0, 255, 255, 0.4),
+                3px 3px 0px rgba(255, 0, 255, 0.4);
+            animation: shake 1s infinite alternate;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Прогресс концовок */
+        .ending-progress {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            font-size: 1.6rem;
+            color: #ffaa00;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.3);
+            z-index: 1000;
+            pointer-events: none;
+            background: rgba(5, 2, 2, 0.7);
+            padding: 6px 14px;
+            border: 1px solid #500;
+            letter-spacing: 1px;
+        }
+
+        /* Уведомление о новой концовке */
+        .ending-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0d0404;
+            border: 4px solid #00ff66;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 255, 102, 0.4);
+            z-index: 1100;
+            animation: pulseGlow 1.5s infinite alternate;
+            pointer-events: none;
+        }
+
+        .ending-notification .notif-title {
+            font-size: 3.5rem;
+            color: #00ff66;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(0, 255, 102, 0.6);
+        }
+
+        .ending-notification .notif-sub {
+            font-size: 2rem;
+            color: #cccccc;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 40px rgba(0, 255, 102, 0.2); }
+            100% { box-shadow: 0 0 80px rgba(0, 255, 102, 0.6); }
+        }
+
+        /* Выбор сложности */
+        .difficulty-container {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .difficulty-title {
+            font-size: 2.2rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .diff-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .diff-label {
+            font-size: 2.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.2s;
+        }
+
+        .diff-label input {
+            display: none;
+        }
+
+        .custom-radio {
+            width: 18px;
+            height: 18px;
+            border: 3px solid #d11a1a;
+            display: inline-block;
+            position: relative;
+        }
+
+        .diff-label input:checked + .custom-radio::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            box-shadow: 0 0 8px #ff0000;
+        }
+
+        .diff-label:hover {
+            color: #ff0000;
+        }
+
+        /* Предупреждение */
+        .warning-text {
+            font-size: 1.6rem;
+            color: #ff6600;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #ff6600;
+            background: rgba(255, 102, 0, 0.1);
+            text-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+        }
+
+        /* Кнопки */
+        .btn {
+            background: transparent;
+            border: 4px solid #d11a1a;
+            color: #d11a1a;
+            font-family: 'VT323', monospace;
+            font-size: 3rem;
+            padding: 10px 40px;
+            cursor: pointer;
+            text-align: left;
+            position: relative;
+            outline: none;
+            box-shadow: 0 0 10px rgba(209, 26, 26, 0.2);
+            transition: all 0.1s ease;
+        }
+
+        .btn::before {
+            content: '> ';
+            opacity: 0;
+            transition: opacity 0.1s ease;
+        }
+
+        .btn:hover {
+            background-color: #d11a1a;
+            color: #000;
+            box-shadow: 0 0 25px rgba(209, 26, 26, 0.8);
+            transform: translateX(10px);
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        /* Настройка Гайда при старте */
+        .guide-box {
+            border: 4px solid #d11a1a;
+            background: #0d0404;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(209, 26, 26, 0.3);
+            max-width: 800px;
+            margin-bottom: 25px;
+        }
+
+        .guide-title {
+            font-size: 3.5rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .guide-text {
+            font-size: 2rem;
+            line-height: 1.4;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+
+        /* Геймплей */
+        #gameplay-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 0;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #500;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .hud-item {
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        #hud-inventory {
+            color: #ffaa00;
+        }
+
+        .text-log {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            line-height: 1.4;
+            color: #ff3333;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .choice-btn {
+            background: #0d0404;
+            border: 2px solid #801010;
+            color: #ff3333;
+            font-family: 'VT323', monospace;
+            font-size: 2.2rem;
+            padding: 12px 20px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .choice-btn:hover {
+            background: #d11a1a;
+            color: #000;
+            border-color: #ff3333;
+            transform: translateX(5px);
+        }
+
+        .chance-badge {
+            float: right;
+            background: #300;
+            color: #ff5555;
+            padding: 2px 10px;
+            font-size: 1.6rem;
+            border: 1px solid #600;
+        }
+
+        .darkness-warning {
+            float: right;
+            background: #111;
+            color: #8866ff;
+            padding: 2px 10px;
+            font-size: 1.4rem;
+            border: 1px solid #444;
+            margin-right: 5px;
+        }
+
+        /* Таймер */
+        .timer-display {
+            position: fixed;
+            top: 15px;
+            left: 20px;
+            font-size: 2rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            z-index: 1000;
+            background: rgba(5, 2, 2, 0.7);
+            padding: 8px 16px;
+            border: 2px solid #ff0000;
+            letter-spacing: 2px;
+            animation: timerPulse 1s infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Стилизация экрана концовок */
+        .ending-tag {
+            color: #00ff66;
+            font-size: 2.6rem;
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+        }
+    </style>
+</head>
+<body class="crt">
+
+    <!-- ИНДИКАТОР ПРОГРЕССА КОНЦОВОК -->
+    <div id="ending-progress" class="ending-progress">Концовок: 0 / 10</div>
+
+    <!-- ТАЙМЕР -->
+    <div id="timer-display" class="timer-display" style="display: none;">ВРЕМЯ: 60</div>
+
+    <!-- СТАДИЯ 1: ГАЙД ПРИ ВХОДЕ -->
+    <div id="intro-guide" class="screen">
+        <div class="guide-box">
+            <h2 class="guide-title">> ИНСТРУКТАЖ ВЫЖИВАНИЯ</h2>
+            <p class="guide-text">
+                Добро пожаловать в текстовый интерактивный хоррор. Твоя судьба определяется твоим выбором и шансом.<br><br>
+                1. <strong>Разветвления:</strong> Сюжетная линия имеет множество скрытых путей и 10 уникальных концовок.<br>
+                2. <strong>Предметы:</strong> Найденные вещи автоматически открывают безопасные действия без риска и отображаются вверху экрана.<br>
+                3. <strong>Шансы на успех [ШАНС]:</strong> Некоторые действия рискованны. Успех рассчитывается случайно.<br>
+                4. <strong>Сложность:</strong> Выбранный уровень в меню напрямую меняет вероятность удачного исхода.<br>
+                5. <strong>Фонарик:</strong> В тёмных локациях без фонаря шансы падают на 15%.<br>
+            </p>
+            <button class="btn" onclick="goToMainMenu()">ПОНЯТНО, ДАЛЕЕ</button>
+        </div>
+    </div>
+
+    <!-- СТАДИЯ 2: ГЛАВНОЕ МЕНЮ -->
+    <div id="main-menu" class="screen" style="display: none;">
+        <div class="title-container">
+            <h1 class="main-title">sasavot</h1>
+        </div>
+
+        <!-- Переключатель сложности -->
+        <div class="difficulty-container">
+            <div class="difficulty-title">Уровень сложности (Влияет на шансы):</div>
+            <div class="diff-options">
+                <label class="diff-label">
+                    <input type="radio" name="difficulty" value="easy" checked>
+                    <span class="custom-radio"></span> Легко (+40% к шансам)
+                </label>
+                <label class="diff-label">
+                    <input type="radio" name="difficulty" value="medium">
+                    <span class="custom-radio"></span> Нормально (Базовые шансы)
+                </label>
+                <label class="diff-label">
+                    <input type="radio" name="difficulty" value="hard">
+                    <span class="custom-radio"></span> Хардкор (-50% от шансов)
+                </label>
+            </div>
+        </div>
+
+        <div class="menu-buttons">
+            <p class="warning-text">⚠ ПРЕДУПРЕЖДЕНИЕ: Игра может показатся сыроватой тк делал я один(мне 16) методом проб и ошибок надеюсь понравится!</p>
+            <button class="btn" onclick="startGame()">НАЧАТЬ ИГРУ</button>
+        </div>
+    </div>
+
+    <!-- СТАДИЯ 3: ИГРОВОЙ ЭКРАН -->
+    <div id="gameplay" class="screen" style="display: none; align-items: stretch; padding-left: 10%; padding-right: 10%;">
+        <div id="gameplay-container">
+            <div class="game-header">
+                <span class="hud-item">> статус: выживание</span>
+                <span id="hud-inventory" class="hud-item">Инвентарь: пуст</span>
+                <span id="hud-diff" class="hud-item" style="color: #ffaa00;">Сложность: Норма</span>
+            </div>
+
+            <!-- Сюжетный текст -->
+            <div id="text-log" class="text-log"></div>
+            <div id="choices" class="choices-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================================
+        // ГЛОБАЛЬНОЕ СОСТОЯНИЕ ИГРЫ
+        // =====================================================================
+        const gameState = {
+            inventory: {
+                wrench: false,
+                tape: false,
+                usb: false,
+                flashlight: false,
+                medkit: false,
+                security_map: false
+            },
+            currentDifficulty: 'medium',
+            unlockedEndings: [],
+            audioCtx: null,
+            ambientOsc: null,
+            ambientGain: null,
+            ambientFilter: null,
+            ambientLfo: null,
+            isDarkScene: false,
+            isChaseScene: false,
+            rememberedCode: null,
+            timeLeft: 0,
+            timer: null
+        };
+
+        // =====================================================================
+        // ЗАГРУЗКА ПРОГРЕССА ИЗ LOCALSTORAGE
+        // =====================================================================
+        function loadEndingProgress() {
+            try {
+                const saved = localStorage.getItem('sasavot_endings');
+                if (saved) {
+                    const endings = JSON.parse(saved);
+                    if (Array.isArray(endings)) {
+                        gameState.unlockedEndings = endings;
+                    }
+                }
+            } catch (e) {
+                gameState.unlockedEndings = [];
+            }
+            updateEndingProgressUI();
+        }
+
+        function saveEndingProgress() {
+            try {
+                localStorage.setItem('sasavot_endings', JSON.stringify(gameState.unlockedEndings));
+            } catch (e) { /* ignore */ }
+            updateEndingProgressUI();
+        }
+
+        function getTotalEndingsCount() {
+            let count = 0;
+            for (const key in story) {
+                if (story[key].ending) count++;
+            }
+            return count;
+        }
+
+        function updateEndingProgressUI() {
+            const el = document.getElementById('ending-progress');
+            const total = getTotalEndingsCount();
+            if (el) {
+                el.textContent = `Концовок: ${gameState.unlockedEndings.length} / ${total}`;
+            }
+        }
+
+        function registerEnding(endingId, endingName) {
+            if (!gameState.unlockedEndings.includes(endingId)) {
+                gameState.unlockedEndings.push(endingId);
+                saveEndingProgress();
+                showEndingNotification(endingName);
+                return true;
+            }
+            return false;
+        }
+
+        function showEndingNotification(endingName) {
+            const existing = document.querySelector('.ending-notification');
+            if (existing) existing.remove();
+
+            const notif = document.createElement('div');
+            notif.className = 'ending-notification';
+            notif.innerHTML = `
+                <div class="notif-title">✦ НОВАЯ КОНЦОВКА ✦</div>
+                <div class="notif-sub">«${endingName}»</div>
+            `;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                if (notif.parentNode) notif.remove();
+            }, 4000);
+        }
+
+        // =====================================================================
+        // АУДИО СИСТЕМА
+        // =====================================================================
+        function initAudio() {
+            if (gameState.audioCtx) return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            gameState.audioCtx = ctx;
+
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            const lfo = ctx.createOscillator();
+            const lfoGain = ctx.createGain();
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(45, ctx.currentTime);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(110, ctx.currentTime);
+            filter.Q.setValueAtTime(5, ctx.currentTime);
+
+            gain.gain.setValueAtTime(0.06, ctx.currentTime);
+
+            lfo.type = 'sine';
+            lfo.frequency.setValueAtTime(0.3, ctx.currentTime);
+            lfoGain.gain.setValueAtTime(0.02, ctx.currentTime);
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(gain.gain);
+            lfo.start();
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+
+            gameState.ambientOsc = osc;
+            gameState.ambientGain = gain;
+            gameState.ambientFilter = filter;
+            gameState.ambientLfo = lfo;
+
+            // Фоновый шум — шипение
+            const bufferSize = ctx.sampleRate * 2;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * 0.015;
+            }
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            noise.loop = true;
+            const noiseGain = ctx.createGain();
+            noiseGain.gain.setValueAtTime(0.02, ctx.currentTime);
+            const noiseFilter = ctx.createBiquadFilter();
+            noiseFilter.type = 'lowpass';
+            noiseFilter.frequency.setValueAtTime(800, ctx.currentTime);
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+            noise.start();
+
+            setInterval(() => {
+                if (gameState.ambientGain) {
+                    const dynamicGain = 0.04 + Math.random() * 0.04;
+                    gameState.ambientGain.gain.setTargetAtTime(dynamicGain, ctx.currentTime, 0.3);
+                }
+            }, 700);
+        }
+
+        function setChaseIntensity(intensity) {
+            // intensity: 0.0 (normal) to 1.0 (max panic)
+            if (!gameState.audioCtx || !gameState.ambientOsc) return;
+            const ctx = gameState.audioCtx;
+            const now = ctx.currentTime;
+            const baseFreq = 45;
+            const maxFreq = 90;
+            const oscFreq = baseFreq + (maxFreq - baseFreq) * intensity;
+            gameState.ambientOsc.frequency.setTargetAtTime(oscFreq, now, 0.2);
+            if (gameState.ambientFilter) {
+                const baseFilter = 110;
+                const maxFilter = 220;
+                const filterFreq = baseFilter + (maxFilter - baseFilter) * intensity;
+                gameState.ambientFilter.frequency.setTargetAtTime(filterFreq, now, 0.2);
+            }
+            if (gameState.ambientLfo) {
+                const lfoRate = 0.3 + intensity * 1.2;
+                gameState.ambientLfo.frequency.setTargetAtTime(lfoRate, now, 0.2);
+            }
+            if (gameState.ambientGain) {
+                const baseGain = 0.06;
+                const maxGain = 0.25;
+                const gainVal = baseGain + (maxGain - baseGain) * intensity;
+                gameState.ambientGain.gain.setTargetAtTime(gainVal, now, 0.2);
+            }
+        }
+
+        function playSoundEffect(freq, type, duration) {
+            if (!gameState.audioCtx) return;
+            const ctx = gameState.audioCtx;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + duration);
+        }
+
+        function playClick() { playSoundEffect(140, 'sine', 0.1); }
+        function playSuccess() { playSoundEffect(300, 'triangle', 0.3); }
+        function playFailure() { playSoundEffect(90, 'sawtooth', 0.5); }
+        function playHeartbeat() { playSoundEffect(60, 'sine', 0.15); }
+
+        // =====================================================================
+        // ПОЛНЫЙ СБРОС СОСТОЯНИЯ ИГРЫ
+        // =====================================================================
+        function resetGameState() {
+            gameState.inventory.wrench = false;
+            gameState.inventory.tape = false;
+            gameState.inventory.usb = false;
+            gameState.inventory.flashlight = false;
+            gameState.inventory.medkit = false;
+            gameState.inventory.security_map = false;
+            gameState.isDarkScene = false;
+            gameState.isChaseScene = false;
+            gameState.rememberedCode = null;
+            gameState.timeLeft = 0;
+            setChaseIntensity(0);
+            updateHUD();
+            
+            // Force clear HUD display
+            const hudInv = document.getElementById('hud-inventory');
+            if (hudInv) {
+                hudInv.innerText = "ИНВЕНТАРЬ: ПУСТ";
+                hudInv.style.color = "#ffaa00";
+            }
+        }
+
+        function goToMainMenu() {
+            playClick();
+            document.getElementById('intro-guide').style.display = 'none';
+            document.getElementById('main-menu').style.display = 'flex';
+        }
+
+        // =====================================================================
+        // РАСЧЁТ ШАНСОВ
+        // =====================================================================
+        function calculateChance(baseChance, sceneKey) {
+            let finalChance = baseChance;
+            if (gameState.currentDifficulty === 'easy') {
+                finalChance = Math.round(baseChance * 1.4);
+            } else if (gameState.currentDifficulty === 'hard') {
+                finalChance = Math.round(baseChance * 0.5);
+            }
+            if (gameState.inventory.security_map) {
+                finalChance += 15;
+            }
+            // Темнота без фонарика: -15% к шансам (сбалансировано)
+            if (gameState.isDarkScene && !gameState.inventory.flashlight) {
+                finalChance -= 15;
+            }
+            return Math.max(5, Math.min(95, finalChance));
+        }
+
+        // =====================================================================
+        // HUD
+        // =====================================================================
+        function updateHUD() {
+            const inv = gameState.inventory;
+            let items = [];
+            if (inv.wrench) items.push("КЛЮЧ");
+            if (inv.tape) items.push("КАССЕТА");
+            if (inv.usb) items.push("USB-ФЛЕШКА");
+            if (inv.flashlight) items.push("ФОНАРИК");
+            if (inv.medkit) items.push("АПТЕЧКА");
+            if (inv.security_map) items.push("КАРТА КАМЕР (+15%)");
+
+            const hudInv = document.getElementById('hud-inventory');
+            if (items.length > 0) {
+                hudInv.innerText = "ИНВЕНТАРЬ: " + items.join(", ");
+                hudInv.style.color = "#00ff66";
+            } else {
+                hudInv.innerText = "ИНВЕНТАРЬ: ПУСТ";
+                hudInv.style.color = "#ffaa00";
+            }
+        }
+
+        // =====================================================================
+        // ЗАПУСК ИГРЫ
+        // =====================================================================
+        function startGame() {
+            resetGameState();
+
+            const checkedRadio = document.querySelector('input[name="difficulty"]:checked');
+            gameState.currentDifficulty = checkedRadio ? checkedRadio.value : 'medium';
+
+            const hudDiff = document.getElementById('hud-diff');
+            if (gameState.currentDifficulty === 'easy') {
+                hudDiff.innerText = "Сложность: Легко";
+                hudDiff.style.color = "#00ff66";
+            } else if (gameState.currentDifficulty === 'hard') {
+                hudDiff.innerText = "Сложность: Хардкор";
+                hudDiff.style.color = "#ff0000";
+            } else {
+                hudDiff.innerText = "Сложность: Норма";
+                hudDiff.style.color = "#ffaa00";
+            }
+
+            playClick();
+            initAudio();
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('gameplay').style.display = 'flex';
+            loadScene('start');
+        }
+
+        // =====================================================================
+        // СЮЖЕТНОЕ ДЕРЕВО
+        // =====================================================================
+        const story = {
+            // ========== НАЧАЛО ==========
+            start: {
+                text: "SASAVOT СЛЕДИТ ЗА ТОБОЙ. Вы просыпаетесь в полуразрушенной комнате управления. Мониторы вокруг пищат, выводя критические ошибки. Из вентиляции сверху доносится тяжелый скрежет когтей. Железная дверь заблокирована электронным замком, а на терминале горит таймер: 60 секунд до полной блокировки системы вентиляции. На стене вы замечаете выцарапанный код: '0001'.",
+                isDark: true,
+                timer: 60,
+                onEnter: () => {
+                    gameState.rememberedCode = '0001';
+                },
+                choices: [
+                    { text: "Попробовать взломать терминал вручную", next: "hack_terminal" },
+                    { text: "Быстро обыскать металлические шкафчики", next: "search_lockers" },
+                    { 
+                        text: "Попытаться выбить старую дверь плечом", 
+                        isChance: true, 
+                        baseChance: 40,
+                        onSuccess: "door_success", 
+                        onFailure: "door_fail" 
+                    }
+                ]
+            },
+
+            // ========== ВЗЛОМ ТЕРМИНАЛА ==========
+            hack_terminal: {
+                text: "Ваши пальцы судорожно бегают по клавиатуре. Терминал запрашивает секретный обходной протокол 'X-21'. На экране хаотично бегут строки логов. Сверху сыпется ржавая пыль — существо очень близко. На мониторе мелькает код доступа: '5555'.",
+                isDark: true,
+                timer: 45,
+                onEnter: () => {
+                    gameState.rememberedCode = '5555';
+                },
+                choices: [
+                    { 
+                        text: "Запустить эксплойт методом подбора", 
+                        isChance: true, 
+                        baseChance: 30, 
+                        onSuccess: "hack_success", 
+                        onFailure: "hack_fail" 
+                    },
+                    { text: "Искать записанный пароль под клавиатурой", next: "find_password" },
+                    { text: "Оставить терминал и побежать к вентиляционному люку", next: "vent_route" }
+                ]
+            },
+
+            // ========== ПОИСК В ШКАФЧИКАХ ==========
+            search_lockers: {
+                text: "Вы открываете ржавые шкафчики. Внутри лежит куча хлама, но вам удается найти: массивный разводной ключ, старую видеокассету 'ПЕРВЫЙ СТРИМ SASAVOT', рабочий пиксельный Фонарик и армейскую Аптечку! На дне одного из шкафчиков вы замечаете выцарапанный код: '4321'. На внутренней стороне дверцы шкафчика вы видите еще один код, выцарапанный ножом: '1111'. Из глубины вентиляционной шахты раздается глухой рык.",
+                onEnter: () => {
+                    gameState.inventory.wrench = true;
+                    gameState.inventory.tape = true;
+                    gameState.inventory.flashlight = true;
+                    gameState.inventory.medkit = true;
+                    gameState.rememberedCode = '4321';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Попытаться сломать замок двери разводным ключом", next: "door_with_tool" },
+                    { text: "Спрятаться внутри шкафчика и затаить дыхание", next: "hide_in_locker" },
+                    { text: "Разбить вентиляционную решетку ключом и залезть внутрь", next: "vent_route" }
+                ]
+            },
+
+            // ========== ВЫБИТЬ ДВЕРЬ (УСПЕХ) ==========
+            door_success: {
+                text: "С диким скрежетом старые петли вылетают. Вы падаете в темный разветвленный коридор. Сзади раздается оглушительный рев SASAVOT — он выбрался из вентиляции и обнаружил ваше отсутствие. На стене вы видите выцарапанный код: '1234'.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { 
+                    gameState.isChaseScene = true; 
+                    setChaseIntensity(0.4);
+                    gameState.rememberedCode = '1234';
+                },
+                choices: [
+                    { text: "Включить фонарик и осмотреть стены коридора", requiresItem: "flashlight", next: "corridor_inspected" },
+                    { 
+                        text: "Попробовать взломать дверь в Кабинет охраны", 
+                        isChance: true, 
+                        baseChance: 35, 
+                        onSuccess: "security_room_inside", 
+                        onFailure: "security_fail" 
+                    },
+                    { text: "Бежать направо в сторону Склада", next: "warehouse_path" },
+                    { text: "Бежать налево к Генераторной", next: "generator_path" }
+                ]
+            },
+
+            // ========== ПРОВАЛ ВЗЛОМА КАБИНЕТА ==========
+            security_fail: {
+                text: "Дверь Кабинета охраны намертво заклинило, а шум от вашей попытки привлек внимание монстра! Тяжелые шаги раздаются за спиной.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.6); },
+                choices: [
+                    { text: "Срочно бежать на Склад", next: "warehouse_path" },
+                    { text: "Бежать в сторону Генераторной", next: "generator_path" }
+                ]
+            },
+
+            // ========== КОРИДОР С ФОНАРИКОМ ==========
+            corridor_inspected: {
+                text: "Луч фонарика выхватывает из темноты три прохода: стальные двери склада, ведущую в генераторную лестницу, открытый люк в Канализацию и проход в Химическую Лабораторию. Также прямо перед вами дверь Кабинета охраны. На стене вы замечаете выцарапанный код: '3141'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '3141';
+                },
+                choices: [
+                    { text: "Открыть дверь Кабинета охраны ключом", requiresItem: "wrench", next: "security_room_inside" },
+                    { text: "Спуститься в затопленную Канализацию", next: "sewer_path" },
+                    { text: "Войти в Химическую Лабораторию", next: "lab_path" },
+                    { text: "Бежать на Склад", next: "warehouse_path" },
+                    { text: "Идти в Генераторную", next: "generator_path" },
+                    { text: "Оглянуться — за вами кто-то наблюдает из темноты", next: "shadows_watching" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ТЕНИ ==========
+            shadows_watching: {
+                text: "В глубине коридора, там, куда не достает луч фонаря, вы замечаете чей-то высокий силуэт. Он стоит неподвижно, словно статуя. Но это не sasavot — фигура слишком человеческая. Она медленно поднимает руку и указывает пальцем в сторону Генераторной, после чего исчезает во тьме. На полу вы замечаете выцарапанный код: '1212'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '1212';
+                },
+                choices: [
+                    { text: "Пойти туда, куда указала тень — в Генераторную", next: "generator_path" },
+                    { text: "Проигнорировать видение и идти на Склад", next: "warehouse_path" }
+                ]
+            },
+
+            // ========== КАБИНЕТ ОХРАНЫ ==========
+            security_room_inside: {
+                text: "Вы оказываетесь внутри поста охраны. На экранах мигают камеры видеонаблюдения со всего комплекса. Вы видите перемещения SASAVOT! Вы забираете со стола интерактивную КАРТУ КАМЕР, которая поможет вам обходить монстра (Шансы на все действия увеличены на +15%). На столе также лежит Флешка с данными. В ящике стола вы находите записку с кодом от сейфа: '7777'. На мониторе охраны отображается код доступа в серверную: '4869'. На двери шкафа висит замок с кодом. На стене висит табличка с кодом от склада: '5555'. На задней двери кабинета вы замечаете выцарапанный код: '2222'.",
+                onEnter: () => {
+                    gameState.inventory.security_map = true;
+                    gameState.inventory.usb = true;
+                    gameState.rememberedCode = '7777';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Изучить записи камер, чтобы узнать слабости монстра", next: "camera_study" },
+                    { text: "Покинуть кабинет охраны и пойти на Склад", next: "warehouse_path" },
+                    { text: "Использовать вентиляционную шахту в кабинете", next: "vent_route" },
+                    { text: "Открыть сейф в углу комнаты", requiresCode: true, correctCode: "7777", onSuccess: "safe_open", onFailure: "safe_wrong" },
+                    { text: "Открыть шкаф с припасами", requiresCode: true, correctCode: "3141", onSuccess: "security_supply_room", onFailure: "security_wrong_code" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: КОМНАТА ПРИПАСОВ ==========
+            security_supply_room: {
+                text: "Шкаф открывается, и вы находите целый арсенал! Дополнительная аптечка, сигнальная ракета и записка: 'Код от склада — 5555'. На стене висит табличка с кодом от вентиляции: '2468'. Также здесь лежит записка с кодом от лаборатории: '1357'. На дне ящика вы находите записку с кодом от генераторной: '4869'. Это может спасти вам жизнь!",
+                onEnter: () => {
+                    gameState.inventory.medkit = true;
+                    gameState.rememberedCode = '5555';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Взять припасы и покинуть кабинет", next: "security_room_from_warehouse" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД В КАБИНЕТЕ ==========
+            security_wrong_code: {
+                text: "Замок издает громкий щелчок. Неверный код! Сигнал привлек внимание SASAVOT. Тяжелые шаги раздаются прямо за дверью кабинета.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.8); },
+                choices: [
+                    { text: "Срочно бежать в вентиляцию", next: "vent_route" },
+                    { text: "Прятаться под столом", next: "hide_under_desk" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: СЕЙФ ОТКРЫТ ==========
+            safe_open: {
+                text: "Сейф с тихим щелчком открывается. Внутри лежит мощный Сигнальный пистолет с запасом светошумовых гранат и записка: 'Код от серверной — 1337'. На дне сейфа вы находите еще одну записку: 'Код от склада — 9999'. Также здесь лежит старая карта с кодом от вентиляции: '2468'. На обратной стороне карты вы видите код: '1122'. Это ваше тайное оружие против монстра!",
+                onEnter: () => {
+                    gameState.inventory.flashlight = true;
+                    gameState.rememberedCode = '1337';
+                },
+                choices: [
+                    { text: "Взять сигнальный пистолет и покинуть кабинет", next: "security_room_from_warehouse" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД СЕЙФА ==========
+            safe_wrong: {
+                text: "Сейф издает предупреждающий сигнал. Код неверный! Сигнал привлек внимание SASAVOT. Тяжелые шаги раздаются прямо за дверью кабинета.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.8); },
+                choices: [
+                    { text: "Срочно бежать в вентиляцию", next: "vent_route" },
+                    { text: "Прятаться под столом", next: "hide_under_desk" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ИЗУЧЕНИЕ КАМЕР ==========
+            camera_study: {
+                text: "Вы прокручиваете записи. На одной из них зафиксировано, как SASAVOT реагирует на высокочастотный звук — монстр закрывает голову когтями и отступает. Если найти динамики на Складе, можно воспроизвести отпугивающий сигнал. Другая запись показывает запертую дверь Архива, на которой виден код — 9999. Третья запись показывает код от лаборатории: '1357'. Четвертая запись показывает код от генераторной: '4869'. Пятая запись показывает код от лифта: '1337'.",
+                onEnter: () => {
+                    gameState.rememberedCode = '9999';
+                },
+                choices: [
+                    { text: "Идти на Склад искать динамики", next: "warehouse_path" },
+                    { text: "Пройти в Архив через вентиляцию", next: "vent_route" },
+                    { text: "Направиться в Генераторную", next: "generator_path" }
+                ]
+            },
+
+            // ========== ВЫБИТЬ ДВЕРЬ (ПРОВАЛ) ==========
+            door_fail: {
+                text: "Вы со всей силы бьете плечом в стальную раму. Удар отдается жуткой болью в ключице. Дверь даже не пошатнулась, но глухой удар привлек существо сверху. Черная длинная рука протискивается сквозь вентиляционную решетку...",
+                isDark: true,
+                isChase: true,
+                timer: 30,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.7); },
+                choices: [
+                    { 
+                        text: "Ослепить тварь ярким лучом фонарика", 
+                        requiresItem: "flashlight", 
+                        next: "flashlight_blind_win" 
+                    },
+                    { 
+                        text: "Ударить по руке разводным ключом", 
+                        requiresItem: "wrench", 
+                        next: "fight_wrench_win" 
+                    },
+                    { text: "Схватить тяжелую железную ножку стула для защиты", next: "fight_chair" },
+                    { text: "В панике залезть под стол", next: "hide_under_desk" }
+                ]
+            },
+
+            // ========== ФОНАРИК ОСЛЕПЛЯЕТ ==========
+            flashlight_blind_win: {
+                text: "Вы направляете луч фонаря прямо на руку твари. Из глубины вентиляции раздается оглушительный скрежещущий визг, существо отдергивает когти обратно. Воспользовавшись моментом, вы выбиваете плечом аварийный замок и вылетаете в коридор!",
+                choices: [
+                    { text: "Бежать по коридору", next: "door_success" }
+                ]
+            },
+
+            // ========== КЛЮЧОМ ПО РУКЕ ==========
+            fight_wrench_win: {
+                text: "Вы со всей силы бьете разводным ключом по склизким когтям. Раздается металлический лязг и нечеловеческий визг! Тварь резко отдергивает руку назад. Этот секундный хаос дает вам шанс вышибить хлипкое стекло в двери и вылезти наружу!",
+                choices: [
+                    { text: "Вылезти через разбитое стекло в двери", next: "door_success" }
+                ]
+            },
+
+            // ========== БОРЬБА СО СТУЛОМ ==========
+            fight_chair: {
+                text: "Вы хватаете ножку стула и замахиваетесь. Существо спрыгивает на пол. Его силуэт постоянно искажается, словно битый пиксель. Оно делает резкий выпад!",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.8); },
+                choices: [
+                    { 
+                        text: "Отразить удар железной ножкой", 
+                        isChance: true, 
+                        baseChance: 45, 
+                        onSuccess: "fight_win", 
+                        onFailure: "fight_death" 
+                    }
+                ]
+            },
+
+            fight_win: {
+                text: "Вы с силой бьете монстра по голове. Раздается жуткий визг, существо на секунду отступает, забиваясь в угол. Это ваш единственный шанс выбежать в приоткрывшийся вентиляционный лаз!",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { setChaseIntensity(0.5); },
+                choices: [
+                    { text: "Нырнуть в вентиляционный проход", next: "vent_route" }
+                ]
+            },
+
+            fight_death: {
+                text: "Существо оказывается невероятно быстрым. Оно легко уворачивается от вашего удара и валит вас на бетонный пол.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.9); },
+                choices: [
+                    { 
+                        text: "Использовать аптечку, чтобы залечить раны на ходу и вырваться", 
+                        requiresItem: "medkit", 
+                        next: "medkit_escape" 
+                    },
+                    { text: "Тьма поглощает вас...", next: "death_screen" }
+                ]
+            },
+
+            medkit_escape: {
+                text: "Существо наносит вам глубокую рану, но вы судорожно вкалываете стимулятор из армейской аптечки. Боль мгновенно уходит, а тело наполняется адреналином! Вы совершаете яростный рывок мимо монстра прямо в коридор!",
+                onEnter: () => {
+                    gameState.inventory.medkit = false;
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Бежать прочь по коридору", next: "door_success" }
+                ]
+            },
+
+            // ========== ПРЯТКИ ПОД СТОЛОМ ==========
+            hide_under_desk: {
+                text: "Вы сжимаетесь в комок под терминалом. SASAVOT спрыгивает в комнату. Вы видите его когтистые лапы, которые медленно обходят стол. Оно принюхивается. Под столом, на старой картонке, вы замечаете выцарапанный код: '6666'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '6666';
+                },
+                choices: [
+                    { 
+                        text: "Задержать дыхание изо всех сил", 
+                        isChance: true, 
+                        baseChance: 55, 
+                        onSuccess: "hide_desk_success", 
+                        onFailure: "hide_desk_fail" 
+                    }
+                ]
+            },
+
+            hide_desk_success: {
+                text: "Монстр стоит прямо перед вашим лицом, но из-за нехватки света и вашей неподвижности проходит мимо, выламывая запертую дверь когтями. Путь свободен!",
+                choices: [
+                    { text: "Осторожно выползти вслед за ним в коридор", next: "corridor_stealth" }
+                ]
+            },
+
+            hide_desk_fail: {
+                text: "Сердце бьется слишком громко. SASAVOT резко переворачивает стол. Вы видите его ужасающие светящиеся глаза прямо перед собой...",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.9); },
+                choices: [
+                    { 
+                        text: "Использовать аптечку, чтобы пережить первый удар и откатиться в сторону", 
+                        requiresItem: "medkit", 
+                        next: "medkit_escape" 
+                    },
+                    { text: "Принять свою судьбу", next: "death_screen" }
+                ]
+            },
+
+            // ========== ВЗЛОМ УСПЕШЕН ==========
+            hack_success: {
+                text: "Компьютер одобрительно мигает зеленым светом. Электронный замок громко щелкает, открывая проход в Лифтовой холл. На двери вы замечаете наклейку с кодом: '8888'.",
+                onEnter: () => {
+                    gameState.rememberedCode = '8888';
+                },
+                choices: [
+                    { text: "Забежать в лифтовую шахту", next: "elevator_shaft" },
+                    { text: "Осмотреть серверные стойки рядом", next: "server_search" },
+                    { text: "Войти в Архив через секретную панель", next: "secret_archive" }
+                ]
+            },
+
+            // ========== ВЗЛОМ ПРОВАЛЕН ==========
+            hack_fail: {
+                text: "Красный экран сообщает: 'СИСТЕМА ЗАБЛОКИРОВАНА'. Комната начинает стремительно заполняться едким желтым газом. Дышать становится невозможно.",
+                isDark: true,
+                isChase: true,
+                timer: 20,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.5); },
+                choices: [
+                    { 
+                        text: "Разбить защитное стекло терминала разводным ключом", 
+                        requiresItem: "wrench", 
+                        next: "break_glass" 
+                    },
+                    { text: "Пытаться дышать через одежду и открыть дверь", next: "door_fail" }
+                ]
+            },
+
+            break_glass: {
+                text: "Вы бьете разводным ключом по экрану. Стекло трескается, обнажая искрящуюся проводку. Замыкание открывает аварийный засов двери! Вы вываливаетесь в коридор.",
+                choices: [
+                    { text: "Бежать по коридору", next: "door_success" }
+                ]
+            },
+
+            find_password: {
+                text: "Под клавиатурой вы находите старый грязный стикер. На нем выведено красным маркером: '2105'. Это код доступа!",
+                onEnter: () => {
+                    gameState.rememberedCode = '2105';
+                },
+                choices: [
+                    { text: "Быстро ввести код на панели терминала", requiresCode: true, correctCode: "2105", onSuccess: "hack_success", onFailure: "door_fail" },
+                    { text: "Услышав шорох сзади, бросить стикер и побежать к двери", next: "door_fail" },
+                    { text: "Запомнить код, но сначала проверить шкафчики", next: "search_lockers" }
+                ]
+            },
+
+            door_with_tool: {
+                text: "Вы вставляете разводной ключ между створками двери и нажимаете всем весом.",
+                choices: [
+                    { 
+                        text: "Надавить со всей силы", 
+                        isChance: true, 
+                        baseChance: 65, 
+                        onSuccess: "door_success", 
+                        onFailure: "tool_break" 
+                    }
+                ]
+            },
+
+            tool_break: {
+                text: "Разводной ключ с громким звоном ломается пополам. Вибрация бьет по рукам. Из люка вентиляции стремительно падает длинная черная тень...",
+                onEnter: () => {
+                    gameState.inventory.wrench = false;
+                    updateHUD();
+                },
+                choices: [
+                    { 
+                        text: "Включить фонарик и бежать в коридор", 
+                        requiresItem: "flashlight", 
+                        next: "flashlight_blind_win" 
+                    },
+                    { text: "ПРИНЯТЬ СУДЬБУ", next: "death_screen" }
+                ]
+            },
+
+            hide_in_locker: {
+                text: "Вы залезаете в узкий шкафчик и закрываете дверцу. Сквозь вентиляционные прорези в дверце вы видите, как огромная темная фигура спрыгивает в центр комнаты. Она медленно идет в сторону вашего шкафчика...",
+                isDark: true,
+                choices: [
+                    { 
+                        text: "Сидеть тихо, не издавая ни звука", 
+                        isChance: true, 
+                        baseChance: 40, 
+                        onSuccess: "locker_stealth_win", 
+                        onFailure: "locker_stealth_fail" 
+                    }
+                ]
+            },
+
+            locker_stealth_win: {
+                text: "Монстр подходит вплотную. Его когти скрежещут по соседней дверце шкафа. Спустя мучительную минуту ожидания, он теряет интерес и уходит в темный коридор.",
+                choices: [
+                    { text: "Тихо выбраться наружу и побежать в противоположную сторону", next: "corridor_stealth" }
+                ]
+            },
+
+            locker_stealth_fail: {
+                text: "Из-за пыли внутри шкафа вы громко чихаете. Когтистая лапа мгновенно пробивает тонкую жестяную дверь шкафа прямо насквозь...",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.8); },
+                choices: [
+                    { 
+                        text: "Использовать аптечку, чтобы зажать рану и вырваться из шкафа", 
+                        requiresItem: "medkit", 
+                        next: "medkit_escape" 
+                    },
+                    { text: "Смерть настигла вас в железном гробу...", next: "death_screen" }
+                ]
+            },
+
+            // ========== ВЕНТИЛЯЦИЯ ==========
+            vent_route: {
+                text: "Вы залезаете в узкую вентиляционную трубу. Здесь пахнет пылью и машинным маслом. Труба раздваивается: один путь уходит круто вниз, другой ведет к вентилятору. На стене трубы вы замечаете выцарапанный код: '2468'. Рядом кто-то написал еще один код, но он зачеркнут — '0000'. Наверное, нерабочий. На дальней стене трубы висит табличка с кодом: '5555'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '2468';
+                },
+                choices: [
+                    { text: "Ползти по крутому спуску вниз", next: "vent_down" },
+                    { 
+                        text: "Заблокировать лопасти вентилятора разводным ключом", 
+                        requiresItem: "wrench", 
+                        next: "vent_fan_wrench_success" 
+                    },
+                    { 
+                        text: "Попробовать заклинить лопасти работающего вентилятора руками", 
+                        isChance: true, 
+                        baseChance: 20, 
+                        onSuccess: "vent_fan_success", 
+                        onFailure: "vent_fan_fail" 
+                    }
+                ]
+            },
+
+            vent_down: {
+                text: "Вы скользите вниз по металлическому желобу и с грохотом вываливаетесь на мягкие мешки с песком на темном заброшенном Складе.",
+                isDark: true,
+                choices: [
+                    { text: "Осмотреться на Складе", next: "warehouse_path" }
+                ]
+            },
+
+            vent_fan_wrench_success: {
+                text: "Вы просовываете тяжелый разводной ключ прямо между лопастями вентилятора. С оглушительным скрежетом двигатель вентилятора сгорает и останавливается. Путь на крышу полностью открыт и безопасен!",
+                choices: [
+                    { text: "Выбраться на крышу по вентиляционной шахте", next: "roof_escape_ending" }
+                ]
+            },
+
+            vent_fan_success: {
+                text: "Каким-то чудом вам удается улучить момент и заклинить вращающийся барабан вентилятора куском арматуры. Путь свободен!",
+                choices: [
+                    { text: "Пролезть на крышу", next: "roof_escape_ending" }
+                ]
+            },
+
+            vent_fan_fail: {
+                text: "Лопасти вентилятора мгновенно затягивают вас внутрь. Вы совершили фатальную ошибку.",
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "restart" }
+                ]
+            },
+
+            // ========== ХИМИЧЕСКАЯ ЛАБОРАТОРИЯ ==========
+            lab_path: {
+                text: "Вы оказываетесь среди разбитых колб и шкафов с реактивами. На столе дымится банка с фосфором, а рядом стоит кислотный раствор. Сзади в коридоре слышны тяжелые прыжки SASAVOT. Вы замечаете странную колбу со светящейся синей жидкостью с надписью 'СЫВОРОТКА-X'. На двери лаборатории висит кодовый замок.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '1357';
+                },
+                choices: [
+                    { text: "Выпить загадочную сыворотку из колбы", next: "drink_serum" },
+                    { 
+                        text: "Смешать реактивы, чтобы создать густую химическую дымовую завесу", 
+                        isChance: true, 
+                        baseChance: 60, 
+                        onSuccess: "smoke_success", 
+                        onFailure: "smoke_fail" 
+                    },
+                    { text: "Забаррикадировать дверь лаборатории шкафом", next: "lab_barricade" },
+                    { text: "Ввести код на двери лаборатории", requiresCode: true, correctCode: "1357", onSuccess: "lab_secret_room", onFailure: "lab_code_fail" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: СЕКРЕТНАЯ КОМНАТА ЛАБОРАТОРИИ ==========
+            lab_secret_room: {
+                text: "Дверь открывается в скрытую лабораторию. Здесь хранятся образцы исследований SASAVOT. Вы находите документы с подробной информацией о слабостях монстра и кодом от Архива: '9999'. Также здесь лежит мощная Аптечка с стимуляторами и записка с кодом от генераторной: '4869'! На стене висит табличка с кодом от склада: '5555'. На полке лежит записка с кодом от кабинета охраны: '7777'.",
+                onEnter: () => {
+                    gameState.inventory.medkit = true;
+                    gameState.rememberedCode = '9999';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Взять аптечку и вернуться в коридор", next: "corridor_inspected" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД ЛАБОРАТОРИИ ==========
+            lab_code_fail: {
+                text: "Замок мигает красным. Неверный код! Дверь лаборатории блокируется наглухо. Из коридора доносится рев SASAVOT — он почуял вас.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.7); },
+                choices: [
+                    { text: "Бежать к вентиляции", next: "vent_route" },
+                    { text: "Забаррикадировать дверь шкафом", next: "lab_barricade" }
+                ]
+            },
+
+            drink_serum: {
+                text: "Вы выпиваете содержимое колбы. Жидкость обжигает горло. Ваши чувства невероятно обостряются, вены чернеют, а по телу разливается первобытная сила... Вы оборачиваетесь к ворвавшемуся в лабораторию SASAVOT. Теперь вы хищник, а он — жертва.",
+                choices: [
+                    { text: "Атаковать чудовище голыми руками", next: "mutation_ending" }
+                ]
+            },
+
+            mutation_ending: {
+                text: "Вы бросаетесь на монстра с нечеловеческой яростью. Разрывая пиксельную плоть, вы полностью уничтожаете существо, но понимаете, что сыворотка изменила вас навсегда. Вы занимаете его место в глубинах комплекса.",
+                ending: { id: "ending_mutation", name: "Новый Монстр" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            smoke_success: {
+                text: "УСПЕХ! Смесь мгновенно вступает в реакцию, выделяя плотный белый дым, заполнивший всю лабораторию и коридор. Ворвавшийся SASAVOT начинает бешено кашлять и тереть слезящиеся глаза. Он полностью дезориентирован! Вы можете незаметно пройти мимо него.",
+                choices: [
+                    { text: "Скрытно проскользнуть на Склад сквозь туман", next: "warehouse_path" },
+                    { text: "Выбежать на лестницу к Генераторной", next: "generator_path" }
+                ]
+            },
+
+            smoke_fail: {
+                text: "ПРОВАЛ. Реактивы вспыхивают ярким фиолетовым пламенем прямо у вас в руках, сильно обжигая лицо и ладони! Вы вскрикиваете от дикой боли, выдавая свое местоположение.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.7); },
+                choices: [
+                    { 
+                        text: "Использовать аптечку, чтобы быстро снять ожог и бежать", 
+                        requiresItem: "medkit", 
+                        next: "medkit_escape" 
+                    },
+                    { text: "Повалиться на пол от боли...", next: "death_screen" }
+                ]
+            },
+
+            lab_barricade: {
+                text: "Вы прислоняете тяжелый шкаф к двери. Монстр с разбегу бьется в дверь, проминая стальной лист. Шкаф удерживает натиск, но долго он не простоит. В стене лаборатории вы замечаете узкий мусоропровод.",
+                choices: [
+                    { text: "Прыгнуть в темную бездну мусоропровода", next: "vent_down" }
+                ]
+            },
+
+            // ========== КАНАЛИЗАЦИЯ ==========
+            sewer_path: {
+                text: "Вы спускаетесь в ледяную вонючую воду. Здесь царит кромешная тьма, нарушаемая лишь редким писком крыс. Благодаря Фонарику вы видите путь вперед через ржавые трубы. На стене вы замечаете выгравированный код: '8080'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '8080';
+                },
+                choices: [
+                    { text: "Идти вперед по главной трубе в поиска выхода", next: "sewer_tunnel" },
+                    { 
+                        text: "Срезать путь через узкий дренажный коллектор", 
+                        isChance: true, 
+                        baseChance: 50, 
+                        onSuccess: "sewer_cut_success", 
+                        onFailure: "sewer_cut_fail" 
+                    },
+                    { 
+                        text: "Нырнуть под воду, чтобы найти скрытый проход", 
+                        isChance: true, 
+                        baseChance: 25, 
+                        onSuccess: "sewer_secret_passage", 
+                        onFailure: "sewer_cut_fail" 
+                    }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ТАЙНЫЙ ПРОХОД В КАНАЛИЗАЦИИ ==========
+            sewer_secret_passage: {
+                text: "Затаив дыхание, вы ныряете в ледяную воду. Ваши пальцы нащупывают ржавую решетку, которая поддается — она не заперта! Вы выныриваете в сухом техническом тоннеле, ведущем прямо в серверную.",
+                choices: [
+                    { text: "Вылезти в серверную через люк", next: "server_search" }
+                ]
+            },
+
+            sewer_tunnel: {
+                text: "Вы долго бредете по воде. Впереди показывается свет сквозь решетку на полу. Вы выбираетесь прямо в секретный Архив под серверной комнатой!",
+                choices: [
+                    { text: "Вылезти в Архив", next: "secret_archive" }
+                ]
+            },
+
+            sewer_cut_success: {
+                text: "Вы успешно преодолеваете узкий проход и по лестнице вылезаете прямо на улицу за пределы здания через ливневый сток!",
+                choices: [
+                    { text: "Выбраться наружу", next: "sewer_escape_ending" }
+                ]
+            },
+
+            sewer_escape_ending: {
+                text: "Грязный, изнуренный, но живой вы выбираетесь на опушку леса рядом с комплексом. Вокруг тишина. Свобода...",
+                ending: { id: "ending_sewer", name: "Побег через сток" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            sewer_cut_fail: {
+                text: "Уровень воды в коллекторе начинает резко прибывать, а ржавая решетка преграждает вам путь вперед. Вода скрывает вас с головой.",
+                choices: [
+                    { text: "Задохнуться под водой...", next: "sewer_drown_ending" }
+                ]
+            },
+
+            sewer_drown_ending: {
+                text: "Тьма и холодные сточные воды забирают вашу жизнь на самом дне комплекса.",
+                ending: { id: "ending_drown", name: "Утонувший во тьме" },
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "restart" }
+                ]
+            },
+
+            // ========== СКЛАД ==========
+            warehouse_path: {
+                text: "Огромный склад уставлен деревянными ящиками. Сверху свисают оборванные кабели. В глубине склада слышны тяжелые шаги — SASAVOT уже идет по вашему следу. На одном из ящиков вы замечаете надпись мелом: 'Код от склада — 5555'. Рядом кто-то выцарапал код '1234' — возможно, от старой двери. На стене висит табличка с кодом от вентиляции: '2468'.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { 
+                    gameState.isChaseScene = true; 
+                    setChaseIntensity(0.4);
+                    gameState.rememberedCode = '5555';
+                },
+                choices: [
+                    { 
+                        text: "Вставить кассету в старый телевизионный пульт управления складом", 
+                        requiresItem: "tape", 
+                        next: "play_distraction_tape" 
+                    },
+                    { text: "Искать черный ход со склада", next: "warehouse_exit" },
+                    { 
+                        text: "Попробовать незаметно обойти существо среди ящиков", 
+                        isChance: true, 
+                        baseChance: 60, 
+                        onSuccess: "warehouse_stealth_success", 
+                        onFailure: "caught_warehouse" 
+                    },
+                    { text: "Открыть кодовый замок на двери склада", requiresCode: true, correctCode: "5555", onSuccess: "warehouse_secret_room", onFailure: "warehouse_code_fail" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: СЕКРЕТНАЯ КОМНАТА СКЛАДА ==========
+            warehouse_secret_room: {
+                text: "Дверь открывается в небольшую секретную комнату охраны. Здесь хранится оружие и припасы. Вы находите мощный Сигнальный пистолет и записку: 'Код от серверной — 4869'. Также здесь лежит карта комплекса с кодом от архива: '9999'. На стене висит табличка с кодом от кабинета охраны: '7777'. На столе лежит записка с кодом от лаборатории: '1357'. Это оружие может ослепить монстра вспышкой!",
+                onEnter: () => {
+                    gameState.inventory.flashlight = true;
+                    gameState.rememberedCode = '4869';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Взять сигнальный пистолет и выйти из склада", next: "roof_escape_ending" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД СКЛАДА ==========
+            warehouse_code_fail: {
+                text: "Замок издает предупреждающий сигнал. Неверный код! SASAVOT, который был рядом, резко поворачивается в вашу сторону. Его светящиеся глаза загораются в темноте.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.9); },
+                choices: [
+                    { text: "Бежать к выходу", next: "roof_escape_ending" },
+                    { text: "Прятаться за ящиками", next: "warehouse_stealth_success" }
+                ]
+            },
+
+            play_distraction_tape: {
+                text: "Вы вставляете кассету 'ПЕРВЫЙ СТРИМ SASAVOT' в старый плеер охраны. На всех мониторах склада запускается старая архивная запись стрима. Знакомые звуки полностью дезориентируют монстра — он замирает у экрана, растерянно смотря на пиксели. Вы можете спокойно пройти дальше!",
+                choices: [
+                    { text: "Спокойно пройти к пожарному выходу", next: "roof_escape_ending" },
+                    { text: "Проверить соседний кабинет охраны", next: "security_room_from_warehouse" },
+                    { text: "Осторожно подойти к дезориентированному монстру", next: "approach_monster_distracted" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ПОДОЙТИ К МОНСТРУ ==========
+            approach_monster_distracted: {
+                text: "Пока SASAVOT завороженно смотрит на экран, вы подкрадываетесь к нему со спины. Его пиксельная плоть мерцает и искажается. В руке вы сжимаете разводной ключ. Один удар — и, возможно, всему придет конец.",
+                choices: [
+                    { 
+                        text: "Нанести сокрушительный удар по голове ключом", 
+                        requiresItem: "wrench", 
+                        next: "warehouse_kill_attempt" 
+                    },
+                    { text: "Не рисковать — уйти к выходу", next: "roof_escape_ending" }
+                ]
+            },
+
+            warehouse_kill_attempt: {
+                text: "Вы замахиваетесь ключом, но в последний момент SASAVOT резко дергается — монитор выдает помехи. Удар приходит лишь скользящим по плечу. Монстр взревев, швыряет вас через весь склад. Вы теряете сознание...",
+                isDark: true,
+                isChase: true,
+                onEnter: () => {
+                    gameState.inventory.wrench = false;
+                    updateHUD();
+                    gameState.isChaseScene = true;
+                    setChaseIntensity(0.9);
+                },
+                choices: [
+                    { 
+                        text: "Очнуться и, превозмогая боль, ползти к выходу", 
+                        isChance: true, 
+                        baseChance: 30, 
+                        onSuccess: "warehouse_crawl_escape", 
+                        onFailure: "death_screen" 
+                    }
+                ]
+            },
+
+            warehouse_crawl_escape: {
+                text: "Вы ползете по бетонному полу, оставляя кровавый след. Позади гремит — монстр ищет вас среди ящиков. Ваша рука нащупывает холодный металл пожарной двери. Рывок — и вы снаружи, в ночной тишине, под звездами.",
+                choices: [
+                    { text: "Уползти в темноту леса", next: "roof_escape_ending" }
+                ]
+            },
+
+            security_room_from_warehouse: {
+                text: "В кабинете охраны вы находите резервную карту доступа. На столе лежит записка: 'Код от архива под сервером — 9999'.",
+                onEnter: () => {
+                    gameState.rememberedCode = '9999';
+                },
+                choices: [
+                    { text: "Идти на крышу", next: "roof_escape_ending" },
+                    { text: "Вернуться в Лифтовой холл через вентиляцию", next: "elevator_shaft" }
+                ]
+            },
+
+            warehouse_exit: {
+                text: "Вы находите тяжелую гермодверь с надписью 'ВЫХОД'. Но для ее открытия требуется запустить резервный генератор в другом крыле здания.",
+                choices: [
+                    { text: "Пробираться в Генераторную", next: "generator_path" }
+                ]
+            },
+
+            warehouse_stealth_success: {
+                text: "Вы ловко маневрируете между стеллажами. Существо проходит мимо, так вас и не заметив. Впереди виднеется пожарный выход.",
+                choices: [
+                    { text: "Выбежать на лестницу к крыше", next: "roof_escape_ending" }
+                ]
+            },
+
+            caught_warehouse: {
+                text: "Вы случайно задеваете шаткий стеллаж. Коробки с грохотом сыплются на пол. Из темноты на вас бросается искаженная пиксельная фигура.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.8); },
+                choices: [
+                    { 
+                        text: "Использовать аптечку, чтобы залечить раны и убежать", 
+                        requiresItem: "medkit", 
+                        next: "medkit_escape" 
+                    },
+                    { text: "Монстр разрывает вас на части...", next: "death_screen" }
+                ]
+            },
+
+            // ========== ГЕНЕРАТОРНАЯ ==========
+            generator_path: {
+                text: "В генераторной стоит жуткий гул. Огромные дизельные двигатели покрыты слоем пыли. Пульт управления генератором мигает тусклыми лампами. На пульте виден кодовый замок для аварийного запуска.",
+                isDark: true,
+                timer: 40,
+                choices: [
+                    { 
+                        text: "Запустить резервные софиты на максимум (Перегрузка)", 
+                        requiresItem: "wrench", 
+                        next: "generator_overload_success" 
+                    },
+                    { 
+                        text: "Судорожно запустить генератор вручную", 
+                        isChance: true, 
+                        baseChance: 55, 
+                        onSuccess: "generator_on", 
+                        onFailure: "generator_explode" 
+                    },
+                    { text: "Искать инструкцию в ящике стола", next: "generator_manual" },
+                    { text: "Обыскать старый металлический шкаф", next: "generator_locker_search" },
+                    { text: "Ввести код аварийного запуска", requiresCode: true, correctCode: "4869", onSuccess: "generator_emergency_on", onFailure: "generator_code_fail" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: АВАРИЙНЫЙ ЗАПУСК ГЕНЕРАТОРА ==========
+            generator_emergency_on: {
+                text: "Код принят! Генератор запускается в аварийном режиме. Свет вспыхивает во всем комплексе с невероятной яркостью. SASAVOT, который уже был рядом, отступает, завывая от боли. Свет выжигает ему глаза! Автоматические двери разблокированы.",
+                choices: [
+                    { text: "Бежать к главному выходу под защитой света", next: "roof_escape_ending" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД ГЕНЕРАТОРА ==========
+            generator_code_fail: {
+                text: "Панель управления вспыхивает красным. 'ОШИБКА КОДА'. Генератор начинает перегреваться. Из вентиляции начинает вытекать горячий пар. Нужно срочно выбираться!",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.6); },
+                choices: [
+                    { text: "Бежать из генераторной", next: "generator_path" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ШКАФ В ГЕНЕРАТОРНОЙ ==========
+            generator_locker_search: {
+                text: "Вы открываете проржавевший шкаф. Внутри — целый арсенал! Противогаз, сигнальный пистолет и старая, но рабочая рация. Сигнальным пистолетом можно ослепить монстра. Рация, возможно, ловит сигнал снаружи. На полке вы замечаете табличку с кодом: '2020'. Также здесь лежит записка с кодом от лифта: '1337'. На дне шкафа лежит старая записка с кодом от архива: '9999'.",
+                onEnter: () => {
+                    gameState.inventory.flashlight = true;
+                    gameState.rememberedCode = '2020';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Вернуться к пульту генератора", next: "generator_path" },
+                    { text: "Попытаться подать сигнал бедствия через рацию", next: "radio_signal" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: РАДИОСИГНАЛ ==========
+            radio_signal: {
+                text: "Вы включаете рацию. Сквозь помехи пробивается голос: '...прием... это поисково-спасательный отряд... мы на подходе к комплексу...' Рацию заглушает рев монстра за дверью. Они идут! Нужно продержаться!",
+                choices: [
+                    { text: "Прокричать в рацию координаты и ждать спасения", next: "rescue_ending" },
+                    { text: "Запустить генератор и бежать на крышу к спасателям", next: "generator_on" }
+                ]
+            },
+
+            // ========== НОВАЯ КОНЦОВКА: СПАСЕНИЕ ==========
+            rescue_ending: {
+                text: "Спустя полчаса, когда вы уже готовитесь к бою с монстром, стена генераторной взрывается снаружи. Свет вертолетных прожекторов заливает помещение. 'Быстрее! Сюда!' — кричат военные. SASAVOT бросается на вас, но автоматная очередь отбрасывает тварь назад. Вас вытаскивают наружу. Комплекс оцепляют. Вы спасены.",
+                ending: { id: "ending_rescue", name: "Эвакуация" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== ПЕРЕГРУЗКА ГЕНЕРАТОРА ==========
+            generator_overload_success: {
+                text: "Вы используете разводной ключ, чтобы затянуть клапан давления и пустить ток в обход предохранителей. Весь комплекс озаряет невероятно яркий свет софитов! Слышен дикий визг SASAVOT — свет выжигает ему глаза. Монстр в панике убегает обратно под землю. Вы в абсолютной безопасности!",
+                choices: [
+                    { text: "Устроить саботаж и полностью взорвать комплекс с монстром внутри", requiresItem: "wrench", next: "sabotage_choice" },
+                    { text: "Спокойно пойти к главному выходу на крышу", next: "roof_escape_ending" }
+                ]
+            },
+
+            sabotage_choice: {
+                text: "Вы решаете покончить с этим кошмаром раз и навсегда. С помощью ключа вы ломаете систему аварийного охлаждения генераторов. Температура стремительно растет. Комплекс взлетит на воздух через 30 секунд. Вы не успеете убежать.",
+                choices: [
+                    { text: "Остаться и убедиться, что SASAVOT погибнет во взрыве", next: "heroic_sacrifice_ending" }
+                ]
+            },
+
+            heroic_sacrifice_ending: {
+                text: "Генераторы детонируют с оглушительным ревом. Огненная волна сжигает комплекс до основания, полностью уничтожая sasavot. Ваша смерть была ненапрасной.",
+                ending: { id: "ending_heroic", name: "Героическое Самопожертвование" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            generator_on: {
+                text: "Генераторы с диким ревом оживают! Свет вспыхивает во всем комплексе, ослепляя SASAVOT, который уже крался за вами. Автоматические двери склада и выхода теперь полностью разблокированы!",
+                choices: [
+                    { text: "Бежать к главному выходу со склада под защитой света", next: "roof_escape_ending" }
+                ]
+            },
+
+            generator_explode: {
+                text: "Вы дергаете не тот рычаг. Происходит сильный скачок напряжения, генератор начинает искрить и взрывается, заполняя комнату огнем. Выхода нет.",
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "generator_fire_ending" }
+                ]
+            },
+
+            generator_fire_ending: {
+                text: "Огненная ловушка захлопывается. Вы сгораете в Генераторной.",
+                ending: { id: "ending_fire", name: "Огненный Капкан" },
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "restart" }
+                ]
+            },
+
+            generator_manual: {
+                text: "В ящике вы находите схему: 'Сначала синий тумблер, затем запуск'. На полу за вашей спиной появляется длинная тень. Время на исходе!",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.6); },
+                choices: [
+                    { text: "Включить генератор по схеме", next: "generator_on" }
+                ]
+            },
+
+            // ========== ЛИФТОВАЯ ШАХТА ==========
+            elevator_shaft: {
+                text: "Вы стоите перед распахнутой шахтой лифта. Кабина застряла парой этажей ниже. Трос натянут и уходит глубоко вниз. На стене висит панель управления лифтом с кодовым замком.",
+                isDark: true,
+                choices: [
+                    { 
+                        text: "Спуститься по тросу на крышу кабины лифта", 
+                        isChance: true, 
+                        baseChance: 50, 
+                        onSuccess: "elevator_success", 
+                        onFailure: "elevator_fail" 
+                    },
+                    { text: "Прыгнуть на пожарную лестницу сбоку шахты", next: "ladder_route" },
+                    { text: "Ввести код на панели управления лифтом", requiresCode: true, correctCode: "1337", onSuccess: "elevator_call_success", onFailure: "elevator_code_fail" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ЛИФТ УСПЕШНО ВЫЗВАН ==========
+            elevator_call_success: {
+                text: "Код принят! Лифт с грохотом начинает спускаться к вам. Через несколько секунд кабина прибывает. Двери открываются, приглашая внутрь.",
+                choices: [
+                    { text: "Вбежать в лифт", next: "elevator_success" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: НЕВЕРНЫЙ КОД ЛИФТА ==========
+            elevator_code_fail: {
+                text: "Панель мигает красным светом. 'НЕВЕРНЫЙ КОД'. Сирена на несколько секунд оглушает вас. Из темноты слышится приближающийся рев SASAVOT!",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.7); },
+                choices: [
+                    { text: "Срочно спрыгнуть по тросу вниз", next: "elevator_shaft" },
+                    { text: "Бежать к пожарной лестнице", next: "ladder_route" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: ВЫЗОВ ЛИФТА ==========
+            elevator_call: {
+                text: "Вы нажимаете кнопку вызова. Где-то в шахте раздается грохот — кабина медленно ползет вверх. Скрежет металла режет слух. Но вместе с кабиной поднимается и звук тяжелого дыхания из темноты...",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.5); },
+                choices: [
+                    { 
+                        text: "Дождаться кабину и вбежать внутрь", 
+                        isChance: true, 
+                        baseChance: 65, 
+                        onSuccess: "elevator_success", 
+                        onFailure: "elevator_caught" 
+                    },
+                    { text: "Передумать и лезть по тросу вручную", next: "elevator_shaft" }
+                ]
+            },
+
+            elevator_caught: {
+                text: "Вы ждете слишком долго. Когда кабина наконец приезжает, сзади раздается рык, и когтистая лапа пробивает вашу грудь насквозь. Вы не успели.",
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "death_screen" }
+                ]
+            },
+
+            elevator_success: {
+                text: "Вы успешно соскальзываете вниз на крышу кабины лифта. Отсюда видна приоткрытая дверь технического этажа, ведущая наружу.",
+                choices: [
+                    { text: "Выползти через проем наружу", next: "roof_escape_ending" }
+                ]
+            },
+
+            elevator_fail: {
+                text: "Ваши ладони соскальзывают со смазанного троса. Вы летите вниз в темную бездну шахты...",
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "elevator_fall_ending" }
+                ]
+            },
+
+            elevator_fall_ending: {
+                text: "Смертельное падение на дно лифтовой шахты прерывает ваше выживание.",
+                ending: { id: "ending_fall", name: "Свободное Падение" },
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "restart" }
+                ]
+            },
+
+            ladder_route: {
+                text: "Лестница жутко скрипит под вашим весом. Одна из ступенек ломается, но вы успеваете удержаться и спуститься на уровень вентиляционного узла.",
+                choices: [
+                    { text: "Пролезть в узел вентиляции", next: "vent_route" }
+                ]
+            },
+
+            // ========== СЕРВЕРНАЯ ==========
+            server_search: {
+                text: "Вы обыскиваете серверные стойки и находите флешку с надписью 'ПРАВДА О SASAVOT'. На мониторе одного из серверов вы видите открытую базу данных с кодами доступа. Там указан код '4869' для аварийного выхода. В этот момент серверная начинает рушиться.",
+                onEnter: () => {
+                    gameState.inventory.usb = true;
+                    gameState.rememberedCode = '4869';
+                    updateHUD();
+                },
+                choices: [
+                    { text: "Забрать флешку и бежать к лифту", next: "elevator_shaft" },
+                    { text: "Попробовать проникнуть в секретную архивную дверь в углу", next: "secret_archive" }
+                ]
+            },
+
+            // ========== АРХИВ ==========
+            secret_archive: {
+                text: "Секретная дверь архива заперта на кодовый замок. На ней висит табличка 'Только для персонала'. Рядом на стене кто-то оставил пометку: 'Код меняется каждую неделю'.",
+                choices: [
+                    { text: "Ввести сохраненный код", requiresCode: true, correctCode: "9999", onSuccess: "archive_inside", onFailure: "archive_alarm" },
+                    { text: "Попробовать угадать другой код", isChance: true, baseChance: 10, onSuccess: "archive_inside", onFailure: "archive_alarm" },
+                    { text: "Сдаться и бежать в лифтовую шахту", next: "elevator_shaft" }
+                ]
+            },
+
+            archive_alarm: {
+                text: "Вы вводите неверный код. Оглушительная сирена взрывает тишину. Из темноты коридора доносится топот множества когтистых лап...",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(1.0); },
+                choices: [
+                    { text: "SASAVOT настигает вас...", next: "death_screen" }
+                ]
+            },
+
+            archive_inside: {
+                text: "Дверь с тихим щелчком открывается. Внутри — терминал связи с внешним миром и старый спутниковый передатчик. Вы можете слить правду о SASAVOT прямо отсюда!",
+                choices: [
+                    { 
+                        text: "Загрузить данные с флешки в глобальную сеть", 
+                        requiresItem: "usb", 
+                        next: "truth_ending" 
+                    },
+                    { text: "Просто бежать к черному выходу из архива на крышу", next: "roof_escape_ending" }
+                ]
+            },
+
+            truth_ending: {
+                text: "Документы улетают в открытый интернет. Спустя секунду гермодверь ломается под ударами монстра, но вы улыбаетесь... Весь мир знает правду.",
+                ending: { id: "ending_truth", name: "Истина Раскрыта" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== КОРИДОР СКРЫТНОСТЬ ==========
+            corridor_stealth: {
+                text: "Вы крадетесь по темным углам коридора. SASAVOT ходит где-то поблизости, прислушиваясь к каждому шороху. На стене вы видите старую надпись мелом: 'Код от вентиляции — 2468'. Рядом кто-то дописал еще один код: '1122'. Еще дальше на стене висит табличка с кодом от архива: '9999'. На полу вы замечаете выцарапанный код: '8888'.",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { 
+                    gameState.isChaseScene = true; 
+                    setChaseIntensity(0.3);
+                    gameState.rememberedCode = '2468';
+                },
+                choices: [
+                    { 
+                        text: "Сделать быстрый рывок к выходу во время шума вентиляции", 
+                        isChance: true, 
+                        baseChance: 70, 
+                        onSuccess: "roof_escape_ending", 
+                        onFailure: "caught_corridor" 
+                    },
+                    { text: "Осторожно заглянуть в дверь Химической лаборатории", next: "lab_path" }
+                ]
+            },
+
+            caught_corridor: {
+                text: "Вы наступаете на осколок стекла. Громкий хруст режет тишину. Тяжелое дыхание раздается прямо у вас за спиной...",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { gameState.isChaseScene = true; setChaseIntensity(0.9); },
+                choices: [
+                    { 
+                        text: "Использовать аптечку, чтобы залечить раны и вырваться", 
+                        requiresItem: "medkit", 
+                        next: "medkit_escape" 
+                    },
+                    { text: "Тьма поглощает вас...", next: "death_screen" }
+                ]
+            },
+
+            // ========== КРЫША (ФИНАЛ) ==========
+            roof_escape_ending: {
+                text: "Вы выбегаете на крышу комплекса. Позади захлопывается бронированная дверь. Ночной ветер бьет в лицо, вдали виднеются огни города. Вы выжили.",
+                ending: { id: "ending_roof", name: "Ускользнувший во Тьму" },
+                choices: [
+                    { text: "ПОЗДРАВЛЯЕМ! НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            },
+
+            // ========== СМЕРТЬ ==========
+            death_screen: {
+                text: "ВЫ ПОГИБЛИ. SASAVOT разорвал вас в темноте.",
+                choices: [
+                    { text: "ПОПРОБОВАТЬ СНОВА", next: "restart" }
+                ]
+            },
+
+            // ========== ДОПОЛНИТЕЛЬНЫЕ СЦЕНЫ С КОДАМИ ==========
+            generator_manual: {
+                text: "В ящике вы находите схему: 'Сначала синий тумблер, затем запуск'. На полке под схемой лежит старая записка: 'Код от аварийного выхода — 1010'. На полу за вашей спиной появляется длинная тень. Время на исходе!",
+                isDark: true,
+                isChase: true,
+                onEnter: () => { 
+                    gameState.isChaseScene = true; 
+                    setChaseIntensity(0.6);
+                    gameState.rememberedCode = '1010';
+                },
+                choices: [
+                    { text: "Включить генератор по схеме", next: "generator_on" }
+                ]
+            },
+
+            ladder_route: {
+                text: "Лестница жутко скрипит под вашим весом. Одна из ступенек ломается, но вы успеваете удержаться и спуститься на уровень вентиляционного узла. На стене лестничной клетки висит табличка с кодом: '4040'.",
+                onEnter: () => {
+                    gameState.rememberedCode = '4040';
+                },
+                choices: [
+                    { text: "Пролезть в узел вентиляции", next: "vent_route" }
+                ]
+            },
+
+            hide_under_desk: {
+                text: "Вы сжимаетесь в комок под терминалом. SASAVOT спрыгивает в комнату. Вы видите его когтистые лапы, которые медленно обходят стол. Оно принюхивается. Под столом вы замечаете выцарапанный код на дереве: '3030'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '3030';
+                },
+                choices: [
+                    { 
+                        text: "Задержать дыхание изо всех сил", 
+                        isChance: true, 
+                        baseChance: 55, 
+                        onSuccess: "hide_desk_success", 
+                        onFailure: "hide_desk_fail" 
+                    }
+                ]
+            },
+
+            vent_down: {
+                text: "Вы скользите вниз по металлическому желобу и с грохотом вываливаетесь на мягкие мешки с песком на темном заброшенном Складе. На стене вы замечаете выгравированный код: '7070'.",
+                isDark: true,
+                onEnter: () => {
+                    gameState.rememberedCode = '7070';
+                },
+                choices: [
+                    { text: "Осмотреться на Складе", next: "warehouse_path" }
+                ]
+            },
+
+            // ========== НОВАЯ СЦЕНА: СЕКРЕТНЫЙ ПРОХОД НА КРЫШУ ==========
+            roof_secret_ending: {
+                text: "Вы вводите код в скрытую панель на крыше, и открывается люк в недоступный ранее технический отсек. Отсюда через пожарную лестницу можно безопасно спуститься на улицу. Вы свободны!",
+                ending: { id: "ending_roof_secret", name: "Тайный Выход" },
+                choices: [
+                    { text: "НАЧАТЬ ИГРУ ЗАНОВО", next: "restart" }
+                ]
+            }
+        };
+
+        // =====================================================================
+        // СИСТЕМА ТАЙМЕРА
+        // =====================================================================
+        function startTimer(seconds) {
+            stopTimer();
+            gameState.timeLeft = seconds;
+            updateTimerDisplay();
+            document.getElementById('timer-display').style.display = 'block';
+
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                updateTimerDisplay();
+                if (gameState.timeLeft <= 0) {
+                    stopTimer();
+                    playFailure();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+                gameState.timer = null;
+            }
+            gameState.timeLeft = 0;
+            const timerEl = document.getElementById('timer-display');
+            if (timerEl) timerEl.style.display = 'none';
+        }
+
+        function updateTimerDisplay() {
+            const timerEl = document.getElementById('timer-display');
+            if (timerEl) {
+                timerEl.textContent = `ВРЕМЯ: ${gameState.timeLeft}`;
+                if (gameState.timeLeft <= 10) {
+                    timerEl.style.color = '#ff0000';
+                    timerEl.style.animation = 'timerPulse 0.5s infinite';
+                } else {
+                    timerEl.style.color = '#ffaa00';
+                    timerEl.style.animation = 'timerPulse 1s infinite';
+                }
+            }
+        }
+
+        // =====================================================================
+        // СИСТЕМА ВВОДА КОДА
+        // =====================================================================
+        function promptCodeInput(promptText, correctCode, onSuccess, onFailure) {
+            const code = prompt(promptText);
+            if (code === correctCode) {
+                playSuccess();
+                loadScene(onSuccess);
+            } else {
+                playFailure();
+                loadScene(onFailure);
+            }
+        }
+
+        // =====================================================================
+        // ЗАГРУЗКА СЦЕНЫ
+        // =====================================================================
+        function loadScene(sceneKey) {
+            if (sceneKey === 'restart') {
+                resetGameState();
+                document.getElementById('gameplay').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'flex';
+                playClick();
+                setChaseIntensity(0);
+                return;
+            }
+
+            const scene = story[sceneKey];
+            if (!scene) {
+                console.error('Scene not found:', sceneKey);
+                return;
+            }
+
+            const textLog = document.getElementById('text-log');
+            const choicesContainer = document.getElementById('choices');
+
+            // Остановка таймера при смене сцены
+            if (!scene.timer) {
+                stopTimer();
+            }
+
+            // Темнота и погоня
+            gameState.isDarkScene = scene.isDark || false;
+            gameState.isChaseScene = scene.isChase || false;
+
+            if (gameState.isChaseScene) {
+                setChaseIntensity(0.6 + Math.random() * 0.3);
+            } else {
+                setChaseIntensity(Math.max(0, parseFloat(gameState.ambientOsc?.frequency?.value || 45) > 55 ? 0.3 : 0));
+                setTimeout(() => { if (!gameState.isChaseScene) setChaseIntensity(0); }, 500);
+            }
+
+            // Запуск таймера если указан
+            if (scene.timer) {
+                startTimer(scene.timer);
+            }
+
+            // Регистрация концовки
+            if (scene.ending) {
+                const isNew = registerEnding(scene.ending.id, scene.ending.name);
+                let endingHtml = scene.text;
+                const endingNumber = gameState.unlockedEndings.indexOf(scene.ending.id) + 1;
+                const totalEndings = getTotalEndingsCount();
+                endingHtml += `<br><span class="ending-tag">[Концовка ${endingNumber} из ${totalEndings}: ${scene.ending.name}]</span>`;
+                if (isNew) {
+                    endingHtml += `<br><span style="color:#ff0;font-size:1.8rem;">✦ НОВАЯ КОНЦОВКА ОТКРЫТА ✦</span>`;
+                }
+                scene._endingText = endingHtml;
+            }
+
+            // Вызов хука при входе
+            if (scene.onEnter) {
+                scene.onEnter();
+            }
+
+            textLog.innerHTML = `<p>${scene._endingText || scene.text}</p>`;
+            scene._endingText = null;
+            choicesContainer.innerHTML = '';
+
+            // Отрисовка выборов
+            scene.choices.forEach(choice => {
+                if (choice.requiresItem && !gameState.inventory[choice.requiresItem]) {
+                    return;
+                }
+
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+
+                if (choice.isChance) {
+                    const finalChance = calculateChance(choice.baseChance, sceneKey);
+                    let badgeHtml = `<span class="chance-badge">ШАНС: ${finalChance}%</span>`;
+                    
+                    if (gameState.isDarkScene && !gameState.inventory.flashlight) {
+                        badgeHtml += `<span class="darkness-warning">ТЕМНО (-15%)</span>`;
+                    }
+                    
+                    if (gameState.timer && gameState.timeLeft <= 0) {
+                        badgeHtml += `<span class="darkness-warning">ВРЕМЯ ВЫШЛО (-20%)</span>`;
+                    }
+                    
+                    btn.innerHTML = `> ${choice.text} ${badgeHtml}`;
+                    
+                    btn.onclick = () => {
+                        const roll = Math.floor(Math.random() * 100) + 1;
+                        playClick();
+                        if (roll <= finalChance) {
+                            playSuccess();
+                            loadScene(choice.onSuccess);
+                        } else {
+                            playFailure();
+                            loadScene(choice.onFailure);
+                        }
+                    };
+                } else if (choice.requiresCode) {
+                    btn.innerText = `> ${choice.text}`;
+                    btn.onclick = () => {
+                        playClick();
+                        promptCodeInput(
+                            choice.codePrompt || 'Введите код:',
+                            gameState.rememberedCode || choice.correctCode,
+                            choice.onSuccess,
+                            choice.onFailure
+                        );
+                    };
+                } else {
+                    btn.innerText = `> ${choice.text}`;
+                    btn.onclick = () => {
+                        playClick();
+                        loadScene(choice.next);
+                    };
+                }
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        // =====================================================================
+        // ИНИЦИАЛИЗАЦИЯ
+        // =====================================================================
+        loadEndingProgress();
+    </script>
+</body>
+</html>
