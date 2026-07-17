@@ -136,8 +136,6 @@ a:hover {
    ============================================ */
 
 .exhibit {
-    min-height: 100vh;
-    padding: 90px 30px 60px;
     max-width: 1000px;
     margin: 0 auto;
     position: relative;
