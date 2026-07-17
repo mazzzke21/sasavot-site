@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sasavot - AI Sandbox Horror</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050202;
+            font-family: 'VT323', monospace;
+            color: #d11a1a;
+        }
+
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 255, 0.06));
+            background-size: 100% 4px, 3px 100%;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.03) 0%, transparent 70%);
+            z-index: 998;
+            pointer-events: none;
+            animation: screenGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes screenGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 10%;
+            background: radial-gradient(circle, #1a0505 0%, #030101 100%);
+            position: relative;
+        }
+
+        .main-title {
+            font-size: 7rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #ff0000;
+            text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.9), -3px -3px 0px rgba(0, 255, 255, 0.5), 3px 3px 0px rgba(255, 0, 255, 0.5);
+        }
+
+        #gameplay-container {
+            width: 100%;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #ff6600;
+            padding-bottom: 10px;
+            color: #ffaa00;
+        }
+
+        .text-log {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin: 20px 0;
+            font-size: 2rem;
+            line-height: 1.4;
+            color: #ff4444;
+            padding: 15px;
+            background: rgba(10, 0, 0, 0.4);
+            border-left: 4px solid #ff0000;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            border: 2px solid #801010;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .player-input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ff3333;
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+        }
+
+        .send-btn {
+            background: #d11a1a;
+            color: #050202;
+            border: none;
+            font-family: 'VT323', monospace;
+            font-size: 1.8rem;
+            padding: 5px 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #ff0000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        .send-btn:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .ai-warning-box {
+            background: rgba(30, 0, 0, 0.95);
+            border: 2px solid #ff0000;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ff3333;
+            font-size: 1.8rem;
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 4rem;
+                letter-spacing: 3px;
+            }
+
+            .screen {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .text-log {
+                font-size: 1.6rem;
+                line-height: 1.3;
+            }
+
+            .game-header {
+                font-size: 1.4rem;
+            }
+
+            .player-input {
+                font-size: 1.6rem;
+            }
+
+            .send-btn {
+                font-size: 1.4rem;
+                padding: 5px 15px;
+            }
+
+            .ai-warning-box {
+                font-size: 1.4rem;
+                padding: 10px;
+            }
+
+            #gameplay-container {
+                height: 85%;
+            }
+        }
+    </style>
+</head>
+<body class="crt">
+
+    <div id="main-menu" class="screen">
+        <h1 class="main-title">sasavot</h1>
+        <p style="font-size: 1.5rem; margin-bottom: 30px; color: #888;">TRUE AI SANDBOX // ПОЛНАЯ АВТОНОМНОСТЬ И СВОБОДА</p>
+        
+        <div style="margin-bottom: 30px;">
+            <label style="color: #ffaa00; font-size: 1.8rem;">СЛОЖНОСТЬ: </label>
+            <select id="difficulty-select" style="background: #000; color: #ff0000; font-family: 'VT323'; font-size: 1.6rem; border: 1px solid #ff0000; padding: 5px;">
+                <option value="easy">ЛЕГКО (ИИ подкидывает вещи)</option>
+                <option value="medium" selected>НОРМА</option>
+                <option value="hard">ХАРДКОР (Выжить почти невозможно)</option>
+            </select>
+        </div>
+
+        <button class="send-btn" style="font-size: 2.5rem; padding: 10px 40px;" onclick="startGame()">НАЧАТЬ ИГРУ</button>
+    </div>
+
+    <div id="gameplay" class="screen" style="display: none;">
+        <div id="gameplay-container">
+            <div class="game-header">
+                <span id="hud-turn">ХОД: 1</span>
+                <span id="hud-inventory">ИНВЕНТАРЬ: ПУСТ</span>
+                <span id="hud-diff">СЛОЖНОСТЬ: НОРМА</span>
+            </div>
+            <div id="text-log" class="text-log">Загрузка ИИ-вселенной...</div>
+            
+            <div class="input-container">
+                <span style="font-size: 2rem; margin-right: 10px; color: #ffaa00;">></span>
+                <input type="text" id="player-action" class="player-input" placeholder="Напиши свои действия..." onkeypress="if(event.key === 'Enter') sendAction()">
+                <button id="send-btn" class="send-btn" onclick="sendAction()">ОТПРАВИТЬ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameState = {
+            turn: 1,
+            difficulty: 'medium',
+            history: []
+        };
+
+        const systemWarningText = "<span style='color: #ff0000; font-size: 1.6rem; display: block; line-height: 1.2;'>⚠️ ВНИМАНИЕ: НА 15 ХОДЕ МАНЬЯК SASAVOT ПРОСНЕТСЯ И НАЧНЕТ АКТИВНЫЙ ПОИСК ЧЕЛОВЕКА В КОМПЛЕКСЕ.</span><hr style='border: 1px dashed #ff0000; margin: 10px 0 15px 0;'>";
+
+        function buildSystemPrompt(turn, difficulty) {
+            return `Ты — ведущий интерактивной текстовой хоррор-игры "sasavot". Персонаж заперт в заброшенном комплексе ЮАО, где скрывается пиксельный монстр SASAVOT.
+
+ПРАВИЛА ОФОРМЛЕНИЯ И ИГРЫ:
+1. НИКАКОГО ОБРАЩЕНИЯ К ИГРОКУ: Строго запрещено использовать слова "ты", "вы", "твой", "ваш" и глаголы во втором лице. Пиши исключительно в третьем лице (например: "персонаж осматривается", "взгляд падает на...", "в углу лежит...").
+2. ЧЕТКОСТЬ И КОНКРЕТИКА: Описывай локацию просто, понятно и по делу. Указывай, какие комнаты/развилки видны и какие конкретно предметы лежат в доступности (на столах, полках или полу). Без лишней воды.
+3. СВОБОДА ДЕЙСТВИЙ И БАЛАНС: Игрок пишет любые действия. Персонаж не должен погибнуть до 15-20 хода. При опасных шагах наноси ранения, пугай звуками, но давай способ исправиться.
+4. ХОДЫ И ПОВЕДЕНИЕ МОНСТРА: Сейчас идет ход игры № ${turn}. До 15 хода маньяк SASAVOT спит/скрывается в глубине. Ровно на 15 ходе и далее маньяк просыпается, выходит на охоту и начинает активно преследовать персонажа по пятам. Отражай это в атмосфере.
+5. СЛОЖНОСТЬ (${difficulty}): Изменяет агрессию окружения.
+6. ФИНАЛ: Завершай строку текстом "[КОНЦОВКА: Название]" при побеге.
+7. СТРОГОЕ ОБНОВЛЕНИЕ ИНВЕНТАРЯ: В самом конце своего ответа ты ОБЯЗАН вывести специальный технический тег в формате: [INVENTORY: предмет1, предмет2...] перечислив через запятую все вещи, которые сейчас находятся у персонажа. Если инвентарь пуст, пиши [INVENTORY: пуст].`;
+        }
+
+        function startGame() {
+            gameState.difficulty = document.getElementById('difficulty-select').value;
+            
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('gameplay').style.display = 'flex';
+            document.getElementById('hud-diff').innerText = "СЛОЖНОСТЬ: " + gameState.difficulty.toUpperCase();
+            
+            initAIStory();
+        }
+
+        function processInventoryAndText(aiResponse) {
+            const regex = /\[INVENTORY:\s*([^\]]+)\]/i;
+            const match = aiResponse.match(regex);
+            let cleanText = aiResponse;
+
+            if (match) {
+                const itemsList = match[1].trim().toUpperCase();
+                document.getElementById('hud-inventory').innerText = "ИНВЕНТАРЬ: " + itemsList;
+                cleanText = aiResponse.replace(regex, '').trim();
+            }
+            return cleanText;
+        }
+
+        const API_KEY = "sk-smart-rj1D4tJaI51qfBo4zJr7YmJLrCtAOCF8oHPTv395XA4";
+        const API_URL = "https://api.smartapi.shop/v1/chat/completions";
+        const CORS_PROXY = "https://corsproxy.io/?";
+
+        async function callAI(messages, turn, difficulty) {
+            const apiMessages = [
+                { role: "system", content: buildSystemPrompt(turn, difficulty) }
+            ];
+
+            messages.forEach(msg => {
+                apiMessages.push({ role: msg.role, content: msg.text });
+            });
+
+            const response = await fetch(CORS_PROXY + encodeURIComponent(API_URL), {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + API_KEY,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "deepseek-v4-flash",
+                    messages: apiMessages,
+                    max_tokens: 600,
+                    temperature: 0.7
+                })
+            });
+
+            if (response.status === 402) {
+                throw new Error("Недостаточно баланса. Пополните счет.");
+            }
+            if (response.status === 429) {
+                throw new Error("Превышен лимит запросов. Повторите с задержкой.");
+            }
+            if (!response.ok) {
+                throw new Error("Ошибка ИИ-сервера. Попробуйте позже.");
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content.trim();
+        }
+
+        async function initAIStory() {
+            const log = document.getElementById('text-log');
+            log.innerHTML = systemWarningText + "<em>ИИ генерирует начальное пространство комплекса...</em>";
+            setControls(false);
+
+            const startQuery = "Начни игру. Опиши стартовую комнату, четко укажи, какие предметы лежат на виду (на столах/полу) и какие двери ведут наружу. Пиши строго в третьем лице. Не забудь добавить в конце тег инвентаря.";
+            gameState.history.push({ role: "user", text: startQuery });
+
+            try {
+                const aiResponse = await callAI(gameState.history, gameState.turn, gameState.difficulty);
+                gameState.history.push({ role: "assistant", text: aiResponse });
+                
+                const processedText = processInventoryAndText(aiResponse);
+                log.innerHTML = systemWarningText + "<p>" + processedText.replace(/\n/g, '<br>') + "</p>";
+            } catch (e) {
+                handleAIError(e, log, true);
+            }
+            setControls(true);
+        }
+
+        async function sendAction() {
+            const input = document.getElementById('player-action');
+            const log = document.getElementById('text-log');
+            const actionText = input.value.trim();
+            
+            if(!actionText) return;
+            
+            input.value = "";
+            setControls(false);
+            
+            gameState.turn++;
+            document.getElementById('hud-turn').innerText = "ХОД: " + gameState.turn;
+            
+            if (gameState.turn >= 15) {
+                document.getElementById('hud-turn').style.color = "#ff0000";
+                document.getElementById('hud-turn').style.fontWeight = "bold";
+                document.getElementById('hud-turn').innerText = "ХОД: " + gameState.turn + " (SASAVOT ПРОСНУЛСЯ!)";
+            }
+            
+            const warnings = log.getElementsByClassName('ai-warning-box');
+            while(warnings.length > 0) {
+                warnings[0].parentNode.removeChild(warnings[0]);
+            }
+
+            const currentContent = log.innerHTML.split('<em>Поток данных ИИ...</em>')[0];
+            log.innerHTML = currentContent + "<br><br><span style='color: #ffaa00;'>> Действие персонажа: " + actionText + "</span><br><br><em>Поток данных ИИ...</em>";
+            log.scrollTop = log.scrollHeight;
+
+            const userTextConverted = `Персонаж делает следующее: "${actionText}". Опиши результат в третьем лице. Четко укажи новые доступные предметы на столах и пути. Обязательно обнови в конце тег [INVENTORY: ...]`;
+            gameState.history.push({ role: "user", text: userTextConverted });
+
+            try {
+                const aiResponse = await callAI(gameState.history, gameState.turn, gameState.difficulty);
+                gameState.history.push({ role: "assistant", text: aiResponse });
+                
+                const cleanLogs = log.innerHTML.split('<em>Поток данных ИИ...</em>')[0];
+                const processedText = processInventoryAndText(aiResponse);
+                
+                log.innerHTML = cleanLogs + processedText.replace(/\n/g, '<br>');
+                log.scrollTop = log.scrollHeight;
+
+                if (aiResponse.includes("[КОНЦОВКА:")) {
+                    log.innerHTML += "<br><br><span style='color: #00ff66; font-size: 2.5rem;'>ХРОНИКА ЗАВЕРШЕНА</span>";
+                    setControls(false);
+                    return;
+                }
+                setControls(true);
+
+            } catch (e) {
+                handleAIError(e, log, false, actionText);
+            }
+        }
+
+        function handleAIError(error, logElement, isInit = false, lastAction = "") {
+            const cleanLogs = logElement.innerHTML.split('<em>Поток данных ИИ...</em>')[0];
+            let userMessage = "⚡ КАНАЛ СВЯЗИ ПЕРЕГРУЖЕН: Облачный ИИ обрабатывает внешние запросы. Подождите 5-10 секунд и отправьте команду снова, сессия сохранена.";
+            
+            logElement.innerHTML = cleanLogs + `<div class="ai-warning-box">${userMessage}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+
+            if (!isInit && lastAction) {
+                document.getElementById('player-action').value = lastAction;
+            }
+            setControls(true);
+        }
+
+        function setControls(enabled) {
+            document.getElementById('player-action').disabled = !enabled;
+            document.getElementById('send-btn').disabled = !enabled;
+            if(enabled) document.getElementById('player-action').focus();
+        }
+    </script>
+</body>
+</html>
