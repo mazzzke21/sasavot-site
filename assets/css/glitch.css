@@ -1,9 +1,3 @@
-/* ============================================
-   GLITCH.CSS — SAS_ARCHIVE.EXE
-   Глитч-эффекты для сайта-музея «Дело SAS»
-   ============================================ */
-
-/* Glitch Flash Overlay */
 .glitch-flash {
     position: fixed;
     top: 0;
@@ -20,7 +14,6 @@
     opacity: 1;
 }
 
-/* Glitch Keyframes */
 @keyframes glitch-1 {
     0% { transform: translate(0); }
     20% { transform: translate(-3px, 2px); }
@@ -53,7 +46,6 @@
     100% { clip-path: inset(0 0 0 0); }
 }
 
-/* Glitch Container */
 .glitch-container {
     position: relative;
     display: inline-block;
@@ -84,7 +76,6 @@
     opacity: 0.8;
 }
 
-/* RGB Split Glitch */
 .rgb-split {
     position: relative;
 }
@@ -93,7 +84,6 @@
     animation: glitch-split 0.4s ease;
 }
 
-/* Screen Shake */
 @keyframes screen-shake {
     0%, 100% { transform: translate(0, 0); }
     10% { transform: translate(-2px, 1px); }
@@ -111,7 +101,6 @@
     animation: screen-shake 0.3s ease;
 }
 
-/* Glitch Image */
 .glitch-image {
     position: relative;
     overflow: hidden;
@@ -123,7 +112,6 @@
     transition: all 0.1s;
 }
 
-/* Scanline Glitch */
 @keyframes scanline-glitch {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100vh); }
@@ -141,7 +129,6 @@
     animation: scanline-glitch 0.15s linear;
 }
 
-/* Color Shift Glitch */
 @keyframes color-shift {
     0% { filter: hue-rotate(0deg); }
     25% { filter: hue-rotate(90deg); }
@@ -154,7 +141,6 @@
     animation: color-shift 0.5s ease;
 }
 
-/* White Flash */
 @keyframes white-flash {
     0% { opacity: 0; }
     50% { opacity: 1; }
@@ -165,7 +151,6 @@
     animation: white-flash 0.2s ease;
 }
 
-/* Glitch Border */
 .glitch-border {
     border: 1px solid transparent;
     transition: border-color 0.1s;
@@ -176,7 +161,6 @@
     box-shadow: 0 0 10px rgba(255, 0, 68, 0.5);
 }
 
-/* Text Corruption */
 @keyframes text-corrupt {
     0% { content: attr(data-text); }
     25% { content: attr(data-corrupt-1); }
@@ -189,7 +173,6 @@
     animation: text-corrupt 0.3s ease;
 }
 
-/* Heavy Glitch for Final Section */
 @keyframes heavy-glitch {
     0% { transform: translate(0, 0) skewX(0deg); opacity: 1; }
     2% { transform: translate(-5px, 3px) skewX(2deg); opacity: 0.8; }
@@ -204,7 +187,6 @@
     animation: heavy-glitch 5s infinite;
 }
 
-/* Glitch Reveal (for spoilers) */
 @keyframes glitch-reveal {
     0% { clip-path: inset(0 0 0 0); filter: blur(0); }
     10% { clip-path: inset(30% 0 50% 0); filter: blur(2px); }

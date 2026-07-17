@@ -1,14 +1,9 @@
-/* ============================================
-   CURSOR-FOLLOW.JS — SAS_ARCHIVE.EXE
-   Кастомный курсор с эффектами для сайта-музея
-   ============================================ */
-
 const CursorFX = {
     trail: [],
     isActive: false,
     config: {
         trailLength: 8,
-        trailInterval: 50,  // ms between trail dots
+        trailInterval: 50,
         glowSize: 20,
         jitterZone: false,
     },
@@ -16,9 +11,7 @@ const CursorFX = {
     lastTrailTime: 0,
     jitterTimer: null,
 
-    // Initialize cursor effects
     init() {
-        // Apply victim name hover effect
         document.querySelectorAll('.victim-name').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.body.style.cursor = 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\'><text y=\'18\' font-size=\'18\'>⚠</text></svg>"), auto';
@@ -28,7 +21,6 @@ const CursorFX = {
             });
         });
 
-        // SAS name hover (green cursor)
         document.querySelectorAll('.sas-name, .sas-graffiti, .sas-message').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.body.style.cursor = 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\'><text y=\'18\' font-size=\'18\' fill=\'%2300cc44\'>▼</text></svg>"), auto';
@@ -38,7 +30,6 @@ const CursorFX = {
             });
         });
 
-        // Survivor name hover (blue cursor)
         document.querySelectorAll('.survivor-name, .card-survivor').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.body.style.cursor = 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\'><text y=\'18\' font-size=\'18\' fill=\'%234488ff\'>◆</text></svg>"), auto';
@@ -48,7 +39,6 @@ const CursorFX = {
             });
         });
 
-        // Glitch zone hover (unstable cursor)
         document.querySelectorAll('.glitch-text, .gb-sas, .final-warning').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 this.startJitter();
@@ -58,7 +48,6 @@ const CursorFX = {
             });
         });
 
-        // Map markers
         document.querySelectorAll('.map-marker').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 document.body.style.cursor = 'pointer';
@@ -69,16 +58,12 @@ const CursorFX = {
         });
     },
 
-    // Cursor jitter disabled — no sudden effects
     startJitter() {
-        // Disabled
     },
 
     stopJitter() {
-        // Disabled
     },
 
-    // Create a visual cursor trail (optional)
     createTrail(e) {
         const now = Date.now();
         if (now - this.lastTrailTime < this.config.trailInterval) return;
@@ -111,7 +96,6 @@ const CursorFX = {
         }
     },
 
-    // Clean up trail
     cleanup() {
         this.trail.forEach(dot => {
             if (dot.parentNode) dot.parentNode.removeChild(dot);
