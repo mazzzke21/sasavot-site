@@ -1,6 +1,6 @@
 /* ============================================
-   MAIN.JS — SAS_ARCHIVE.EXE
-   ============================================ */
+    MAIN.JS — SAS_ARCHIVE.EXE
+    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -13,13 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (!warningOverlay || !warningOkBtn) return;
         
-        // Show warning overlay immediately
         warningOverlay.classList.remove('hidden');
         
-        // Hide overlay and start terminal animation on OK click
         warningOkBtn.addEventListener('click', () => {
             warningOverlay.classList.add('hidden');
-            // Start terminal animation after overlay is hidden
             setTimeout(() => {
                 initTerminal();
             }, 300);
@@ -36,28 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const delay = parseInt(line.dataset.delay) || 0;
             setTimeout(() => {
                 line.classList.add('visible');
-                // Play subtle audio tick on each line
-                if (AudioEngine.context && index > 0 && index % 2 === 0) {
-                    AudioEngine.resume();
-                }
             }, delay);
         });
 
-        // Enable scroll to proceed
-        const terminal = document.getElementById('terminal');
-        const proceedNext = () => {
-            document.getElementById('dasha').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        // Enter key
+        // Enter key to proceed
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && isElementInViewport(document.getElementById('intro'))) {
-                proceedNext();
+                document.getElementById('dasha').scrollIntoView({ behavior: 'smooth' });
             }
         });
     }
 
-    // Helper: check if element is in viewport
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
         return (
@@ -74,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function initEscOverlay() {
         const escapeLink = document.getElementById('escapeLink');
         const escOverlay = document.getElementById('escOverlay');
-        const countdownEl = document.getElementById('escCountdown');
 
         if (!escapeLink || !escOverlay) return;
 
@@ -83,15 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'game.html';
         });
 
-        // Global ESC key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !escOverlay.classList.contains('active')) {
                 if (isElementInViewport(document.getElementById('intro'))) {
                     escapeLink.click();
                 }
-            }
-            if (e.key === 'Escape' && escOverlay.classList.contains('active')) {
-                // Prevent double escape
             }
         });
     }
@@ -108,13 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggle.textContent = isActive 
                         ? toggle.textContent.replace('[РАСКРЫТЬ', '[СКРЫТЬ')
                         : toggle.textContent.replace('[СКРЫТЬ', '[РАСКРЫТЬ');
-                    
-                    // Trigger glitch on open
-                    if (isActive) {
-                        GlitchEngine.trigger();
-                        AudioEngine.resume();
-                        AudioEngine.playGlitch();
-                    }
                 }
             });
         });
@@ -142,18 +116,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = imageData.data;
 
                 for (let i = 0; i < data.length; i += 4) {
-                    // CCTV gray noise
                     const noise = Math.random() * 60;
                     const val = 20 + noise;
-                    data[i] = val;     // R
-                    data[i+1] = val;   // G
-                    data[i+2] = val;   // B
+                    data[i] = val;
+                    data[i+1] = val;
+                    data[i+2] = val;
                     data[i+3] = 255;
                 }
 
                 ctx.putImageData(imageData, 0, 0);
 
-                // Add timestamp overlay
+                // Timestamp overlay
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
                 ctx.fillRect(0, h - 16, w, 16);
                 ctx.fillStyle = '#00cc44';
@@ -162,94 +135,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
                 ctx.fillText(timeStr, 4, h - 5);
 
-                // VHS glitch occasionally
-                if (Math.random() < 0.01) {
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-                    ctx.fillRect(0, Math.random() * h, w, 2 + Math.random() * 4);
-                }
-
                 if (isAnimating) {
                     requestAnimationFrame(drawCCTVFrame);
                 }
             }
 
             drawCCTVFrame();
-
-            // Store cleanup
             canvas._cctvCleanup = () => { isAnimating = false; };
         });
     }
 
     // ==========================================
-    // 5. AUDIO BUTTONS
-    // ==========================================
-    function initAudioButtons() {
-        // Cutierover scream button
-        const cutieBtn = document.getElementById('cutieAudioBtn');
-        if (cutieBtn) {
-            cutieBtn.addEventListener('click', () => {
-                VHSPlayer.playAudio('cutie-scream');
-                GlitchEngine.trigger();
-            });
-        }
-
-        // Criswave call button
-        const crisBtn = document.getElementById('crisAudioPlay');
-        if (crisBtn) {
-            crisBtn.addEventListener('click', () => {
-                VHSPlayer.playAudio('cris-call');
-                // Visual waveform animation
-                const canvas = document.getElementById('audioWaveform');
-                if (canvas) {
-                    animateWaveform(canvas);
-                }
-            });
-        }
-    }
-
-    // Audio waveform animation
-    function animateWaveform(canvas) {
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        const w = canvas.width = canvas.clientWidth;
-        const h = canvas.height = canvas.clientHeight;
-        let time = 0;
-        let isAnimating = true;
-
-        function draw() {
-            if (!isAnimating) return;
-            ctx.fillStyle = '#050505';
-            ctx.fillRect(0, 0, w, h);
-
-            time += 0.05;
-
-            ctx.strokeStyle = '#00cc44';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-
-            for (let x = 0; x < w; x++) {
-                const y = h/2 + Math.sin(x * 0.05 + time) * 10 
-                         + Math.sin(x * 0.1 + time * 2) * 5 
-                         + Math.sin(x * 0.02 + time * 0.5) * 15
-                         + (Math.random() - 0.5) * 5;
-                if (x === 0) ctx.moveTo(x, y);
-                else ctx.lineTo(x, y);
-            }
-
-            ctx.stroke();
-
-            requestAnimationFrame(draw);
-        }
-
-        draw();
-        
-        // Stop after 4 seconds
-        setTimeout(() => { isAnimating = false; }, 4000);
-    }
-
-    // ==========================================
-    // 6. MAP INTERACTIONS
+    // 5. MAP INTERACTIONS
     // ==========================================
     function initMap() {
         const markers = document.querySelectorAll('.map-marker');
@@ -262,32 +159,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const victimData = {
             dasha: {
                 title: 'dasha228play',
-                text: 'Место последней трансляции. Квартира в ЮАО, Москва. 12.04.2021. Тело не найдено. На месте обнаружены: разбитый монитор, вырванная веб-камера, надпись на стене.',
+                text: 'Место последней трансляции. Квартира в ЮАО, Москва. 12.04.2021. Тело не найдено.',
                 img: '🗃'
             },
             morphe: {
                 title: 'morphe_ya',
-                text: 'Улица рядом с домом. Камеры наблюдения зафиксировали мужской силуэт, следующий за жертвой. 03.09.2022. Квартира пуста, на стене надпись: «ТЫ НЕ ДАЛА. Я ЗАБРАЛ САМ. sasavot»',
+                text: 'Улица рядом с домом. Камеры наблюдения зафиксировали мужской силуэт. 03.09.2022.',
                 img: '📹'
             },
             cutie: {
                 title: 'cutierover',
-                text: 'Дом в ЮАО, Москва. 17.01.2023. Жертва вычислила IP-адрес sasavot. Проникновение в квартиру во время голосового чата в Discord. Тело не найдено.',
+                text: 'Дом в ЮАО, Москва. 17.01.2023. Жертва вычислила IP-адрес sasavot.',
                 img: '💻'
             },
             cris: {
                 title: 'chr1swave',
-                text: 'Подвальное помещение дома в ЮАО. 08.06.2023. Последний звонок в 112. На стене: «sasavot WAS HERE. sasavot IS FOREVER. sasavot IS GOD.» Полное отсутствие улик.',
+                text: 'Подвальное помещение дома в ЮАО. 08.06.2023. Последний звонок в 112.',
                 img: '📞'
             },
             korya: {
                 title: 'korya_mc — ВЫЖИЛА',
-                text: 'Квартира в ЮАО, Москва. 14.11.2023. sasavot проник в квартиру, но не тронул жертву. Единственная выжившая. Находится под программой защиты свидетелей.',
+                text: 'Квартира в ЮАО, Москва. 14.11.2023. Единственная выжившая.',
                 img: '💙'
             },
             sas: {
                 title: 'sasavot — последняя активность',
-                text: 'Последнее известное местоположение. Квартира в ЮАО, Москва. 31.12.2024 — финальный стрим. После — квартира пуста. Подозреваемый в федеральном розыске.',
+                text: 'Последнее известное местоположение. Квартира в ЮАО, Москва. 31.12.2024.',
                 img: '❓'
             }
         };
@@ -303,13 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalImage.style.fontSize = '60px';
                 modalText.textContent = data.text;
                 modal.classList.add('active');
-
-                // Play SAS voice on his marker
-                if (victim === 'sas') {
-                    VHSPlayer.playAudio('sas-voice');
-                }
-
-                AudioEngine.resume();
             });
         });
 
@@ -319,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Close on outside click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('active');
@@ -328,13 +217,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 7. GUESTBOOK SAS MESSAGE GLITCH
+    // 6. GUESTBOOK SAS MESSAGE GLITCH
     // ==========================================
     function initGuestbook() {
         const sasMsg = document.getElementById('sasMessage');
         if (!sasMsg) return;
 
-        // Periodic glitch on SAS guestbook message
         setInterval(() => {
             sasMsg.style.opacity = '0';
             sasMsg.style.transform = 'translateX(5px)';
@@ -357,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 8. NAVIGATION HIGHLIGHT
+    // 7. NAVIGATION HIGHLIGHT
     // ==========================================
     function initNavigation() {
         const sections = document.querySelectorAll('.exhibit');
@@ -382,21 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ==========================================
-    // 9. FINAL SECTION — disabled (no effects)
-    // ==========================================
-    function initFinalSection() {
-        // Disabled — no sudden heavy glitch
-    }
-
-    // ==========================================
-    // 10. MOUSE TRAIL — disabled
-    // ==========================================
-    function initMouseTrail() {
-        // Disabled — no sudden effects
-    }
-
-    // ==========================================
-    // 11. NAVIGATION CLICK SMOOTH SCROLL
+    // 8. NAVIGATION CLICK SMOOTH SCROLL
     // ==========================================
     function initNavScroll() {
         document.querySelectorAll('.nav-link').forEach(link => {
@@ -406,46 +280,186 @@ document.addEventListener('DOMContentLoaded', () => {
                 const target = document.getElementById(targetId);
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
-                    // Play tape rewind sound
-                    AudioEngine.resume();
-                    AudioEngine.playTapeRewind();
                 }
             });
         });
     }
 
     // ==========================================
+    // 9. SCROLLITELLING VIDEO (timecode-based)
+    // ==========================================
+    function initScrollVideo() {
+        const video = document.getElementById('bgVideo');
+        if (!video) return;
+
+        // Try to use real video first
+        if (video.readyState >= 1) {
+            initScrollVideoLogic(video);
+        } else {
+            video.addEventListener('loadedmetadata', () => initScrollVideoLogic(video));
+            
+            // If video fails to load, use canvas fallback
+            video.addEventListener('error', () => {
+                console.log('Video not found, using canvas fallback');
+                initCanvasFallback();
+            });
+            
+            // Timeout fallback
+            setTimeout(() => {
+                if (video.readyState < 1) {
+                    console.log('Video load timeout, using canvas fallback');
+                    initCanvasFallback();
+                }
+            }, 3000);
+        }
+    }
+
+    function initScrollVideoLogic(video) {
+        const duration = video.duration;
+        if (!duration || !isFinite(duration)) {
+            console.warn('Video duration not available');
+            return;
+        }
+        
+        console.log('Video loaded successfully:', {
+            duration: duration.toFixed(2) + 's',
+            videoWidth: video.videoWidth,
+            videoHeight: video.videoHeight,
+            readyState: video.readyState
+        });
+
+        // Play video once and freeze on last frame
+        video.loop = false;
+        video.play().then(() => {
+            console.log('Background video playing once');
+        }).catch(() => {
+            console.log('Video autoplay blocked, waiting for interaction');
+            document.addEventListener('click', () => {
+                video.play();
+            }, { once: true });
+        });
+
+        // When video ends, freeze on last frame
+        video.addEventListener('ended', () => {
+            console.log('Video ended, frozen on last frame');
+            // Video stays on last frame automatically
+        });
+
+        // Remove scroll-based video control
+        // Video plays once and stays on last frame
+        console.log(`Video initialized: plays once, ${duration.toFixed(2)}s duration`);
+    }
+
+    // Canvas fallback - animated noise/static effect
+    function initCanvasFallback() {
+        const video = document.getElementById('bgVideo');
+        if (!video) return;
+        
+        // Hide video element
+        video.style.display = 'none';
+        
+        // Create canvas
+        const canvas = document.createElement('canvas');
+        canvas.id = 'bgCanvas';
+        canvas.className = 'bg-video';
+        canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;opacity:0.15;pointer-events:none;';
+        document.body.insertBefore(canvas, document.body.firstChild);
+        
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Animation variables
+        let time = 0;
+        let lastScrollTop = window.scrollY;
+        
+        // Draw animated noise frame
+        function drawNoiseFrame() {
+            const w = canvas.width;
+            const h = canvas.height;
+            
+            // Get scroll progress
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = scrollHeight > 0 ? Math.max(0, Math.min(1, window.scrollY / scrollHeight)) : 0;
+            
+            // Create image data
+            const imageData = ctx.createImageData(w, h);
+            const data = imageData.data;
+            
+            // Animated noise based on time and scroll
+            const noiseIntensity = 30 + Math.sin(time * 0.5) * 10;
+            
+            for (let i = 0; i < data.length; i += 4) {
+                const x = (i / 4) % w;
+                const y = Math.floor((i / 4) / w);
+                
+                // Base noise
+                let noise = Math.random() * noiseIntensity;
+                
+                // Add some structure based on scroll position
+                const wave = Math.sin(y * 0.01 + time + scrollProgress * 10) * 20;
+                
+                const val = Math.min(255, 20 + noise + wave);
+                
+                data[i] = val;     // R
+                data[i+1] = val;   // G
+                data[i+2] = val;   // B
+                data[i+3] = 255;   // A
+            }
+            
+            ctx.putImageData(imageData, 0, 0);
+            
+            // Add horizontal scan lines
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            for (let y = 0; y < h; y += 3) {
+                ctx.fillRect(0, y, w, 1);
+            }
+            
+            // Add occasional bright line
+            if (Math.random() < 0.02) {
+                const lineY = Math.random() * h;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+                ctx.fillRect(0, lineY, w, 2);
+            }
+            
+            time += 0.016;
+            requestAnimationFrame(drawNoiseFrame);
+        }
+        
+        // Start animation
+        drawNoiseFrame();
+        
+        console.log('Canvas fallback initialized - animated noise effect');
+    }
+
+    // ==========================================
     // INITIALIZATION
     // ==========================================
 
-    // Audio engine is disabled — no sounds, no hum, no audio effects
-    // Only visual glitch effects remain active
-    console.log('Режим тишины: аудио-движок отключен');
+    console.log('SAS_ARCHIVE v1.04.2025 — инициализация...');
 
-    // Initialize all modules
     try {
-        // Initialize warning overlay first (it will handle terminal initialization)
         initWarningOverlay();
-        
-        // Initialize other modules (but terminal will wait for OK button)
         initEscOverlay();
         initSpoilers();
         initCCTV();
-        initAudioButtons();
         initMap();
         initGuestbook();
         initNavigation();
-        initFinalSection();
-        initMouseTrail();
         initNavScroll();
+        initScrollVideo();
 
-        // Initialize engines
-        GlitchEngine.init();
         VHSPlayer.init();
         CursorFX.init();
 
         console.log('SAS_ARCHIVE v1.04.2025 initialized successfully');
-        console.log('ДЕЛО №SAS-2024-88 — Цифровой архив расследования');
     } catch (err) {
         console.error('Initialization error:', err);
     }
