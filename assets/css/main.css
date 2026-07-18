@@ -12,7 +12,7 @@ body {
     background-color: #0d0d0d;
     color: #b8b8b8;
     font-family: 'IBM Plex Mono', 'Courier New', monospace;
-    font-size: 14px;
+    font-size: clamp(12px, 1.4vw, 16px);
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
@@ -36,18 +36,15 @@ a:hover {
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
-
 ::-webkit-scrollbar-track {
     background: #0d0d0d;
 }
-
 ::-webkit-scrollbar-thumb {
     background: #333;
     border-radius: 2px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
@@ -60,7 +57,7 @@ a:hover {
     z-index: 1000;
     background: #0d0d0d;
     border-bottom: 1px solid #1a1a1a;
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 13px);
     user-select: none;
 }
 
@@ -68,44 +65,61 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 12px;
+    padding: clamp(2px, 0.4vw, 6px) clamp(8px, 1.2vw, 16px);
     background: #1a1a1a;
     border-bottom: 1px solid #2a2a2a;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 12px);
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .nav-title {
     color: #00cc44;
     font-weight: 600;
     letter-spacing: 1px;
+    flex-shrink: 0;
 }
 
 .nav-status {
     color: #666;
-    font-size: 10px;
+    font-size: clamp(8px, 0.9vw, 11px);
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .nav-version {
     color: #444;
-    font-size: 10px;
+    font-size: clamp(8px, 0.9vw, 11px);
+    flex-shrink: 0;
 }
 
 .nav-menu {
     display: flex;
     overflow-x: auto;
-    padding: 4px 8px;
-    gap: 4px;
+    overflow-y: hidden;
+    padding: clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 12px);
+    gap: clamp(2px, 0.3vw, 6px);
     background: #0d0d0d;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.nav-menu::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-link {
-    padding: 4px 10px;
+    padding: clamp(2px, 0.4vw, 6px) clamp(6px, 1vw, 14px);
     color: #666;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 12px);
     white-space: nowrap;
     border: 1px solid transparent;
     transition: all 0.2s ease;
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .nav-link:hover {
@@ -121,34 +135,38 @@ a:hover {
 }
 
 .exhibit {
-    max-width: 1000px;
+    max-width: min(1000px, 95vw);
     margin: 0 auto;
     position: relative;
+    padding: 0;
 }
 
 .exhibit:not(:last-of-type)::after {
     display: block;
-    width: 60%;
+    width: min(60%, 400px);
     height: 1px;
     background: linear-gradient(90deg, transparent, #333, transparent);
-    margin: 40px auto 0;
+    margin: clamp(24px, 4vw, 48px) auto 0;
+    content: '';
 }
 
 .exhibit-header {
     background: #111;
     border: 1px solid #222;
-    padding: 16px;
-    margin-bottom: 24px;
+    padding: clamp(12px, 2vw, 24px);
+    margin-bottom: clamp(16px, 2.5vw, 32px);
 }
 
 .exhibit-badge {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: clamp(8px, 1.2vw, 16px);
+    padding-bottom: clamp(4px, 0.8vw, 12px);
     border-bottom: 1px solid #222;
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
 }
 
 .badge-id {
@@ -157,55 +175,52 @@ a:hover {
 }
 
 .badge-status {
-    padding: 2px 8px;
+    padding: 2px clamp(4px, 0.6vw, 10px);
     border: 1px solid #444;
-    font-size: 10px;
+    font-size: clamp(9px, 0.9vw, 12px);
 }
 
 .status-confirmed {
     color: #00cc44;
     border-color: #00cc44;
 }
-
 .status-missing {
     color: #cc0000;
 }
-
 .status-anomaly {
     color: #4488ff;
     border-color: #4488ff;
 }
-
 .status-closed {
     color: #ffcc00;
     border-color: #ffcc00;
 }
-
 .status-wanted {
     color: #cc0000;
     border-color: #cc0000;
     animation: pulse-red 2s infinite;
 }
-
 .status-alive {
     color: #00cc44;
 }
 
 .exhibit-meta {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 6px;
-    font-size: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(max(180px, 20vw), 1fr));
+    gap: clamp(4px, 0.6vw, 8px);
+    font-size: clamp(10px, 1.1vw, 14px);
 }
 
 .meta-row {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .meta-label {
     color: #666;
-    min-width: 80px;
+    min-width: clamp(60px, 8vw, 100px);
+    flex-shrink: 0;
 }
 
 .meta-value {
@@ -215,19 +230,13 @@ a:hover {
 .two-column {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-}
-
-@media (max-width: 768px) {
-    .two-column {
-        grid-template-columns: 1fr;
-    }
+    gap: clamp(16px, 2.5vw, 32px);
 }
 
 .vhs-player {
     background: #0a0a0a;
     border: 1px solid #222;
-    margin-bottom: 16px;
+    margin-bottom: clamp(12px, 1.6vw, 24px);
 }
 
 .vhs-player-screen {
@@ -320,38 +329,42 @@ a:hover {
 
 .corrupted-text {
     color: #cc0000;
-    font-size: 18px;
+    font-size: clamp(14px, 2vw, 22px);
     font-weight: 700;
     letter-spacing: 3px;
     animation: blink 1s step-end infinite;
     margin-bottom: 8px;
+    text-align: center;
+    padding: 0 8px;
 }
 
 .corrupted-sub {
     color: #666;
-    font-size: 11px;
+    font-size: clamp(9px, 1.2vw, 13px);
     letter-spacing: 2px;
 }
 
 .vhs-player-controls {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
+    gap: clamp(4px, 0.8vw, 12px);
+    padding: clamp(6px, 0.8vw, 12px) clamp(8px, 1.2vw, 16px);
     background: #111;
     border-top: 1px solid #222;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
+    flex-wrap: wrap;
 }
 
 .vhs-btn {
     background: #222;
     color: #888;
     border: 1px solid #333;
-    padding: 4px 12px;
+    padding: clamp(2px, 0.4vw, 6px) clamp(8px, 1.2vw, 16px);
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .vhs-btn:hover {
@@ -366,13 +379,14 @@ a:hover {
 
 .vhs-status {
     color: #cc0000;
-    font-size: 9px;
+    font-size: clamp(8px, 0.8vw, 11px);
     margin-left: auto;
+    min-width: 0;
 }
 
 .vhs-time {
     color: #00cc44;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .screamer-overlay {
@@ -403,6 +417,7 @@ a:hover {
 .screamer-content {
     text-align: center;
     animation: screamer-shake 0.5s infinite;
+    padding: 16px;
 }
 
 @keyframes screamer-shake {
@@ -413,15 +428,16 @@ a:hover {
 }
 
 .screamer-image {
-    width: 300px;
-    height: 400px;
+    width: min(300px, 80vw);
+    height: auto;
+    aspect-ratio: 3/4;
     margin: 0 auto 20px;
     background: #111;
     border: 3px solid #cc0000;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 120px;
+    font-size: clamp(60px, 15vw, 120px);
     box-shadow: 0 0 50px rgba(204, 0, 0, 0.5), inset 0 0 50px rgba(0, 0, 0, 0.5);
 }
 
@@ -432,7 +448,7 @@ a:hover {
 
 .screamer-text {
     color: #cc0000;
-    font-size: 32px;
+    font-size: clamp(20px, 4vw, 40px);
     letter-spacing: 5px;
     font-weight: 700;
     animation: blink 0.5s step-end infinite;
@@ -440,7 +456,7 @@ a:hover {
 
 .screamer-sub {
     color: #666;
-    font-size: 14px;
+    font-size: clamp(11px, 1.5vw, 16px);
     margin-top: 10px;
     letter-spacing: 2px;
 }
@@ -450,8 +466,8 @@ a:hover {
     flex-direction: column;
     justify-content: center;
     min-height: 100vh;
-    padding: 40px;
-    font-size: 14px;
+    padding: clamp(16px, 4vw, 60px);
+    font-size: clamp(12px, 1.5vw, 16px);
     line-height: 1.8;
 }
 
@@ -469,7 +485,7 @@ a:hover {
 .terminal-cursor {
     color: #00cc44;
     animation: blink 1s step-end infinite;
-    font-size: 18px;
+    font-size: clamp(14px, 2vw, 20px);
 }
 
 @keyframes blink {
@@ -507,34 +523,35 @@ a:hover {
 
 .esc-content {
     color: #b8b8b8;
-    font-size: 24px;
+    font-size: clamp(16px, 2.5vw, 28px);
     line-height: 2;
+    padding: 20px;
 }
 
 .esc-sub {
     margin-top: 20px;
     color: #666;
-    font-size: 14px;
+    font-size: clamp(12px, 1.4vw, 16px);
 }
 
 .evidence-card {
     background: #111;
     border: 1px solid #222;
-    padding: 16px;
-    margin-bottom: 16px;
+    padding: clamp(12px, 1.5vw, 20px);
+    margin-bottom: clamp(12px, 1.6vw, 24px);
 }
 
 .evidence-card h3 {
     color: #888;
-    font-size: 12px;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
+    font-size: clamp(10px, 1.1vw, 14px);
+    margin-bottom: clamp(8px, 1vw, 16px);
+    padding-bottom: clamp(4px, 0.6vw, 12px);
     border-bottom: 1px solid #222;
     letter-spacing: 1px;
 }
 
 .card-content {
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.7;
 }
 
@@ -549,14 +566,14 @@ a:hover {
 }
 
 .evidence-text {
-    font-size: 14px;
+    font-size: clamp(11px, 1.3vw, 16px);
     line-height: 1.9;
-    margin: 20px 0;
+    margin: clamp(12px, 2vw, 28px) 0;
     padding: 0 4px;
 }
 
 .evidence-text p {
-    margin-bottom: 12px;
+    margin-bottom: clamp(8px, 1vw, 16px);
     text-indent: 0;
 }
 
@@ -566,7 +583,7 @@ a:hover {
 
 .filename {
     color: #ffcc00;
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
 }
 
 .highlight-red {
@@ -582,13 +599,13 @@ a:hover {
 .archival-note {
     color: #666;
     font-style: italic;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .creepy-note {
     color: #994444;
     font-style: italic;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     border-left: 2px solid #661111;
     padding-left: 8px;
     margin-top: 8px;
@@ -597,10 +614,10 @@ a:hover {
 
 .made-by {
     text-align: center;
-    margin-top: 40px;
-    padding: 20px;
+    margin-top: clamp(24px, 4vw, 48px);
+    padding: clamp(12px, 2vw, 24px);
     border-top: 1px solid #222;
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     color: #555;
     letter-spacing: 1px;
 }
@@ -616,17 +633,17 @@ a:hover {
 
 .log-note {
     color: #888;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     margin-top: 8px;
 }
 
 .log-content {
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     line-height: 1.6;
 }
 
 .spoiler-block {
-    margin-bottom: 16px;
+    margin-bottom: clamp(12px, 1.6vw, 24px);
 }
 
 .spoiler-toggle {
@@ -634,9 +651,9 @@ a:hover {
     background: #1a1a1a;
     color: #888;
     border: 1px solid #333;
-    padding: 8px 16px;
+    padding: clamp(6px, 0.8vw, 12px) clamp(12px, 1.5vw, 20px);
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -654,8 +671,8 @@ a:hover {
     background: #0a0a0a;
     border: 1px solid #333;
     border-top: none;
-    padding: 16px;
-    font-size: 12px;
+    padding: clamp(12px, 1.5vw, 24px);
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.7;
 }
 
@@ -678,9 +695,9 @@ a:hover {
 .sas-message {
     background: #0a0a0a;
     border-left: 3px solid #cc0000;
-    padding: 12px 16px;
-    margin: 12px 0;
-    font-size: 12px;
+    padding: clamp(8px, 1.2vw, 20px);
+    margin: clamp(8px, 1.2vw, 16px) 0;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.8;
 }
 
@@ -688,21 +705,21 @@ a:hover {
     color: #00cc44;
     text-align: right;
     margin-top: 8px;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .sas-graffiti {
     color: #cc0000;
-    font-size: 18px;
+    font-size: clamp(14px, 2vw, 20px);
     text-align: center;
-    padding: 12px;
+    padding: clamp(8px, 1.2vw, 16px);
     margin: 8px 0;
     border: 1px dashed #cc0000;
     letter-spacing: 2px;
 }
 
 .sas-chat {
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.8;
 }
 
@@ -722,7 +739,7 @@ a:hover {
 }
 
 .discord-log {
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     line-height: 1.7;
 }
 
@@ -746,23 +763,25 @@ a:hover {
 .system-msg {
     color: #555;
     font-style: italic;
-    font-size: 10px;
+    font-size: clamp(8px, 0.9vw, 12px);
 }
 
 .discord-voice-window {
     background: #0a0a0a;
     border: 1px solid #222;
-    margin-bottom: 16px;
+    margin-bottom: clamp(12px, 1.6vw, 24px);
 }
 
 .discord-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: clamp(6px, 0.8vw, 12px);
     background: #111;
     border-bottom: 1px solid #222;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
+    flex-wrap: wrap;
 }
 
 .discord-channel {
@@ -774,10 +793,10 @@ a:hover {
 }
 
 .discord-log-content {
-    padding: 12px;
-    max-height: 400px;
+    padding: clamp(8px, 1.2vw, 16px);
+    max-height: clamp(250px, 40vw, 450px);
     overflow-y: auto;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     line-height: 1.8;
 }
 
@@ -785,7 +804,7 @@ a:hover {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4px;
-    margin-bottom: 16px;
+    margin-bottom: clamp(12px, 1.6vw, 24px);
 }
 
 .cctv-cam {
@@ -811,7 +830,7 @@ a:hover {
 
 .cctv-lost-text {
     color: #cc0000;
-    font-size: 11px;
+    font-size: clamp(9px, 1.2vw, 14px);
     letter-spacing: 2px;
     animation: pulse-red 2s infinite;
 }
@@ -845,7 +864,7 @@ a:hover {
     right: 0;
     padding: 4px 8px;
     background: rgba(0, 0, 0, 0.85);
-    font-size: 10px;
+    font-size: clamp(8px, 0.9vw, 12px);
     color: #00ff66;
     z-index: 10;
     font-weight: 600;
@@ -856,9 +875,9 @@ a:hover {
 .call-transcript {
     background: #0a0a0a;
     border: 1px solid #222;
-    padding: 16px;
-    margin: 16px 0;
-    font-size: 12px;
+    padding: clamp(12px, 1.5vw, 24px);
+    margin: clamp(12px, 1.6vw, 24px) 0;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.8;
 }
 
@@ -879,12 +898,12 @@ a:hover {
 .sas-whisper {
     color: #00cc44;
     font-style: italic;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .audio-visualizer {
     width: 100%;
-    height: 80px;
+    height: clamp(40px, 6vw, 80px);
     background: #050505;
     border: 1px solid #222;
     margin-bottom: 8px;
@@ -900,20 +919,21 @@ a:hover {
     align-items: center;
     gap: 12px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
 .audio-duration {
     color: #00cc44;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .audio-btn {
     background: #222;
     color: #888;
     border: 1px solid #333;
-    padding: 8px 16px;
+    padding: clamp(6px, 0.8vw, 12px) clamp(12px, 1.5vw, 20px);
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
     cursor: pointer;
     transition: all 0.2s ease;
     width: 100%;
@@ -942,9 +962,9 @@ a:hover {
 .interview-text {
     font-style: italic;
     color: #aaa;
-    font-size: 13px;
+    font-size: clamp(11px, 1.2vw, 15px);
     line-height: 1.8;
-    padding: 12px;
+    padding: clamp(8px, 1.2vw, 16px);
     border-left: 2px solid #4488ff;
 }
 
@@ -952,15 +972,15 @@ a:hover {
     text-align: right;
     color: #4488ff;
     margin-top: 8px;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .chat-messages {
     background: #0a0a0a;
     border-left: 3px solid #4488ff;
-    padding: 8px 12px;
-    margin: 12px 0;
-    font-size: 12px;
+    padding: clamp(6px, 0.8vw, 14px) clamp(8px, 1.2vw, 16px);
+    margin: clamp(8px, 1.2vw, 16px) 0;
+    font-size: clamp(10px, 1.1vw, 14px);
 }
 
 .chat-user {
@@ -970,11 +990,11 @@ a:hover {
 .final-warning {
     background: #1a0000;
     border: 1px solid #cc0000;
-    padding: 16px;
-    margin-bottom: 24px;
+    padding: clamp(12px, 1.5vw, 24px);
+    margin-bottom: clamp(16px, 2.5vw, 32px);
     text-align: center;
     color: #cc0000;
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     animation: pulse-red 3s infinite;
 }
 
@@ -990,8 +1010,8 @@ a:hover {
 .sas-voice {
     color: #00cc44;
     font-style: italic;
-    font-size: 13px;
-    padding: 12px;
+    font-size: clamp(11px, 1.2vw, 15px);
+    padding: clamp(8px, 1.2vw, 16px);
     border-left: 2px solid #00cc44;
     margin: 8px 0;
 }
@@ -999,31 +1019,31 @@ a:hover {
 .final-transcript {
     background: #0a0a0a;
     border: 1px solid #222;
-    padding: 16px;
-    margin: 16px 0;
+    padding: clamp(12px, 1.5vw, 24px);
+    margin: clamp(12px, 1.6vw, 24px) 0;
 }
 
 .final-transcript h3 {
     color: #cc0000;
-    font-size: 12px;
-    margin-bottom: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
+    margin-bottom: clamp(8px, 1vw, 16px);
     letter-spacing: 1px;
 }
 
 .transcript-content {
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.8;
 }
 
 .map-container {
     position: relative;
-    margin: 16px 0;
+    margin: clamp(12px, 1.6vw, 24px) 0;
 }
 
 .map-placeholder {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: clamp(300px, 50vw, 600px);
     background: #0a0a0a;
     border: 1px solid #222;
     overflow: hidden;
@@ -1038,20 +1058,21 @@ a:hover {
     background-image:
         linear-gradient(rgba(0, 204, 68, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 204, 68, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-size: clamp(20px, 4vw, 50px) clamp(20px, 4vw, 50px);
 }
 
 .map-title {
     position: absolute;
-    top: 12px;
+    top: 8px;
     left: 50%;
     transform: translateX(-50%);
     color: #666;
-    font-size: 11px;
+    font-size: clamp(8px, 0.9vw, 12px);
     letter-spacing: 2px;
     background: rgba(0, 0, 0, 0.8);
-    padding: 4px 12px;
+    padding: 4px clamp(6px, 1vw, 16px);
     border: 1px solid #222;
+    white-space: nowrap;
 }
 
 .map-marker {
@@ -1064,30 +1085,30 @@ a:hover {
 
 .marker-dot {
     display: block;
-    width: 12px;
-    height: 12px;
+    width: clamp(8px, 1.2vw, 14px);
+    height: clamp(8px, 1.2vw, 14px);
     background: #cc0000;
     border-radius: 50%;
-    margin: 0 auto 4px;
+    margin: 0 auto 2px;
     animation: marker-pulse 2s infinite;
     box-shadow: 0 0 10px rgba(204, 0, 0, 0.5);
 }
 
 .marker-label {
     display: block;
-    font-size: 9px;
+    font-size: clamp(7px, 0.8vw, 11px);
     color: #b8b8b8;
     background: rgba(0, 0, 0, 0.8);
-    padding: 2px 6px;
+    padding: 1px 4px;
     white-space: nowrap;
 }
 
 .marker-date {
     display: block;
-    font-size: 8px;
+    font-size: clamp(6px, 0.7vw, 10px);
     color: #666;
     background: rgba(0, 0, 0, 0.8);
-    padding: 1px 6px;
+    padding: 1px 4px;
 }
 
 .marker-survivor .marker-dot {
@@ -1121,6 +1142,7 @@ a:hover {
     z-index: 2000;
     justify-content: center;
     align-items: center;
+    padding: clamp(12px, 2vw, 24px);
 }
 
 .map-modal.active {
@@ -1130,10 +1152,12 @@ a:hover {
 .map-modal-content {
     background: #111;
     border: 1px solid #333;
-    padding: 24px;
-    max-width: 500px;
-    width: 90%;
+    padding: clamp(16px, 2.5vw, 32px);
+    max-width: min(500px, 90vw);
+    width: 100%;
     position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .map-modal-close {
@@ -1142,7 +1166,7 @@ a:hover {
     right: 12px;
     color: #666;
     cursor: pointer;
-    font-size: 18px;
+    font-size: clamp(14px, 2vw, 22px);
 }
 
 .map-modal-close:hover {
@@ -1152,12 +1176,12 @@ a:hover {
 .map-modal-content h3 {
     color: #cc0000;
     margin-bottom: 12px;
-    font-size: 14px;
+    font-size: clamp(12px, 1.4vw, 18px);
 }
 
 .map-modal-image {
     width: 100%;
-    height: 200px;
+    height: clamp(120px, 20vw, 240px);
     background: #0a0a0a;
     border: 1px solid #222;
     margin-bottom: 12px;
@@ -1165,11 +1189,11 @@ a:hover {
     justify-content: center;
     align-items: center;
     color: #444;
-    font-size: 11px;
+    font-size: clamp(9px, 1vw, 13px);
 }
 
 .map-modal-content p {
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.7;
     color: #888;
 }
@@ -1177,39 +1201,39 @@ a:hover {
 .guestbook-warning {
     background: #1a0000;
     border: 1px solid #cc0000;
-    padding: 20px;
-    margin-bottom: 24px;
+    padding: clamp(12px, 2vw, 24px);
+    margin-bottom: clamp(16px, 2.5vw, 32px);
     text-align: center;
     color: #cc0000;
-    font-size: 13px;
+    font-size: clamp(11px, 1.2vw, 15px);
     line-height: 2;
 }
 
 .guestbook-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: clamp(16px, 2.5vw, 32px);
 }
 
 .guestbook-header h3 {
     color: #b8b8b8;
-    font-size: 14px;
+    font-size: clamp(12px, 1.4vw, 18px);
     letter-spacing: 2px;
 }
 
 .guestbook-count {
     color: #666;
-    font-size: 10px;
+    font-size: clamp(8px, 0.9vw, 12px);
     margin-top: 4px;
 }
 
 .guestbook-messages {
-    margin-bottom: 32px;
+    margin-bottom: clamp(20px, 3vw, 40px);
 }
 
 .gb-message {
     background: #111;
     border: 1px solid #222;
-    padding: 12px 16px;
+    padding: clamp(8px, 1.2vw, 18px);
     margin-bottom: 8px;
     transition: all 0.3s ease;
 }
@@ -1220,9 +1244,10 @@ a:hover {
 }
 
 .gb-meta {
-    font-size: 10px;
+    font-size: clamp(8px, 0.9vw, 12px);
     color: #666;
     margin-bottom: 6px;
+    word-break: break-word;
 }
 
 .gb-date {
@@ -1230,7 +1255,7 @@ a:hover {
 }
 
 .gb-text {
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 1.6;
     color: #b8b8b8;
 }
@@ -1254,7 +1279,7 @@ a:hover {
 
 .sas-text {
     color: #00cc44 !important;
-    font-size: 16px !important;
+    font-size: clamp(12px, 1.8vw, 18px) !important;
     text-align: center;
     letter-spacing: 3px;
 }
@@ -1269,9 +1294,9 @@ a:hover {
 .guestbook-counter {
     background: #0a0a0a;
     border: 1px solid #222;
-    padding: 20px;
-    margin-bottom: 24px;
-    font-size: 11px;
+    padding: clamp(12px, 2vw, 24px);
+    margin-bottom: clamp(16px, 2.5vw, 32px);
+    font-size: clamp(9px, 1vw, 13px);
     line-height: 2.2;
 }
 
@@ -1289,22 +1314,22 @@ a:hover {
     color: #00cc44;
     text-align: center;
     margin-top: 12px;
-    font-size: 12px;
+    font-size: clamp(10px, 1.1vw, 14px);
     letter-spacing: 2px;
 }
 
 .archivist-closing {
     text-align: center;
-    padding: 40px 20px;
+    padding: clamp(24px, 4vw, 48px) clamp(12px, 2vw, 32px);
     border-top: 1px solid #222;
-    margin-top: 40px;
-    font-size: 12px;
+    margin-top: clamp(24px, 4vw, 48px);
+    font-size: clamp(10px, 1.1vw, 14px);
     line-height: 2.2;
 }
 
 .sas-final {
     color: #00cc44;
-    font-size: 24px;
+    font-size: clamp(18px, 3vw, 30px);
     margin-top: 20px;
     letter-spacing: 5px;
     animation: blink 2s step-end infinite;
@@ -1322,38 +1347,6 @@ a:hover {
     94% { transform: translate(1px, -2px); opacity: 0.85; }
     95% { transform: translate(-2px, 1px); opacity: 0.75; }
     96% { transform: translate(2px, -1px); opacity: 0.9; }
-}
-
-@media (max-width: 600px) {
-    .exhibit {
-        padding: 70px 12px 30px;
-    }
-
-    .terminal {
-        padding: 20px;
-        font-size: 12px;
-    }
-
-    .exhibit-meta {
-        grid-template-columns: 1fr;
-    }
-
-    .cctv-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .map-placeholder {
-        height: 350px;
-    }
-
-    .nav-menu {
-        padding: 2px 4px;
-    }
-
-    .nav-link {
-        font-size: 9px;
-        padding: 2px 6px;
-    }
 }
 
 .bg-video {
@@ -1383,7 +1376,7 @@ a:hover {
     z-index: 99999;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: clamp(12px, 3vw, 32px);
 }
 
 .warning-overlay.hidden {
@@ -1391,11 +1384,11 @@ a:hover {
 }
 
 .warning-content {
-    max-width: 800px;
+    max-width: min(800px, 95vw);
     width: 100%;
     background: linear-gradient(135deg, #0d0d0d 0%, #1a0000 100%);
     border: 2px solid #cc0000;
-    padding: 40px;
+    padding: clamp(20px, 4vw, 48px);
     box-shadow: 0 0 60px rgba(204, 0, 0, 0.4);
     animation: warning-appear 0.5s ease-out;
 }
@@ -1412,14 +1405,14 @@ a:hover {
 }
 
 .warning-text-box {
-    margin-bottom: 30px;
+    margin-bottom: clamp(16px, 3vw, 36px);
 }
 
 .warning-line {
     color: #b8b8b8;
-    font-size: 16px;
+    font-size: clamp(13px, 1.6vw, 20px);
     line-height: 1.8;
-    margin-bottom: 12px;
+    margin-bottom: clamp(6px, 1vw, 16px);
     text-align: center;
 }
 
@@ -1434,8 +1427,8 @@ a:hover {
     border: 2px solid #cc0000;
     color: #cc0000;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 18px;
-    padding: 12px 40px;
+    font-size: clamp(14px, 2vw, 22px);
+    padding: clamp(8px, 1.2vw, 16px) clamp(24px, 4vw, 48px);
     cursor: pointer;
     transition: all 0.3s ease;
     letter-spacing: 2px;
@@ -1451,6 +1444,186 @@ a:hover {
 
 .warning-ok-btn:active {
     transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-status {
+        font-size: clamp(7px, 1.5vw, 10px);
+    }
+}
+
+@media (max-width: 600px) {
+    .exhibit {
+        padding: 60px 8px 24px;
+    }
+
+    .terminal {
+        padding: 16px;
+        font-size: 11px;
+    }
+
+    .exhibit-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .cctv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-menu {
+        padding: 2px 4px;
+    }
+
+    .nav-link {
+        font-size: 8px;
+        padding: 2px 5px;
+    }
+
+    .nav-titlebar {
+        font-size: 8px;
+        padding: 2px 6px;
+    }
+
+    .nav-status {
+        font-size: 7px;
+    }
+
+    .discord-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .vhs-player-controls {
+        gap: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .exhibit {
+        padding: 56px 6px 20px;
+    }
+
+    .exhibit-header {
+        padding: 10px;
+    }
+
+    .exhibit-badge {
+        font-size: 9px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .terminal {
+        padding: 12px;
+        font-size: 10px;
+        min-height: 80vh;
+    }
+
+    .nav-link {
+        font-size: 7px;
+        padding: 1px 4px;
+    }
+
+    .nav-titlebar {
+        font-size: 7px;
+        padding: 2px 4px;
+    }
+
+    .nav-title {
+        font-size: 9px;
+    }
+
+    .nav-status {
+        display: none;
+    }
+
+    .warning-content {
+        padding: 16px;
+    }
+
+    .warning-line {
+        font-size: 12px;
+    }
+
+    .map-placeholder {
+        height: 250px;
+    }
+
+    .map-grid {
+        background-size: 15px 15px;
+    }
+
+    .map-marker .marker-label {
+        font-size: 6px;
+    }
+
+    .map-marker .marker-date {
+        font-size: 5px;
+    }
+
+    .marker-dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .gb-message {
+        padding: 8px 10px;
+    }
+
+    .vhs-player-controls {
+        gap: 4px;
+        padding: 6px;
+    }
+
+    .vhs-btn {
+        font-size: 8px;
+        padding: 2px 8px;
+    }
+
+    .vhs-status {
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
+        font-size: 7px;
+    }
+
+    .discord-log-content {
+        max-height: 200px;
+    }
+
+    .screamer-text {
+        font-size: 16px;
+    }
+
+    .guestbook-counter {
+        font-size: 8px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .exhibit {
+        max-width: 1100px;
+    }
+
+    body {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 2000px) {
+    .exhibit {
+        max-width: 1200px;
+    }
+
+    body {
+        font-size: 16px;
+    }
 }
 
 @media print {

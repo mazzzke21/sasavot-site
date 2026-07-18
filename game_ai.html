@@ -59,29 +59,31 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding: 0 10%;
+            padding: 0 clamp(5%, 8vw, 10%);
             background: radial-gradient(circle, #1a0505 0%, #030101 100%);
             position: relative;
         }
 
         .main-title {
-            font-size: 7rem;
+            font-size: clamp(2.5rem, 9vw, 8rem);
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: clamp(2px, 0.5vw, 6px);
             color: #ff0000;
             text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.9), -3px -3px 0px rgba(0, 255, 255, 0.5), 3px 3px 0px rgba(255, 0, 255, 0.5);
+            line-height: 1.1;
+            word-break: break-word;
         }
 
         .menu-subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
+            font-size: clamp(0.9rem, 2vw, 1.8rem);
+            margin-bottom: clamp(16px, 3vw, 36px);
             color: #888;
             font-family: 'VT323', monospace;
         }
 
         .difficulty-label {
             color: #ffaa00;
-            font-size: 1.8rem;
+            font-size: clamp(1rem, 2.2vw, 2rem);
             font-family: 'VT323', monospace;
         }
 
@@ -89,20 +91,21 @@
             background: #000;
             color: #ff0000;
             font-family: 'VT323', monospace;
-            font-size: 1.6rem;
+            font-size: clamp(0.9rem, 2vw, 1.8rem);
             border: 1px solid #ff0000;
-            padding: 5px;
+            padding: clamp(3px, 0.5vw, 6px);
+            max-width: 100%;
         }
 
         .start-btn {
-            font-size: 2.5rem;
-            padding: 10px 40px;
+            font-size: clamp(1.3rem, 3.2vw, 2.8rem);
+            padding: clamp(6px, 1vw, 12px) clamp(20px, 4vw, 48px);
             font-family: 'VT323', monospace;
         }
 
         #gameplay-container {
             width: 100%;
-            height: 90%;
+            height: clamp(80%, 85vh, 90%);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -111,31 +114,33 @@
         .game-header {
             display: flex;
             justify-content: space-between;
-            font-size: 1.8rem;
+            font-size: clamp(1rem, 2.2vw, 2rem);
             border-bottom: 2px solid #ff6600;
-            padding-bottom: 10px;
+            padding-bottom: clamp(6px, 1vw, 12px);
             color: #ffaa00;
+            flex-wrap: wrap;
+            gap: 6px;
         }
 
         .text-log {
             flex-grow: 1;
             overflow-y: auto;
-            margin: 20px 0;
-            font-size: 2rem;
+            margin: clamp(10px, 2vw, 24px) 0;
+            font-size: clamp(1rem, 2.5vw, 2.2rem);
             line-height: 1.4;
             color: #ff4444;
-            padding: 15px;
+            padding: clamp(8px, 1.5vw, 18px);
             background: rgba(10, 0, 0, 0.4);
             border-left: 4px solid #ff0000;
         }
 
         .input-container {
             display: flex;
-            gap: 15px;
+            gap: clamp(8px, 1.5vw, 18px);
             width: 100%;
             background: rgba(0,0,0,0.6);
             border: 2px solid #801010;
-            padding: 10px;
+            padding: clamp(6px, 1vw, 12px);
             border-radius: 4px;
         }
 
@@ -146,7 +151,8 @@
             outline: none;
             color: #ff3333;
             font-family: 'VT323', monospace;
-            font-size: 2rem;
+            font-size: clamp(1rem, 2.5vw, 2.2rem);
+            min-width: 0;
         }
 
         .send-btn {
@@ -154,10 +160,11 @@
             color: #050202;
             border: none;
             font-family: 'VT323', monospace;
-            font-size: 1.8rem;
-            padding: 5px 25px;
+            font-size: clamp(0.9rem, 2.2vw, 2rem);
+            padding: clamp(3px, 0.6vw, 8px) clamp(12px, 3vw, 30px);
             cursor: pointer;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
 
         .send-btn:hover {
@@ -175,50 +182,27 @@
         .ai-warning-box {
             background: rgba(30, 0, 0, 0.95);
             border: 2px solid #ff0000;
-            padding: 15px;
-            margin: 15px 0;
+            padding: clamp(10px, 1.5vw, 18px);
+            margin: clamp(8px, 1.5vw, 18px) 0;
             color: #ff3333;
-            font-size: 1.8rem;
+            font-size: clamp(0.9rem, 2.2vw, 2rem);
             border-radius: 4px;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
         }
 
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 4rem;
-                letter-spacing: 3px;
-            }
-
-            .screen {
-                padding-left: 5%;
-                padding-right: 5%;
-            }
-
-            .text-log {
-                font-size: 1.6rem;
-                line-height: 1.3;
-            }
-
+        @media (max-width: 480px) {
             .game-header {
-                font-size: 1.4rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
             }
 
-            .player-input {
-                font-size: 1.6rem;
+            .input-container {
+                flex-wrap: wrap;
             }
 
             .send-btn {
-                font-size: 1.4rem;
-                padding: 5px 15px;
-            }
-
-            .ai-warning-box {
-                font-size: 1.4rem;
-                padding: 10px;
-            }
-
-            #gameplay-container {
-                height: 85%;
+                width: 100%;
             }
         }
     </style>
@@ -251,7 +235,7 @@
             <div id="text-log" class="text-log">Загрузка ИИ-вселенной...</div>
             
             <div class="input-container">
-                <span style="font-size: 2rem; margin-right: 10px; color: #ffaa00;">></span>
+                <span style="font-size: clamp(1rem, 2.5vw, 2.2rem); margin-right: clamp(4px, 1vw, 12px); color: #ffaa00;">></span>
                 <input type="text" id="player-action" class="player-input" placeholder="Напиши свои действия..." onkeypress="if(event.key === 'Enter') sendAction()">
                 <button id="send-btn" class="send-btn" onclick="sendAction()">ОТПРАВИТЬ</button>
             </div>
@@ -265,7 +249,7 @@
             history: []
         };
 
-        const systemWarningText = "<span style='color: #ff0000; font-size: 1.6rem; display: block; line-height: 1.2;'>⚠️ ВНИМАНИЕ: НА 15 ХОДЕ МАНЬЯК SASAVOT ПРОСНЕТСЯ И НАЧНЕТ АКТИВНЫЙ ПОИСК ЧЕЛОВЕКА В КОМПЛЕКСЕ.</span><hr style='border: 1px dashed #ff0000; margin: 10px 0 15px 0;'>";
+        const systemWarningText = "<span style='color: #ff0000; font-size: clamp(0.9rem, 2vw, 1.8rem); display: block; line-height: 1.2;'>⚠️ ВНИМАНИЕ: НА 15 ХОДЕ МАНЬЯК SASAVOT ПРОСНЕТСЯ И НАЧНЕТ АКТИВНЫЙ ПОИСК ЧЕЛОВЕКА В КОМПЛЕКСЕ.</span><hr style='border: 1px dashed #ff0000; margin: clamp(6px, 1vw, 12px) 0 clamp(10px, 1.5vw, 18px) 0;'>";
 
         function buildSystemPrompt(turn, difficulty) {
             return `Ты — ведущий интерактивной текстовой хоррор-игры "sasavot". Персонаж заперт в заброшенном комплексе ЮАО, где скрывается пиксельный монстр SASAVOT.
@@ -465,7 +449,7 @@
                 log.scrollTop = log.scrollHeight;
 
                 if (aiResponse.includes("[КОНЦОВКА:")) {
-                    log.innerHTML += "<br><br><span style='color: #00ff66; font-size: 2.5rem;'>ХРОНИКА ЗАВЕРШЕНА</span>";
+                    log.innerHTML += "<br><br><span style='color: #00ff66; font-size: clamp(1.3rem, 3.2vw, 2.8rem);'>ХРОНИКА ЗАВЕРШЕНА</span>";
                     setControls(false);
                     return;
                 }

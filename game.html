@@ -59,9 +59,10 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            background: #050202 url('0001.png') center/cover no-repeat fixed;
+            padding: clamp(12px, 3vw, 40px);
+            background: #050202 url('0001.png') center/cover no-repeat;
             position: relative;
+            overflow: hidden;
         }
 
         .screen::before {
@@ -81,9 +82,9 @@
         }
 
         .main-title {
-            font-size: 6rem;
+            font-size: clamp(2rem, 6vw, 5rem);
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: clamp(2px, 0.5vw, 5px);
             color: #ff0000;
             text-shadow: 
                 0px 0px 10px rgba(255, 0, 0, 0.9),
@@ -91,8 +92,10 @@
                 -3px -3px 0px rgba(0, 255, 255, 0.5),
                 3px 3px 0px rgba(255, 0, 255, 0.5);
             animation: shake 1s infinite alternate, titleGlow 2s ease-in-out infinite;
-            margin-bottom: 20px;
+            margin-bottom: clamp(8px, 1.5vw, 24px);
             text-align: center;
+            line-height: 1.1;
+            flex-shrink: 1;
         }
 
         @keyframes shake {
@@ -122,30 +125,32 @@
         }
 
         .subtitle {
-            font-size: 1.8rem;
+            font-size: clamp(0.8rem, 2vw, 1.6rem);
             color: #888;
-            margin-bottom: 50px;
+            margin-bottom: clamp(12px, 3vw, 40px);
             text-align: center;
             letter-spacing: 2px;
+            flex-shrink: 1;
         }
 
         .games-container {
             display: flex;
-            gap: 40px;
-            max-width: 1200px;
+            gap: clamp(12px, 2vw, 32px);
+            max-width: min(1200px, 95vw);
             width: 100%;
             justify-content: center;
             flex-wrap: wrap;
             align-items: stretch;
+            flex-shrink: 1;
+            min-height: 0;
         }
 
         .game-card {
-            flex: 1;
-            min-width: 300px;
+            flex: 1 1 min(300px, 80vw);
             max-width: 500px;
             background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
             border: 3px solid #d11a1a;
-            padding: 30px;
+            padding: clamp(12px, 2vw, 28px);
             border-radius: 8px;
             box-shadow: 
                 0 0 40px rgba(209, 26, 26, 0.4),
@@ -162,18 +167,11 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-        }
-
-        .game-card-description {
-            flex: 1;
-        }
-
-        .game-card-features {
-            flex: 1;
+            min-height: 0;
         }
 
         .game-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(clamp(-4px, -1vw, -10px));
             border-color: #ff0000;
             box-shadow: 
                 0 0 60px rgba(209, 26, 26, 0.6),
@@ -181,45 +179,49 @@
         }
 
         .game-card-title {
-            font-size: 3rem;
+            font-size: clamp(1.2rem, 3vw, 2.8rem);
             color: #ff0000;
-            margin-bottom: 15px;
+            margin-bottom: clamp(6px, 1vw, 16px);
             text-shadow: 
                 0 0 10px rgba(255, 0, 0, 0.8),
                 0 0 20px rgba(255, 0, 0, 0.4);
             animation: titleGlow 2s ease-in-out infinite;
             text-align: center;
+            flex-shrink: 1;
         }
 
         .game-card-type {
-            font-size: 1.4rem;
+            font-size: clamp(0.7rem, 1.5vw, 1.3rem);
             color: #ffaa00;
             text-align: center;
-            margin-bottom: 20px;
-            padding: 8px;
+            margin-bottom: clamp(6px, 1.5vw, 18px);
+            padding: clamp(3px, 0.6vw, 8px);
             border: 1px solid #ff6600;
             background: rgba(255, 102, 0, 0.1);
             letter-spacing: 1px;
+            flex-shrink: 1;
         }
 
         .game-card-description {
-            font-size: 1.6rem;
-            line-height: 1.5;
+            font-size: clamp(0.75rem, 1.5vw, 1.4rem);
+            line-height: 1.4;
             color: #cccccc;
-            margin-bottom: 20px;
+            margin-bottom: clamp(6px, 1.5vw, 18px);
             text-align: center;
+            flex-shrink: 1;
         }
 
         .game-card-features {
             list-style: none;
-            font-size: 1.3rem;
+            font-size: clamp(0.7rem, 1.4vw, 1.2rem);
             color: #b8b8b8;
-            line-height: 1.8;
+            line-height: 1.6;
+            flex-shrink: 1;
         }
 
         .game-card-features li {
-            padding: 5px 0;
-            padding-left: 20px;
+            padding: clamp(1px, 0.3vw, 4px) 0;
+            padding-left: clamp(10px, 1.5vw, 20px);
             position: relative;
         }
 
@@ -238,8 +240,8 @@
             border: 2px solid #d11a1a;
             color: #ff4444;
             font-family: 'VT323', monospace;
-            font-size: 2rem;
-            padding: 12px;
+            font-size: clamp(0.9rem, 2vw, 1.8rem);
+            padding: clamp(6px, 1vw, 12px);
             cursor: pointer;
             text-align: center;
             transition: all 0.3s ease;
@@ -247,6 +249,7 @@
             text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
             box-shadow: 0 0 10px rgba(128, 16, 16, 0.3);
             align-self: flex-end;
+            flex-shrink: 1;
         }
 
         .game-card:hover .game-card-btn {
@@ -260,10 +263,10 @@
 
         .back-link {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: clamp(6px, 1.5vw, 20px);
+            left: clamp(6px, 1.5vw, 20px);
             color: #666;
-            font-size: 1.4rem;
+            font-size: clamp(0.7rem, 1.4vw, 1.3rem);
             text-decoration: none;
             transition: all 0.3s ease;
             z-index: 1000;
@@ -272,73 +275,6 @@
         .back-link:hover {
             color: #ffcc00;
             text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-        }
-
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 4rem;
-                letter-spacing: 3px;
-            }
-
-            .subtitle {
-                font-size: 1.4rem;
-            }
-
-            .games-container {
-                gap: 20px;
-            }
-
-            .game-card {
-                min-width: 100%;
-                padding: 20px;
-            }
-
-            .game-card-title {
-                font-size: 2.5rem;
-            }
-
-            .game-card-description {
-                font-size: 1.3rem;
-            }
-
-            .game-card-features {
-                font-size: 1.1rem;
-            }
-
-            .game-card-btn {
-                font-size: 1.6rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-title {
-                font-size: 3rem;
-                letter-spacing: 2px;
-            }
-
-            .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .game-card-title {
-                font-size: 2rem;
-            }
-
-            .game-card-type {
-                font-size: 1.2rem;
-            }
-
-            .game-card-description {
-                font-size: 1.1rem;
-            }
-
-            .game-card-features {
-                font-size: 1rem;
-            }
-
-            .game-card-btn {
-                font-size: 1.4rem;
-            }
         }
     </style>
 </head>
@@ -399,22 +335,7 @@
     </div>
 
     <script>
-        let animationComplete = false;
-        
-        function unlockScroll() {
-            if (!animationComplete) {
-                animationComplete = true;
-                document.body.style.overflow = 'auto';
-            }
-        }
-        
         document.body.style.overflow = 'hidden';
-        
-        setTimeout(unlockScroll, 4000);
-        
-        document.addEventListener('click', unlockScroll, { once: true });
-        document.addEventListener('touchstart', unlockScroll, { once: true });
-        document.addEventListener('keydown', unlockScroll, { once: true });
     </script>
 </body>
 </html>

@@ -52,209 +52,6 @@
             50% { opacity: 0.6; }
         }
 
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 4rem;
-                letter-spacing: 3px;
-            }
-
-            .screen {
-                padding-left: 5%;
-                padding-right: 5%;
-            }
-
-            .guide-title {
-                font-size: 2.5rem;
-            }
-
-            .guide-text {
-                font-size: 1.4rem;
-                line-height: 1.3;
-            }
-
-            .guide-text br {
-                display: block;
-                margin-bottom: 5px;
-            }
-
-            .btn {
-                font-size: 2rem;
-                padding: 8px 25px;
-            }
-
-            .difficulty-title {
-                font-size: 1.6rem;
-            }
-
-            .diff-label {
-                font-size: 1.6rem;
-            }
-
-            .warning-text {
-                font-size: 1.2rem;
-                padding: 15px;
-            }
-
-            .hud-item {
-                font-size: 1.4rem;
-            }
-
-            .text-log {
-                font-size: 1.6rem;
-                line-height: 1.3;
-            }
-
-            .choice-btn {
-                font-size: 1.6rem;
-                padding: 10px 15px;
-            }
-
-            .chance-badge {
-                font-size: 1.2rem;
-                padding: 2px 8px;
-            }
-
-            .darkness-warning {
-                font-size: 1.1rem;
-                padding: 2px 8px;
-            }
-
-            .ending-progress {
-                font-size: 1.2rem;
-                top: 10px;
-                right: 10px;
-                padding: 5px 10px;
-            }
-
-            .timer-display {
-                font-size: 1.4rem;
-                top: 10px;
-                left: 10px;
-                padding: 6px 12px;
-            }
-
-            .ending-notification {
-                padding: 20px;
-                max-width: 90%;
-            }
-
-            .ending-notification .notif-title {
-                font-size: 2.5rem;
-            }
-
-            .ending-notification .notif-sub {
-                font-size: 1.5rem;
-            }
-
-            .ending-tag {
-                font-size: 1.8rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-title {
-                font-size: 3rem;
-                letter-spacing: 2px;
-            }
-
-            .screen {
-                padding-left: 3%;
-                padding-right: 3%;
-            }
-
-            .guide-box {
-                padding: 20px;
-            }
-
-            .guide-title {
-                font-size: 2rem;
-            }
-
-            .guide-text {
-                font-size: 1.2rem;
-            }
-
-            .btn {
-                font-size: 1.6rem;
-                padding: 6px 20px;
-            }
-
-            .difficulty-container {
-                gap: 8px;
-            }
-
-            .difficulty-title {
-                font-size: 1.3rem;
-            }
-
-            .diff-options {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .diff-label {
-                font-size: 1.3rem;
-            }
-
-            .warning-text {
-                font-size: 1rem;
-                padding: 12px;
-            }
-
-            .game-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-
-            .hud-item {
-                font-size: 1.2rem;
-            }
-
-            .text-log {
-                font-size: 1.3rem;
-            }
-
-            .choice-btn {
-                font-size: 1.3rem;
-                padding: 8px 12px;
-            }
-
-            .chance-badge {
-                font-size: 1rem;
-            }
-
-            .darkness-warning {
-                font-size: 0.9rem;
-            }
-
-            .ending-progress {
-                font-size: 1rem;
-                top: 5px;
-                right: 5px;
-                padding: 4px 8px;
-            }
-
-            .timer-display {
-                font-size: 1.2rem;
-                top: 5px;
-                left: 5px;
-                padding: 5px 10px;
-            }
-
-            .ending-notification .notif-title {
-                font-size: 2rem;
-            }
-
-            .ending-notification .notif-sub {
-                font-size: 1.2rem;
-            }
-
-            .ending-tag {
-                font-size: 1.4rem;
-            }
-        }
-
         @keyframes flicker {
             0% { opacity: 0.97; }
             50% { opacity: 1; }
@@ -283,11 +80,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            padding-left: 10%;
-            padding-right: 10%;
+            padding-left: clamp(5%, 8vw, 10%);
+            padding-right: clamp(5%, 8vw, 10%);
             background: radial-gradient(circle, #1a0505 0%, #030101 100%);
             animation: flicker 0.15s infinite;
             position: relative;
+            overflow-y: auto;
         }
 
         .screen.active {
@@ -295,14 +93,14 @@
         }
 
         .title-container {
-            margin-bottom: 20px;
+            margin-bottom: clamp(12px, 2vw, 24px);
             position: relative;
         }
 
         .main-title {
-            font-size: 8rem;
+            font-size: clamp(2.5rem, 10vw, 9rem);
             text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: clamp(2px, 0.6vw, 6px);
             color: #ff0000;
             text-shadow: 
                 0px 0px 10px rgba(255, 0, 0, 0.9),
@@ -310,6 +108,7 @@
                 -3px -3px 0px rgba(0, 255, 255, 0.5),
                 3px 3px 0px rgba(255, 0, 255, 0.5);
             animation: shake 1s infinite alternate, titleGlow 2s ease-in-out infinite;
+            line-height: 1.1;
         }
 
         @keyframes shake {
@@ -340,15 +139,15 @@
 
         .ending-progress {
             position: fixed;
-            top: 15px;
-            right: 20px;
-            font-size: 1.6rem;
+            top: clamp(8px, 1.5vw, 20px);
+            right: clamp(8px, 2vw, 24px);
+            font-size: clamp(0.9rem, 1.8vw, 1.8rem);
             color: #ffaa00;
             text-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
             z-index: 1000;
             pointer-events: none;
             background: linear-gradient(135deg, rgba(5, 2, 2, 0.9) 0%, rgba(20, 5, 5, 0.9) 100%);
-            padding: 8px 16px;
+            padding: clamp(4px, 0.8vw, 10px) clamp(8px, 1.5vw, 18px);
             border: 2px solid #ff6600;
             border-radius: 4px;
             letter-spacing: 1px;
@@ -363,7 +162,7 @@
             transform: translate(-50%, -50%);
             background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
             border: 4px solid #00ff66;
-            padding: 40px;
+            padding: clamp(20px, 4vw, 48px);
             text-align: center;
             box-shadow: 
                 0 0 60px rgba(0, 255, 102, 0.4),
@@ -372,10 +171,12 @@
             animation: pulseGlow 1.5s infinite alternate, notificationAppear 0.5s ease-out;
             pointer-events: none;
             border-radius: 8px;
+            max-width: min(90vw, 600px);
+            width: 90%;
         }
 
         .ending-notification .notif-title {
-            font-size: 3.5rem;
+            font-size: clamp(1.8rem, 4vw, 4rem);
             color: #00ff66;
             margin-bottom: 10px;
             text-shadow: 
@@ -385,7 +186,7 @@
         }
 
         .ending-notification .notif-sub {
-            font-size: 2rem;
+            font-size: clamp(1rem, 2.5vw, 2.2rem);
             color: #ffffff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
@@ -420,15 +221,15 @@
         }
 
         .difficulty-container {
-            margin-bottom: 30px;
+            margin-bottom: clamp(16px, 3vw, 36px);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             animation: fadeIn 0.8s ease-out;
         }
 
         .difficulty-title {
-            font-size: 2.2rem;
+            font-size: clamp(1.2rem, 2.8vw, 2.5rem);
             color: #ffaa00;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -437,15 +238,16 @@
 
         .diff-options {
             display: flex;
-            gap: 20px;
+            gap: clamp(10px, 2vw, 24px);
+            flex-wrap: wrap;
         }
 
         .diff-label {
-            font-size: 2.4rem;
+            font-size: clamp(1.2rem, 3vw, 2.6rem);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: clamp(6px, 1vw, 12px);
             transition: all 0.3s ease;
             color: #cccccc;
         }
@@ -455,22 +257,23 @@
         }
 
         .custom-radio {
-            width: 20px;
-            height: 20px;
+            width: clamp(16px, 2vw, 24px);
+            height: clamp(16px, 2vw, 24px);
             border: 3px solid #d11a1a;
             display: inline-block;
             position: relative;
             transition: all 0.3s ease;
             box-shadow: 0 0 5px rgba(209, 26, 26, 0.3);
+            flex-shrink: 0;
         }
 
         .diff-label input:checked + .custom-radio::after {
             content: '';
             position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 8px;
-            height: 8px;
+            top: clamp(2px, 0.3vw, 4px);
+            left: clamp(2px, 0.3vw, 4px);
+            width: clamp(6px, 1vw, 12px);
+            height: clamp(6px, 1vw, 12px);
             background: #ff0000;
             box-shadow: 
                 0 0 8px #ff0000,
@@ -498,13 +301,13 @@
         }
 
         .warning-text {
-            font-size: 1.6rem;
+            font-size: clamp(0.9rem, 2vw, 1.8rem);
             color: #ffaa00;
             text-align: center;
-            max-width: 800px;
+            max-width: min(800px, 95vw);
             line-height: 1.5;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: clamp(16px, 3vw, 36px);
+            padding: clamp(12px, 2vw, 24px);
             border: 2px solid #ff6600;
             background: linear-gradient(135deg, rgba(255, 102, 0, 0.1) 0%, rgba(255, 50, 0, 0.1) 100%);
             text-shadow: 0 0 8px rgba(255, 170, 0, 0.6);
@@ -518,8 +321,8 @@
             border: 3px solid #d11a1a;
             color: #ff3333;
             font-family: 'VT323', monospace;
-            font-size: 3rem;
-            padding: 12px 45px;
+            font-size: clamp(1.4rem, 4vw, 3.5rem);
+            padding: clamp(8px, 1.2vw, 14px) clamp(20px, 4vw, 50px);
             cursor: pointer;
             text-align: left;
             position: relative;
@@ -564,20 +367,20 @@
         .guide-box {
             border: 3px solid #d11a1a;
             background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
-            padding: 35px;
+            padding: clamp(16px, 3.5vw, 40px);
             box-shadow: 
                 0 0 40px rgba(209, 26, 26, 0.4),
                 inset 0 0 30px rgba(209, 26, 26, 0.1);
-            max-width: 800px;
+            max-width: min(800px, 95vw);
             margin-bottom: 25px;
             border-radius: 6px;
             animation: fadeIn 0.8s ease-out;
         }
 
         .guide-title {
-            font-size: 3.5rem;
+            font-size: clamp(1.8rem, 4.5vw, 4rem);
             color: #ff0000;
-            margin-bottom: 15px;
+            margin-bottom: clamp(8px, 1.5vw, 18px);
             text-shadow: 
                 0 0 10px rgba(255, 0, 0, 0.8),
                 0 0 20px rgba(255, 0, 0, 0.4);
@@ -585,11 +388,18 @@
         }
 
         .guide-text {
-            font-size: 2rem;
+            font-size: clamp(0.85rem, 2vw, 1.8rem);
             line-height: 1.5;
             color: #dddddd;
-            margin-bottom: 20px;
+            margin-bottom: clamp(12px, 2vw, 24px);
             text-shadow: 0 0 5px rgba(200, 200, 200, 0.3);
+        }
+
+        #intro-guide,
+        #main-menu {
+            justify-content: flex-start;
+            padding-top: clamp(24px, 5vh, 60px);
+            padding-bottom: clamp(24px, 5vh, 60px);
         }
 
         #gameplay-container {
@@ -598,7 +408,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 40px 0;
+            padding: clamp(16px, 4vw, 48px) clamp(8px, 3vw, 32px);
             animation: fadeIn 0.5s ease-out;
         }
 
@@ -607,15 +417,15 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #ff6600;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            padding-bottom: clamp(8px, 1.2vw, 14px);
+            margin-bottom: clamp(12px, 2vw, 24px);
             flex-wrap: wrap;
-            gap: 10px;
+            gap: clamp(6px, 1vw, 12px);
             box-shadow: 0 2px 15px rgba(255, 102, 0, 0.3);
         }
 
         .hud-item {
-            font-size: 2rem;
+            font-size: clamp(1rem, 2.5vw, 2.2rem);
             text-transform: uppercase;
             color: #ffaa00;
             text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
@@ -630,12 +440,12 @@
         .text-log {
             flex-grow: 1;
             overflow-y: auto;
-            margin-bottom: 20px;
-            font-size: 2.2rem;
+            margin-bottom: clamp(12px, 2vw, 24px);
+            font-size: clamp(1rem, 2.8vw, 2.4rem);
             line-height: 1.5;
             color: #ff4444;
             text-shadow: 0 0 5px rgba(255, 68, 68, 0.4);
-            padding: 10px;
+            padding: clamp(6px, 1vw, 12px);
             background: rgba(10, 0, 0, 0.3);
             border-left: 3px solid #ff0000;
             border-radius: 4px;
@@ -644,7 +454,7 @@
         .choices-container {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: clamp(8px, 1.5vw, 18px);
         }
 
         .choice-btn {
@@ -652,8 +462,8 @@
             border: 2px solid #801010;
             color: #ff4444;
             font-family: 'VT323', monospace;
-            font-size: 2.2rem;
-            padding: 15px 25px;
+            font-size: clamp(1rem, 2.8vw, 2.4rem);
+            padding: clamp(10px, 1.5vw, 18px) clamp(14px, 2.5vw, 28px);
             cursor: pointer;
             text-align: left;
             transition: all 0.3s ease;
@@ -700,8 +510,8 @@
             float: right;
             background: linear-gradient(135deg, #300 0%, #500 100%);
             color: #ff6666;
-            padding: 3px 12px;
-            font-size: 1.6rem;
+            padding: 2px clamp(6px, 1vw, 14px);
+            font-size: clamp(0.8rem, 2vw, 1.8rem);
             border: 1px solid #ff0000;
             border-radius: 3px;
             text-shadow: 0 0 5px rgba(255, 102, 102, 0.5);
@@ -712,8 +522,8 @@
             float: right;
             background: linear-gradient(135deg, #111 0%, #222 100%);
             color: #aa99ff;
-            padding: 3px 12px;
-            font-size: 1.4rem;
+            padding: 2px clamp(6px, 1vw, 14px);
+            font-size: clamp(0.7rem, 1.8vw, 1.6rem);
             border: 1px solid #8866ff;
             border-radius: 3px;
             margin-right: 5px;
@@ -723,16 +533,16 @@
 
         .timer-display {
             position: fixed;
-            top: 15px;
-            left: 20px;
-            font-size: 2rem;
+            top: clamp(8px, 1.5vw, 18px);
+            left: clamp(8px, 2vw, 24px);
+            font-size: clamp(1rem, 2.5vw, 2.2rem);
             color: #ff0000;
             text-shadow: 
                 0 0 10px rgba(255, 0, 0, 0.9),
                 0 0 20px rgba(255, 0, 0, 0.5);
             z-index: 1000;
             background: linear-gradient(135deg, rgba(5, 2, 2, 0.9) 0%, rgba(30, 0, 0, 0.9) 100%);
-            padding: 10px 18px;
+            padding: clamp(6px, 1vw, 12px) clamp(10px, 2vw, 20px);
             border: 2px solid #ff0000;
             letter-spacing: 2px;
             animation: timerPulse 1s infinite;
@@ -759,7 +569,7 @@
 
         .ending-tag {
             color: #00ff66;
-            font-size: 2.6rem;
+            font-size: clamp(1.2rem, 3.5vw, 3rem);
             font-weight: bold;
             display: block;
             margin-top: 15px;
@@ -784,21 +594,23 @@
 
         .footer-links {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: clamp(8px, 2vw, 24px);
+            right: clamp(8px, 2vw, 24px);
             display: flex;
-            gap: 15px;
+            gap: clamp(8px, 1.5vw, 18px);
             z-index: 1000;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .footer-link {
             background: linear-gradient(135deg, rgba(209, 26, 26, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
             border: 2px solid #d11a1a;
             color: #ff4444;
-            padding: 10px 20px;
+            padding: clamp(6px, 1vw, 12px) clamp(10px, 2vw, 22px);
             text-decoration: none;
             font-family: 'VT323', monospace;
-            font-size: 1.6rem;
+            font-size: clamp(0.8rem, 2vw, 1.8rem);
             border-radius: 4px;
             transition: all 0.3s ease;
             text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
@@ -818,32 +630,6 @@
                 0 0 15px rgba(255, 0, 0, 0.4);
         }
 
-        @media (max-width: 768px) {
-            .footer-links {
-                bottom: 10px;
-                right: 10px;
-                gap: 10px;
-            }
-
-            .footer-link {
-                font-size: 1.2rem;
-                padding: 8px 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .footer-links {
-                flex-direction: column;
-                bottom: 10px;
-                right: 10px;
-            }
-
-            .footer-link {
-                font-size: 1rem;
-                padding: 6px 12px;
-            }
-        }
-
         .endings-modal {
             display: none;
             position: fixed;
@@ -854,7 +640,7 @@
             background: rgba(0, 0, 0, 0.9);
             z-index: 2000;
             overflow-y: auto;
-            padding: 40px 20px;
+            padding: clamp(16px, 4vw, 48px) clamp(8px, 2vw, 24px);
         }
 
         .endings-modal.active {
@@ -863,22 +649,22 @@
         }
 
         .endings-modal-content {
-            max-width: 900px;
+            max-width: min(900px, 95vw);
             margin: 0 auto;
             background: linear-gradient(135deg, #0d0404 0%, #1a0505 100%);
             border: 3px solid #d11a1a;
             border-radius: 8px;
-            padding: 30px;
+            padding: clamp(16px, 3vw, 36px);
             box-shadow: 
                 0 0 60px rgba(209, 26, 26, 0.5),
                 inset 0 0 30px rgba(209, 26, 26, 0.1);
         }
 
         .endings-modal-title {
-            font-size: 3.5rem;
+            font-size: clamp(1.8rem, 4.5vw, 4rem);
             color: #ff0000;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: clamp(16px, 3vw, 36px);
             text-shadow: 
                 0 0 10px rgba(255, 0, 0, 0.8),
                 0 0 20px rgba(255, 0, 0, 0.4);
@@ -889,7 +675,7 @@
             background: rgba(10, 0, 0, 0.5);
             border: 2px solid #801010;
             border-radius: 6px;
-            padding: 20px;
+            padding: clamp(12px, 2vw, 24px);
             margin-bottom: 15px;
             transition: all 0.3s ease;
         }
@@ -913,20 +699,24 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .ending-name {
-            font-size: 2.2rem;
+            font-size: clamp(1rem, 2.8vw, 2.4rem);
             color: #ffaa00;
             text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
             flex: 1;
+            min-width: 0;
         }
 
         .ending-status {
-            font-size: 1.4rem;
-            padding: 5px 12px;
+            font-size: clamp(0.8rem, 1.8vw, 1.6rem);
+            padding: 3px clamp(8px, 1.2vw, 14px);
             border-radius: 4px;
             font-weight: bold;
+            flex-shrink: 0;
         }
 
         .ending-status.unlocked {
@@ -945,9 +735,9 @@
             background: #000;
             color: #fff;
             border: 2px solid #fff;
-            padding: 8px 16px;
+            padding: 6px 14px;
             font-family: 'VT323', monospace;
-            font-size: 1.6rem;
+            font-size: clamp(0.9rem, 2vw, 1.8rem);
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 4px;
@@ -963,13 +753,13 @@
 
         .spoiler-content {
             display: none;
-            margin-top: 15px;
-            padding: 15px;
+            margin-top: 12px;
+            padding: clamp(10px, 1.5vw, 18px);
             background: rgba(0, 0, 0, 0.6);
             border-left: 3px solid #ff6600;
             border-radius: 4px;
             color: #cccccc;
-            font-size: 1.6rem;
+            font-size: clamp(0.9rem, 2vw, 1.8rem);
             line-height: 1.5;
         }
 
@@ -980,13 +770,13 @@
 
         .close-modal-btn {
             display: block;
-            margin: 30px auto 0;
+            margin: clamp(16px, 3vw, 36px) auto 0;
             background: transparent;
             border: 3px solid #ff0000;
             color: #ff0000;
             font-family: 'VT323', monospace;
-            font-size: 2.5rem;
-            padding: 12px 40px;
+            font-size: clamp(1.2rem, 3.2vw, 2.8rem);
+            padding: clamp(8px, 1.2vw, 14px) clamp(20px, 4vw, 48px);
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 4px;
@@ -997,6 +787,26 @@
             background: #ff0000;
             color: #000;
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+        }
+
+        @media (max-width: 600px) {
+            .diff-options {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .game-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                bottom: 8px;
+                right: 8px;
+                gap: 6px;
+            }
         }
     </style>
 </head>
