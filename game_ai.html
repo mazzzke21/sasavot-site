@@ -487,43 +487,55 @@ ${rebalanceRule}
         const API_URL = "https://api.smartapi.shop/v1/chat/completions";
         const CORS_PROXY = "https://corsproxy.io/?";
 
-        async function callAI(messages, turn, difficulty, awakeTurn) {
-            const apiMessages = [
-                { role: "system", content: buildSystemPrompt(turn, difficulty, awakeTurn) }
-            ];
+        async function callAI(messages, turn, difficulty, awakeTurn, retries = 3) {
+            for (let attempt = 1; attempt <= retries; attempt++) {
+                try {
+                    const apiMessages = [
+                        { role: "system", content: buildSystemPrompt(turn, difficulty, awakeTurn) }
+                    ];
 
-            messages.forEach(msg => {
-                apiMessages.push({ role: msg.role, content: msg.text });
-            });
+                    messages.forEach(msg => {
+                        apiMessages.push({ role: msg.role, content: msg.text });
+                    });
 
-            const response = await fetch(CORS_PROXY + encodeURIComponent(API_URL), {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + API_KEY,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    model: "mimo-v2.5",
-                    messages: apiMessages,
-                    max_tokens: 1500,
-                    temperature: 0.7
-                })
-            });
+                    const response = await fetch(CORS_PROXY + encodeURIComponent(API_URL), {
+                        method: "POST",
+                        headers: {
+                            "Authorization": "Bearer " + API_KEY,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            model: "mimo-v2.5",
+                            messages: apiMessages,
+                            max_tokens: 1500,
+                            temperature: 0.7
+                        })
+                    });
 
-            if (response.status === 402) {
-                throw new Error("Недостаточно баланса. Пополните счет.");
+                    if (response.status === 402) {
+                        throw new Error("Недостаточно баланса. Пополните счет.");
+                    }
+                    if (response.status === 429 && attempt < retries) {
+                        await new Promise(r => setTimeout(r, 2000 * attempt));
+                        continue;
+                    }
+                    if (!response.ok && attempt < retries) {
+                        await new Promise(r => setTimeout(r, 1000 * attempt));
+                        continue;
+                    }
+
+                    const data = await response.json();
+                    let text = data.choices[0].message.content.trim();
+                    text = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g, '');
+                    return text;
+                } catch (e) {
+                    if (attempt < retries && e.message !== "Недостаточно баланса. Пополните счет.") {
+                        await new Promise(r => setTimeout(r, 1000 * attempt));
+                        continue;
+                    }
+                    throw e;
+                }
             }
-            if (response.status === 429) {
-                throw new Error("Превышен лимит запросов. Повторите с задержкой.");
-            }
-            if (!response.ok) {
-                throw new Error("Ошибка ИИ-сервера. Попробуйте позже.");
-            }
-
-            const data = await response.json();
-            let text = data.choices[0].message.content.trim();
-            text = text.replace(/[\u4e00-\u9fff\u3400-\u4dbf\uf900-\ufaff]/g, '');
-            return text;
         }
 
         async function initAIStory() {
