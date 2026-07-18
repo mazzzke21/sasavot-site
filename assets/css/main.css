@@ -248,6 +248,15 @@ a:hover {
     cursor: pointer;
 }
 
+.vhs-player-screen video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .vhs-canvas {
     position: absolute;
     top: 0;
@@ -1046,7 +1055,33 @@ a:hover {
     height: clamp(300px, 50vw, 600px);
     background: #0a0a0a;
     border: 1px solid #222;
+}
+
+.map-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    cursor: grab;
+}
+
+.map-viewport:active {
+    cursor: grabbing;
+}
+
+.map-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: 0 0;
+    transition: transform 0.1s ease;
+    will-change: transform;
+}
+
+.map-inner.no-transition {
+    transition: none;
 }
 
 .map-grid {
@@ -1059,6 +1094,7 @@ a:hover {
         linear-gradient(rgba(0, 204, 68, 0.05) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 204, 68, 0.05) 1px, transparent 1px);
     background-size: clamp(20px, 4vw, 50px) clamp(20px, 4vw, 50px);
+    pointer-events: none;
 }
 
 .map-title {
@@ -1073,6 +1109,52 @@ a:hover {
     padding: 4px clamp(6px, 1vw, 16px);
     border: 1px solid #222;
     white-space: nowrap;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.map-zoom-controls {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 20;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #333;
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+.map-zoom-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    color: #888;
+    border: 1px solid #444;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.map-zoom-btn:hover {
+    background: #222;
+    color: #ffcc00;
+    border-color: #ffcc00;
+}
+
+.map-zoom-level {
+    color: #666;
+    font-size: 10px;
+    min-width: 36px;
+    text-align: center;
+    letter-spacing: 1px;
 }
 
 .map-marker {
@@ -1081,6 +1163,7 @@ a:hover {
     cursor: pointer;
     z-index: 10;
     text-align: center;
+    pointer-events: auto;
 }
 
 .marker-dot {

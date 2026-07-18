@@ -161,13 +161,174 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initMap() {
-        const markers = document.querySelectorAll('.map-marker');
+        const viewport = document.querySelector('.map-viewport');
+        const inner = document.getElementById('mapInner');
         const modal = document.getElementById('mapModal');
         const modalTitle = document.getElementById('mapModalTitle');
         const modalText = document.getElementById('mapModalText');
         const modalClose = document.getElementById('mapModalClose');
         const modalImage = document.getElementById('mapModalImage');
+        const zoomLevelEl = document.getElementById('mapZoomLevel');
 
+        if (!viewport || !inner) return;
+
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        const MIN_SCALE = 0.5;
+        const MAX_SCALE = 5;
+
+        function updateTransform() {
+            inner.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+            if (zoomLevelEl) {
+                zoomLevelEl.textContent = Math.round(scale * 100) + '%';
+            }
+        }
+
+        function applyZoom(newScale, cx, cy) {
+            const oldScale = scale;
+            scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, newScale));
+            const vpw = viewport.clientWidth;
+            const vph = viewport.clientHeight;
+            const scaleRatio = scale / oldScale;
+            translateX = cx - (cx - translateX) * scaleRatio;
+            translateY = cy - (cy - translateY) * scaleRatio;
+            clampPan();
+            updateTransform();
+        }
+
+        function clampPan() {
+            const vpw = viewport.clientWidth;
+            const vph = viewport.clientHeight;
+            const iw = vpw * scale;
+            const ih = vph * scale;
+            const maxX = Math.max(0, (iw - vpw) / scale);
+            const maxY = Math.max(0, (ih - vph) / scale);
+            translateX = Math.min(maxX, Math.max(-maxX, translateX));
+            translateY = Math.min(maxY, Math.max(-maxY, translateY));
+        }
+
+        function getPointerPos(e) {
+            if (e.touches) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        // Mouse drag
+        viewport.addEventListener('mousedown', (e) => {
+            if (e.button !== 0) return;
+            if (e.target.closest('.map-marker') || e.target.closest('.map-zoom-btn') || e.target.closest('.map-zoom-level')) return;
+            isDragging = true;
+            const pos = getPointerPos(e);
+            startX = pos.x - translateX;
+            startY = pos.y - translateY;
+            viewport.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const pos = getPointerPos(e);
+            translateX = pos.x - startX;
+            translateY = pos.y - startY;
+            clampPan();
+            updateTransform();
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                viewport.style.cursor = 'grab';
+            }
+        });
+
+        // Touch drag
+        let lastTouchDist = 0;
+        let isTouchZooming = false;
+
+        viewport.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.map-marker')) return;
+            if (e.touches.length === 1) {
+                isDragging = true;
+                const pos = getPointerPos(e);
+                startX = pos.x - translateX;
+                startY = pos.y - translateY;
+            } else if (e.touches.length === 2) {
+                isDragging = false;
+                isTouchZooming = true;
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                lastTouchDist = Math.sqrt(dx * dx + dy * dy);
+            }
+        }, { passive: true });
+
+        viewport.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1 && isDragging) {
+                const pos = getPointerPos(e);
+                translateX = pos.x - startX;
+                translateY = pos.y - startY;
+                clampPan();
+                updateTransform();
+            } else if (e.touches.length === 2 && isTouchZooming) {
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (lastTouchDist > 0) {
+                    const pinchRatio = dist / lastTouchDist;
+                    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+                    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                    const vpRect = viewport.getBoundingClientRect();
+                    applyZoom(scale * pinchRatio, cx - vpRect.left, cy - vpRect.top);
+                }
+                lastTouchDist = dist;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        viewport.addEventListener('touchend', () => {
+            isDragging = false;
+            isTouchZooming = false;
+        });
+
+        // Mouse wheel zoom
+        viewport.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            const vpRect = viewport.getBoundingClientRect();
+            applyZoom(scale * delta, e.clientX - vpRect.left, e.clientY - vpRect.top);
+        }, { passive: false });
+
+        // Zoom controls
+        document.querySelectorAll('.map-zoom-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.dataset.zoom;
+                const vpRect = viewport.getBoundingClientRect();
+                const cx = vpRect.width / 2;
+                const cy = vpRect.height / 2;
+                if (action === 'in') {
+                    applyZoom(scale * 1.3, cx, cy);
+                } else if (action === 'out') {
+                    applyZoom(scale / 1.3, cx, cy);
+                } else if (action === 'reset') {
+                    inner.classList.add('no-transition');
+                    scale = 1;
+                    translateX = 0;
+                    translateY = 0;
+                    updateTransform();
+                    requestAnimationFrame(() => {
+                        inner.classList.remove('no-transition');
+                    });
+                }
+            });
+        });
+
+        // Marker modal
         const victimData = {
             dasha: {
                 title: 'dasha228play',
@@ -201,8 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        markers.forEach(marker => {
-            marker.addEventListener('click', () => {
+        document.querySelectorAll('.map-marker').forEach(marker => {
+            marker.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const victim = marker.dataset.victim;
                 const data = victimData[victim];
                 if (!data) return;

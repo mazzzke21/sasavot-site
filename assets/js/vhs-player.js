@@ -7,8 +7,29 @@ const VHSPlayer = {
             if (!id) return;
 
             const canvas = playerEl.querySelector('.vhs-canvas');
+            const video = playerEl.querySelector('.vhs-video');
             const playBtn = playerEl.querySelector('.play-btn');
             const stopBtn = playerEl.querySelector('.stop-btn');
+
+            if (id === 'final') {
+                const vid = playerEl.querySelector('video');
+                this.players[id] = {
+                    el: playerEl,
+                    video: vid,
+                    isPlaying: false,
+                };
+
+                const corrupted = document.getElementById('finalCorrupted');
+                const status = document.getElementById('finalStatus');
+
+                if (playBtn) {
+                    playBtn.addEventListener('click', () => this.play(id));
+                }
+                if (stopBtn) {
+                    stopBtn.addEventListener('click', () => this.stop(id));
+                }
+                return;
+            }
 
             if (!canvas) return;
 
@@ -69,6 +90,22 @@ const VHSPlayer = {
         if (!player || player.isPlaying) return;
 
         player.isPlaying = true;
+
+        if (player.video) {
+            player.video.muted = false;
+            player.video.currentTime = 0;
+            player.video.play().catch(() => {});
+            const corrupted = document.getElementById('finalCorrupted');
+            const status = document.getElementById('finalStatus');
+            if (corrupted) corrupted.classList.add('hidden');
+            if (status) status.textContent = '[ВОССТАНОВЛЕНИЕ...]';
+            setTimeout(() => {
+                if (status) status.textContent = '[ФАЙЛ ВОССТАНОВЛЕН]';
+            }, 2000);
+            this.playAudioEffect(id);
+            return;
+        }
+
         this.playAudioEffect(id);
 
         const animate = () => {
@@ -142,6 +179,17 @@ const VHSPlayer = {
         if (!player) return;
 
         player.isPlaying = false;
+
+        if (player.video) {
+            player.video.pause();
+            player.video.currentTime = 0;
+            const corrupted = document.getElementById('finalCorrupted');
+            const status = document.getElementById('finalStatus');
+            if (corrupted) corrupted.classList.remove('hidden');
+            if (status) status.textContent = '[ФАЙЛ НЕСТАБИЛЕН]';
+            return;
+        }
+
         if (player.animationId) {
             cancelAnimationFrame(player.animationId);
             player.animationId = null;

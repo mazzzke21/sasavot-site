@@ -484,7 +484,9 @@
 
             <div class="vhs-player final-player" data-video="final">
                 <div class="vhs-player-screen" id="finalPlayer">
-                    <canvas class="vhs-canvas" id="finalCanvas"></canvas>
+                    <video class="vhs-canvas" id="finalVideo" muted loop playsinline preload="auto">
+                        <source src="cctv2.mp4" type="video/mp4">
+                    </video>
                     <div class="vhs-noise-overlay heavy"></div>
                     <div class="vhs-tracking-lines heavy"></div>
                     <div class="vhs-corrupted-overlay" id="finalCorrupted">
@@ -496,7 +498,7 @@
                     <button class="vhs-btn play-btn" data-player="final">▶ PLAY</button>
                     <button class="vhs-btn stop-btn" data-player="final">⏹ СТОП</button>
                     <span class="vhs-time">00:17:23</span>
-                    <span class="vhs-status">[ФАЙЛ НЕСТАБИЛЕН]</span>
+                    <span class="vhs-status" id="finalStatus">[ФАЙЛ НЕСТАБИЛЕН]</span>
                 </div>
             </div>
 
@@ -538,38 +540,48 @@
 
         <div class="map-container">
             <div class="map-placeholder" id="crimeMap">
-                <div class="map-grid"></div>
-                <div class="map-marker" data-victim="dasha" style="top: 35%; left: 45%;">
-                    <span class="marker-dot"></span>
-                    <span class="marker-label">dasha228play</span>
-                    <span class="marker-date">12.04.2021</span>
+                <div class="map-viewport">
+                    <div class="map-inner" id="mapInner">
+                        <div class="map-grid"></div>
+                        <div class="map-marker" data-victim="dasha" style="top: 32%; left: 40%;">
+                            <span class="marker-dot"></span>
+                            <span class="marker-label">dasha228play</span>
+                            <span class="marker-date">12.04.2021</span>
+                        </div>
+                        <div class="map-marker" data-victim="morphe" style="top: 45%; left: 56%;">
+                            <span class="marker-dot"></span>
+                            <span class="marker-label">morphe_ya</span>
+                            <span class="marker-date">03.09.2022</span>
+                        </div>
+                        <div class="map-marker" data-victim="cutie" style="top: 24%; left: 48%;">
+                            <span class="marker-dot"></span>
+                            <span class="marker-label">cutierover</span>
+                            <span class="marker-date">17.01.2023</span>
+                        </div>
+                        <div class="map-marker" data-victim="cris" style="top: 54%; left: 36%;">
+                            <span class="marker-dot"></span>
+                            <span class="marker-label">chr1swave</span>
+                            <span class="marker-date">08.06.2023</span>
+                        </div>
+                        <div class="map-marker marker-survivor" data-victim="korya" style="top: 36%; left: 60%;">
+                            <span class="marker-dot"></span>
+                            <span class="marker-label">korya_mc</span>
+                            <span class="marker-date">14.11.2023 — ВЫЖИЛА</span>
+                        </div>
+                        <div class="map-marker marker-sas" data-victim="sas" style="top: 48%; left: 48%;">
+                            <span class="marker-dot"></span>
+                            <span class="marker-label">sasavot (последняя активность)</span>
+                            <span class="marker-date">31.12.2024</span>
+                        </div>
+                    </div>
+                    <div class="map-title">Москва, Южный административный округ</div>
+                    <div class="map-zoom-controls">
+                        <button class="map-zoom-btn" data-zoom="in" title="Приблизить">+</button>
+                        <span class="map-zoom-level" id="mapZoomLevel">100%</span>
+                        <button class="map-zoom-btn" data-zoom="out" title="Отдалить">−</button>
+                        <button class="map-zoom-btn" data-zoom="reset" title="Сбросить">⟲</button>
+                    </div>
                 </div>
-                <div class="map-marker" data-victim="morphe" style="top: 42%; left: 52%;">
-                    <span class="marker-dot"></span>
-                    <span class="marker-label">morphe_ya</span>
-                    <span class="marker-date">03.09.2022</span>
-                </div>
-                <div class="map-marker" data-victim="cutie" style="top: 28%; left: 48%;">
-                    <span class="marker-dot"></span>
-                    <span class="marker-label">cutierover</span>
-                    <span class="marker-date">17.01.2023</span>
-                </div>
-                <div class="map-marker" data-victim="cris" style="top: 50%; left: 40%;">
-                    <span class="marker-dot"></span>
-                    <span class="marker-label">chr1swave</span>
-                    <span class="marker-date">08.06.2023</span>
-                </div>
-                <div class="map-marker marker-survivor" data-victim="korya" style="top: 38%; left: 55%;">
-                    <span class="marker-dot"></span>
-                    <span class="marker-label">korya_mc</span>
-                    <span class="marker-date">14.11.2023 — ВЫЖИЛА</span>
-                </div>
-                <div class="map-marker marker-sas" data-victim="sas" style="top: 45%; left: 50%;">
-                    <span class="marker-dot"></span>
-                    <span class="marker-label">sasavot (последняя активность)</span>
-                    <span class="marker-date">31.12.2024</span>
-                </div>
-                <div class="map-title">Москва, Южный административный округ</div>
             </div>
         </div>
 
