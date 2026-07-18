@@ -78,6 +78,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initCCTV() {
+        // Handle CCTV video
+        const cctvVideo = document.getElementById('morpheCCTV1');
+        if (cctvVideo) {
+            console.log('CCTV video element found');
+            console.log('Video src:', cctvVideo.querySelector('source')?.src);
+            console.log('Video readyState:', cctvVideo.readyState);
+            
+            cctvVideo.load();
+            
+            const playPromise = cctvVideo.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('CCTV video playing successfully');
+                }).catch(err => {
+                    console.warn('CCTV video autoplay failed:', err);
+                    document.addEventListener('click', () => {
+                        cctvVideo.play();
+                        console.log('CCTV video playing after click');
+                    }, { once: true });
+                });
+            }
+
+            cctvVideo.addEventListener('loadeddata', () => {
+                console.log('CCTV video data loaded, duration:', cctvVideo.duration);
+            });
+
+            cctvVideo.addEventListener('error', (e) => {
+                console.error('CCTV video error:', e);
+            });
+            
+            cctvVideo.addEventListener('timeupdate', () => {
+                console.log('CCTV video timeupdate:', cctvVideo.currentTime);
+            });
+        }
+
         const canvases = document.querySelectorAll('.cctv-canvas');
 
         canvases.forEach(canvas => {

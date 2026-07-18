@@ -191,8 +191,10 @@
             <div class="column-left">
                 <div class="cctv-grid">
                     <div class="cctv-cam active">
-                        <canvas class="cctv-canvas" id="morpheCCTV1"></canvas>
-                        <span class="cctv-label">КАМЕРА 1 — УЛИЦА</span>
+                        <video class="cctv-video" id="morpheCCTV1" autoplay muted loop playsinline preload="auto">
+                            <source src="cctv1.mp4" type="video/mp4">
+                        </video>
+                        <span class="cctv-label">КАМЕРА 1 — СТРИМ</span>
                     </div>
                     <div class="cctv-cam active">
                         <canvas class="cctv-canvas" id="morpheCCTV2"></canvas>
