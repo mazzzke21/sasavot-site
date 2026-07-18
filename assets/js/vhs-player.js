@@ -19,7 +19,6 @@ const VHSPlayer = {
                     isPlaying: false,
                 };
 
-                const corrupted = document.getElementById('finalCorrupted');
                 const status = document.getElementById('finalStatus');
 
                 if (playBtn) {
@@ -95,9 +94,7 @@ const VHSPlayer = {
             player.video.muted = false;
             player.video.currentTime = 0;
             player.video.play().catch(() => {});
-            const corrupted = document.getElementById('finalCorrupted');
             const status = document.getElementById('finalStatus');
-            if (corrupted) corrupted.classList.add('hidden');
             if (status) status.textContent = '[ВОССТАНОВЛЕНИЕ...]';
             setTimeout(() => {
                 if (status) status.textContent = '[ФАЙЛ ВОССТАНОВЛЕН]';
@@ -183,9 +180,7 @@ const VHSPlayer = {
         if (player.video) {
             player.video.pause();
             player.video.currentTime = 0;
-            const corrupted = document.getElementById('finalCorrupted');
             const status = document.getElementById('finalStatus');
-            if (corrupted) corrupted.classList.remove('hidden');
             if (status) status.textContent = '[ФАЙЛ НЕСТАБИЛЕН]';
             return;
         }

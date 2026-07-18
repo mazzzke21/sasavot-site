@@ -246,12 +246,43 @@
         const gameState = {
             turn: 1,
             difficulty: 'medium',
-            history: []
+            history: [],
+            awakeTurn: 10
         };
 
-        const systemWarningText = "<span style='color: #ff0000; font-size: clamp(0.9rem, 2vw, 1.8rem); display: block; line-height: 1.2;'>⚠️ ВНИМАНИЕ: НА 15 ХОДЕ МАНЬЯК SASAVOT ПРОСНЕТСЯ И НАЧНЕТ АКТИВНЫЙ ПОИСК ЧЕЛОВЕКА В КОМПЛЕКСЕ.</span><hr style='border: 1px dashed #ff0000; margin: clamp(6px, 1vw, 12px) 0 clamp(10px, 1.5vw, 18px) 0;'>";
+        function getAwakeTurn(difficulty) {
+            switch(difficulty) {
+                case 'easy': return 15;
+                case 'hard': return 5;
+                default: return 10;
+            }
+        }
 
-        function buildSystemPrompt(turn, difficulty) {
+        function getDifficultyLabel(difficulty) {
+            switch(difficulty) {
+                case 'easy': return 'ЛЕГКО';
+                case 'hard': return 'ХАРДКОР';
+                default: return 'НОРМА';
+            }
+        }
+
+        function getRebalanceRule(difficulty) {
+            switch(difficulty) {
+                case 'easy':
+                    return 'ШАНС УСПЕХА (ЛЕГКО): Действия персонажа почти всегда успешны. Даже прямые столкновения с SASAVOT редко заканчиваются фатально. Монстр медлителен и часто теряет след.';
+                case 'hard':
+                    return 'ШАНС УСПЕХА (ХАРДКОР): Действия персонажа часто проваливаются. Прямое противостояние с SASAVOT почти гарантированно ведет к гибели. Персонаж должен полагаться только на скрытность, хитрость и случай. Любая ошибка может стать последней.';
+                default:
+                    return 'ШАНС УСПЕХА (НОРМА): Действия персонажа имеют средний шанс успеха. Прямые атаки на SASAVOT обычно проваливаются. Используй окружение, предметы и избегай открытого конфликта. Монстр силен, но не всеведущ.';
+            }
+        }
+
+        function getSystemWarningText(awakeTurn) {
+            return `<span style='color: #ff0000; font-size: clamp(0.9rem, 2vw, 1.8rem); display: block; line-height: 1.2;'>⚠️ ВНИМАНИЕ: НА ${awakeTurn} ХОДЕ МАНЬЯК SASAVOT ПРОСНЕТСЯ И НАЧНЕТ АКТИВНЫЙ ПОИСК ЧЕЛОВЕКА В КОМПЛЕКСЕ.</span><hr style='border: 1px dashed #ff0000; margin: clamp(6px, 1vw, 12px) 0 clamp(10px, 1.5vw, 18px) 0;'>`;
+        }
+
+        function buildSystemPrompt(turn, difficulty, awakeTurn) {
+            const rebalanceRule = getRebalanceRule(difficulty);
             return `Ты — ведущий интерактивной текстовой хоррор-игры "sasavot". Персонаж заперт в заброшенном комплексе ЮАО, где скрывается пиксельный монстр SASAVOT.
 
 ПРАВИЛА ОФОРМЛЕНИЯ И ИГРЫ:
@@ -262,11 +293,13 @@
 
 ЧЕТКОСТЬ И КОНКРЕТИКА: Описывай локацию просто, понятно и по делу. Указывай, какие комнаты/развилки видны и какие конкретно предметы лежат в доступности (на столах, полках или полу).
 
-СВОБОДА ДЕЙСТВИЙ И БАЛАНС: Игрок пишет любые действия. Персонаж не должен погибнуть до 15-20 хода. При опасных шагах наноси ранения, пугай звуками, но давай способ исправиться.
+СВОБОДА ДЕЙСТВИЙ И БАЛАНС: Игрок пишет любые действия. Персонаж не должен погибнуть до ${awakeTurn}-${awakeTurn + 5} хода. При опасных шагах наноси ранения, пугай звуками, но давай способ исправиться.
 
-ХОДЫ И ПОВЕДЕНИЕ МОНСТРА: Сейчас идет ход игры № ${turn}. До 15 хода маньяк SASAVOT спит. Ровно на 15 ходе и далее маньяк просыпается, выходит на охоту и начинает активно преследовать персонажа по пятам. Отражай это в атмосфере.
+ХОДЫ И ПОВЕДЕНИЕ МОНСТРА: Сейчас идет ход игры № ${turn}. До ${awakeTurn} хода маньяк SASAVOT спит. Ровно на ${awakeTurn} ходе и далее маньяк просыпается, выходит на охоту и начинает активно преследовать персонажа по пятам. Отражай это в атмосфере.
 
 СЛОЖНОСТЬ (${difficulty}): Изменяет агрессию окружения и шанс найти полезное.
+
+${rebalanceRule}
 
 ФИНАЛ: Всего заложено около 22 вариантов концовок. Завершай строку текстом "[КОНЦОВКА: Название]" при успешном или фатальном финале.
 
@@ -321,12 +354,118 @@
 22. Побег со Склада — вставить кассету в плеер и пройти к пожарному выходу.`;
         }
 
+        const AmbientController = {
+            audio1: null,
+            audio2: null,
+            audio3: null,
+            phase: 'idle',
+            fadeTimer: null,
+
+            init() {
+                this.audio1 = new Audio('ambient1.mp3');
+                this.audio1.loop = true;
+                this.audio1.volume = 0;
+                this.audio1.preload = 'auto';
+
+                this.audio2 = new Audio('ambient2.mp3');
+                this.audio2.loop = false;
+                this.audio2.volume = 0;
+                this.audio2.preload = 'auto';
+
+                this.audio3 = new Audio('ambient3.mp3');
+                this.audio3.loop = true;
+                this.audio3.volume = 0;
+                this.audio3.preload = 'auto';
+            },
+
+            startAmbient1() {
+                if (this.phase !== 'idle') return;
+                this.phase = 'ambient1';
+                this.audio1.currentTime = 0;
+                this.audio1.play().catch(() => {});
+                this.fade(this.audio1, 0.3, 1500);
+            },
+
+            transitionToAmbient3() {
+                if (this.phase !== 'ambient1') return;
+                this.phase = 'transitioning';
+
+                this.audio2.currentTime = 0;
+                this.audio2.volume = 0;
+                this.audio2.play().catch(() => {});
+
+                this.crossfade(this.audio1, this.audio2, 1500, () => {
+                    this.audio1.pause();
+                    this.audio2.onended = () => {
+                        this.phase = 'ambient3';
+                        this.audio3.currentTime = 0;
+                        this.audio3.volume = 0;
+                        this.audio3.play().catch(() => {});
+                        this.fade(this.audio3, 0.3, 1500);
+                    };
+                });
+            },
+
+            fade(el, targetVol, duration) {
+                if (this.fadeTimer) clearInterval(this.fadeTimer);
+                const start = el.volume;
+                const step = targetVol - start;
+                const steps = duration / 30;
+                const volStep = step / steps;
+                let count = 0;
+
+                this.fadeTimer = setInterval(() => {
+                    count++;
+                    el.volume = Math.max(0, Math.min(0.5, start + volStep * count));
+                    if (count >= steps) {
+                        el.volume = targetVol;
+                        clearInterval(this.fadeTimer);
+                        this.fadeTimer = null;
+                    }
+                }, 30);
+            },
+
+            crossfade(fadeOut, fadeIn, duration, onDone) {
+                if (this.fadeTimer) clearInterval(this.fadeTimer);
+                const startVol = fadeOut.volume;
+                const steps = duration / 30;
+                const volStep = startVol / steps;
+                const inStep = 0.3 / steps;
+                let count = 0;
+
+                this.fadeTimer = setInterval(() => {
+                    count++;
+                    fadeOut.volume = Math.max(0, startVol - volStep * count);
+                    fadeIn.volume = Math.min(0.3, inStep * count);
+                    if (count >= steps) {
+                        fadeOut.volume = 0;
+                        fadeIn.volume = 0.3;
+                        clearInterval(this.fadeTimer);
+                        this.fadeTimer = null;
+                        if (onDone) onDone();
+                    }
+                }, 30);
+            },
+
+            stopAll() {
+                if (this.fadeTimer) clearInterval(this.fadeTimer);
+                [this.audio1, this.audio2, this.audio3].forEach(a => {
+                    if (a) { a.pause(); a.volume = 0; a.currentTime = 0; }
+                });
+                this.phase = 'idle';
+            }
+        };
+
         function startGame() {
             gameState.difficulty = document.getElementById('difficulty-select').value;
+            gameState.awakeTurn = getAwakeTurn(gameState.difficulty);
             
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('gameplay').style.display = 'flex';
-            document.getElementById('hud-diff').innerText = "СЛОЖНОСТЬ: " + gameState.difficulty.toUpperCase();
+            document.getElementById('hud-diff').innerText = "СЛОЖНОСТЬ: " + getDifficultyLabel(gameState.difficulty);
+            
+            AmbientController.init();
+            AmbientController.startAmbient1();
             
             initAIStory();
         }
@@ -348,9 +487,9 @@
         const API_URL = "https://api.smartapi.shop/v1/chat/completions";
         const CORS_PROXY = "https://corsproxy.io/?";
 
-        async function callAI(messages, turn, difficulty) {
+        async function callAI(messages, turn, difficulty, awakeTurn) {
             const apiMessages = [
-                { role: "system", content: buildSystemPrompt(turn, difficulty) }
+                { role: "system", content: buildSystemPrompt(turn, difficulty, awakeTurn) }
             ];
 
             messages.forEach(msg => {
@@ -389,18 +528,18 @@
 
         async function initAIStory() {
             const log = document.getElementById('text-log');
-            log.innerHTML = systemWarningText + "<em>ИИ генерирует начальное пространство комплекса...</em>";
+            log.innerHTML = getSystemWarningText(gameState.awakeTurn) + "<em>ИИ генерирует начальное пространство комплекса...</em>";
             setControls(false);
 
             const startQuery = "Начни игру. Опиши стартовую комнату, четко укажи, какие предметы лежат на виду (на столах/полу) и какие двери ведут наружу. Пиши строго в третьем лице. Не забудь добавить в конце тег инвентаря.";
             gameState.history.push({ role: "user", text: startQuery });
 
             try {
-                const aiResponse = await callAI(gameState.history, gameState.turn, gameState.difficulty);
+                const aiResponse = await callAI(gameState.history, gameState.turn, gameState.difficulty, gameState.awakeTurn);
                 gameState.history.push({ role: "assistant", text: aiResponse });
                 
                 const processedText = processInventoryAndText(aiResponse);
-                log.innerHTML = systemWarningText + "<p>" + processedText.replace(/\n/g, '<br>') + "</p>";
+                log.innerHTML = getSystemWarningText(gameState.awakeTurn) + "<p>" + processedText.replace(/\n/g, '<br>') + "</p>";
             } catch (e) {
                 handleAIError(e, log, true);
             }
@@ -420,10 +559,14 @@
             gameState.turn++;
             document.getElementById('hud-turn').innerText = "ХОД: " + gameState.turn;
             
-            if (gameState.turn >= 15) {
+            if (gameState.turn >= gameState.awakeTurn) {
                 document.getElementById('hud-turn').style.color = "#ff0000";
                 document.getElementById('hud-turn').style.fontWeight = "bold";
                 document.getElementById('hud-turn').innerText = "ХОД: " + gameState.turn + " (SASAVOT ПРОСНУЛСЯ!)";
+            }
+            
+            if (gameState.turn === gameState.awakeTurn) {
+                AmbientController.transitionToAmbient3();
             }
             
             const warnings = log.getElementsByClassName('ai-warning-box');
@@ -439,7 +582,7 @@
             gameState.history.push({ role: "user", text: userTextConverted });
 
             try {
-                const aiResponse = await callAI(gameState.history, gameState.turn, gameState.difficulty);
+                const aiResponse = await callAI(gameState.history, gameState.turn, gameState.difficulty, gameState.awakeTurn);
                 gameState.history.push({ role: "assistant", text: aiResponse });
                 
                 const cleanLogs = log.innerHTML.split('<em>Поток данных ИИ...</em>')[0];
