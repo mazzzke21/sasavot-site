@@ -399,7 +399,6 @@
     </div>
 
     <script>
-        // Block scroll until animation completes
         let animationComplete = false;
         
         function unlockScroll() {
@@ -409,13 +408,10 @@
             }
         }
         
-        // Initially block scroll
         document.body.style.overflow = 'hidden';
         
-        // Unlock after animation (4 seconds for title animation)
         setTimeout(unlockScroll, 4000);
         
-        // Also unlock on any click/touch
         document.addEventListener('click', unlockScroll, { once: true });
         document.addEventListener('touchstart', unlockScroll, { once: true });
         document.addEventListener('keydown', unlockScroll, { once: true });

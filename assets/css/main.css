@@ -127,7 +127,6 @@ a:hover {
 }
 
 .exhibit:not(:last-of-type)::after {
-    content: '';
     display: block;
     width: 60%;
     height: 1px;
