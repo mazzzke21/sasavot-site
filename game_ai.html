@@ -141,6 +141,7 @@
             background: rgba(0,0,0,0.6);
             border: 2px solid #801010;
             padding: clamp(6px, 1vw, 12px);
+            padding-right: clamp(180px, 22vw, 280px);
             border-radius: 4px;
         }
 
@@ -199,16 +200,67 @@
 
             .input-container {
                 flex-wrap: wrap;
+                padding-right: clamp(6px, 1vw, 12px);
             }
 
             .send-btn {
                 width: 100%;
             }
+
+            .footer-links {
+                flex-direction: column;
+                bottom: 8px;
+                right: 8px;
+                gap: 6px;
+            }
+        }
+
+        .footer-links {
+            position: fixed;
+            bottom: clamp(8px, 2vw, 24px);
+            right: clamp(8px, 2vw, 24px);
+            display: flex;
+            gap: clamp(8px, 1.5vw, 18px);
+            z-index: 1000;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .footer-link {
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);
+            border: 2px solid #d11a1a;
+            color: #ff4444;
+            padding: clamp(6px, 1vw, 12px) clamp(10px, 2vw, 22px);
+            text-decoration: none;
+            font-family: 'VT323', monospace;
+            font-size: clamp(0.8rem, 2vw, 1.8rem);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+            box-shadow: 0 0 10px rgba(128, 16, 16, 0.3);
+        }
+
+        .footer-link:hover {
+            background: linear-gradient(135deg, rgba(209, 26, 26, 0.4) 0%, rgba(139, 0, 0, 0.4) 100%);
+            color: #ff0000;
+            border-color: #ff0000;
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 20px rgba(209, 26, 26, 0.6),
+                inset 0 0 15px rgba(209, 26, 26, 0.2);
+            text-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.8),
+                0 0 15px rgba(255, 0, 0, 0.4);
         }
     </style>
 </head>
+
 <body class="crt">
 
+    <div class="footer-links">
+        <a href="https://t.me/kkkrilola" target="_blank" class="footer-link">TELEGRAM</a>
+        <a href="https://www.donationalerts.com/r/mazzzke211" target="_blank" class="footer-link">ДОНАТ</a>
+    </div>
     <div id="main-menu" class="screen">
         <h1 class="main-title">sasavot</h1>
         <p class="menu-subtitle">TRUE AI SANDBOX // ПОЛНАЯ АВТОНОМНОСТЬ И СВОБОДА</p>
